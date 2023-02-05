@@ -1,0 +1,12 @@
+ Volume in drive C has no label.
+ Volume Serial Number is D8FC-F104
+
+ Directory of C:\Users\Vadym\Downloads\group_project
+
+02/05/2023  02:33 PM    <DIR>          .
+02/05/2023  02:33 PM    <DIR>          ..
+02/01/2023  10:28 PM                 0 test.txt
+02/01/2023  10:54 PM               412 test2.txt
+02/05/2023  02:33 PM                 0 test4.txt
+               3 File(s)            412 bytes
+               2 Dir(s)  380,281,135,104 bytes free
