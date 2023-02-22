@@ -14,7 +14,7 @@ class User(Base):
     user_id: Mapped[int] = mapped_column(primary_key=True)
     goal_id:Mapped[int] = mapped_column(ForeignKey('goal_table.goal_id'))
     user_level_id:Mapped[int] = mapped_column(ForeignKey('user_level_table.user_level_id'))
-    password:Mapped[int] =  mapped_column(String(50))
+    password:Mapped[str] =  mapped_column(String(50))
     user_name:Mapped[str] = mapped_column(String(50))
     email:Mapped[str] = mapped_column(String(50))
     frame:Mapped[str] = mapped_column(String(120))
