@@ -3,7 +3,7 @@ from sqlalchemy import String, ForeignKey
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from datetime import datetime
 from typing import List
-from .session import Base
+from ..db.session import Base
 
 metadata = Base.metadata
 
