@@ -1,13 +1,16 @@
 <template>
+
   <Navigation/>
   <div class="app">
 
     <content>
       <router-view/>
+
     </content>
     <footer>
 
     </footer>
+
   </div>
 </template>
 
@@ -29,10 +32,16 @@ export default {
   font-weight: 400;
 }
 .app{
-  background-image: url("../src/components/materials/hero-bg.png");
+
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  background-image: url("../src/components/materials/hero-bg.png");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center top;
+  background-size: cover;
 }
+
 </style>
