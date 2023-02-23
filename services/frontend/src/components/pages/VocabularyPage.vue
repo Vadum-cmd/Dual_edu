@@ -205,7 +205,7 @@ input[type="text"] {
   cursor: pointer;
 }
 
-/* Styles for the current page indicator */
+
 .pagination span {
   background-color: black;
   color: white;
