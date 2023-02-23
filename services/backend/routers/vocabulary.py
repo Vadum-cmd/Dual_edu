@@ -1,11 +1,13 @@
-from fastapi import FastAPI
-
+from fastapi import FastAPI, Depends
+from sqlalchemy.orm import Session
+from dependencies import get_db
+from crud.crud import get_user, get_user_words
 
 app = FastAPI()
 
 @app.get("/vocabulary")
-def get_vocabulary():
-    dictionary = {}
-    for i in range(1500):
-        dictionary[f"word_{i}"] = f"translation_{i}"
-    return {"frame type": "avatats/654__frame_type_2.png", "level": 97, "unknown words": dictionary}
+def get_vocabulary(user_id: int, db: Session = Depends(get_db)):
+    user = get_user(db=db, user_id=user_id)
+    user_vocabulary = get_user_words(db=db, user_id=user_id)
+    return {"user_name": user.user_name, "user_level": user.user_level}  # TODO: add user_vocabulary
+

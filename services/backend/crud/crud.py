@@ -149,4 +149,3 @@ def delete_word(db: Session, word_id: int):
     db_word = db.query(Word).filter(Word.word_id == word_id).first()  
     db.delete(db_word)
     db.commit()
-        
