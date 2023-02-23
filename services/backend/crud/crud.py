@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from typing import List
-from .model import User, User_level, Word, Book, Goal
-from .new_schema import UserCreate, UserUpdate, User_levelCreate, User_levelUpdate, WordCreate, WordUpdate, BookCreate, BookUpdate, GoalCreate, GoalUpdate
+from ..models.model import User, User_level, Word, Book, Goal
+from ..schemas.new_schema import UserCreate, UserUpdate, User_levelCreate, User_levelUpdate, WordCreate, WordUpdate, BookCreate, BookUpdate, GoalCreate, GoalUpdate
 
 #Returns a user with the specified user_id.
 def get_user(db: Session, user_id: int) -> User:
