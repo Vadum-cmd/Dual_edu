@@ -1,7 +1,17 @@
 from sqlalchemy.orm import Session
 from typing import List
-from ..models.model import User, User_level, Word, Book, Goal
-from ..schemas.new_schema import UserCreate, UserUpdate, User_levelCreate, User_levelUpdate, WordCreate, WordUpdate, BookCreate, BookUpdate, GoalCreate, GoalUpdate
+from ..models.model import User, User_level, Book, Goal, User_word, DB_word
+from ..schemas.new_schema import UserCreate, UserUpdate, User_levelCreate, User_levelUpdate, DBWord, DBWordCreate, UserWord, UserWordCreate, UserWordUpdate, BookCreate, BookUpdate, GoalCreate, GoalUpdate
+#from ..schemas.new_schema import Word
+#from ..schemas.new_schema import WordCreate, WordUpdate
+
+
+# from .base import CRUDBase
+# class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
+#     def get_by_email(self, db: Session, *, email: str) -> Optional[User]:
+#         return db.query(User).filter(User.email == email).first()
+
+# user = CRUDUser(User)
 
 #Returns a user with the specified user_id.
 def get_user(db: Session, user_id: int) -> User:
@@ -120,33 +130,74 @@ def delete_book(db: Session, book_id: int):
     db.delete(db_book)
     db.commit()
 
-def create_word(db: Session, word: WordCreate):
-    db_word = Word(**word.dict())
-    db.add(db_word)
+def get_db_word(db: Session, en_word: str) -> DBWord:
+    return db.query(DB_word).filter(DB_word.en_word == en_word).first()
+
+
+def create_db_word(db: Session, db_word: DBWordCreate) -> DBWord:
+    db_word_obj = DB_word(**db_word.dict())
+    db.add(db_word_obj)
     db.commit()
-    db.refresh(db_word)
-    return db_word
+    db.refresh(db_word_obj)
+    return db_word_obj
 
 
-def get_word(db: Session, word_id: int):
-    return db.query(Word).filter(Word.word_id == word_id).first()
+def get_user_word(db: Session, word_id: int) -> UserWord:
+    return db.query(User_word).filter(User_word.word_id == word_id).first()
 
 
-def get_words(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(Word).offset(skip).limit(limit).all()
+def get_user_words(db: Session, skip: int = 0, limit: int = 100) -> List[UserWord]:
+    return db.query(User_word).offset(skip).limit(limit).all()
 
 
-def update_word(db: Session, word_id: int, word: WordUpdate):
-    db_word = db.query(Word).filter(Word.word_id == word_id).first()
-    for field, value in word:
-        setattr(db_word, field, value)
+def create_user_word(db: Session, user_word: UserWordCreate) -> UserWord:
+    user_word_obj = User_word(**user_word.dict())
+    db.add(user_word_obj)
     db.commit()
-    db.refresh(db_word)
-    return db_word
+    db.refresh(user_word_obj)
+    return user_word_obj
 
 
-def delete_word(db: Session, word_id: int):
-    db_word = db.query(Word).filter(Word.word_id == word_id).first()  
-    db.delete(db_word)
+def update_user_word(db: Session, user_word: UserWordUpdate) -> UserWord:
+    user_word_obj = db.query(User_word).filter(User_word.word_id == user_word.word_id).first()
+    for key, value in user_word.dict(exclude_unset=True).items():
+        setattr(user_word_obj, key, value)
     db.commit()
+    db.refresh(user_word_obj)
+    return user_word_obj
+
+
+def delete_user_word(db: Session, word_id: int) -> None:
+    db.query(User_word).filter(User_word.word_id == word_id).delete()
+    db.commit()
+
+# def create_word(db: Session, word: WordCreate):
+#     db_word = Word(**word.dict())
+#     db.add(db_word)
+#     db.commit()
+#     db.refresh(db_word)
+#     return db_word
+
+
+# def get_word(db: Session, word_id: int):
+#     return db.query(Word).filter(Word.word_id == word_id).first()
+
+
+# def get_words(db: Session, skip: int = 0, limit: int = 100):
+#     return db.query(Word).offset(skip).limit(limit).all()
+
+
+# def update_word(db: Session, word_id: int, word: WordUpdate):
+#     db_word = db.query(Word).filter(Word.word_id == word_id).first()
+#     for field, value in word:
+#         setattr(db_word, field, value)
+#     db.commit()
+#     db.refresh(db_word)
+#     return db_word
+
+
+# def delete_word(db: Session, word_id: int):
+#     db_word = db.query(Word).filter(Word.word_id == word_id).first()  
+#     db.delete(db_word)
+#     db.commit()
         

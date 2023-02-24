@@ -72,31 +72,41 @@ class Goal(GoalBase):
 class GoalUpdate(GoalBase):
     pass
 
-
-class WordBase(BaseModel):
-    word_level: str
-    uk_word: str
+class DBWordBase(BaseModel):
     en_word: str
+    word_level: Optional[str]
+    uk_word: Optional[str]
 
 
-class WordCreate(WordBase):
-    book_id: int
-
-
-class Word(WordBase):
-    word_id: int
-    book_id: int
-
-    class Config:
-        orm_mode = True
-
-
-class WordUpdate(WordBase):
+class DBWordCreate(DBWordBase):
     pass
 
 
+class DBWord(DBWordBase):
+    class Config:
+        orm_mode = True
+
+class DBWord(DBWordBase):
+    pass
+
+class UserWordBase(BaseModel):
+    en_word: str
+    is_known: bool
+
+class UserWordCreate(UserWordBase):
+    book_id: int
+
+class UserWord(UserWordBase):
+    word_id: int
+    db_word: Optional[DBWord]
+    class Config:
+        orm_mode = True
+
+class UserWordUpdate(UserWordBase):
+    pass
+
 class BookBase(BaseModel):
-    book_name: str
+    book_title: str
     book_author: str
 
 
@@ -107,7 +117,7 @@ class BookCreate(BookBase):
 class Book(BookBase):
     book_id: int
     user_id: int
-    words: List[Word] = []
+    words: List[UserWord] = []
 
     class Config:
         orm_mode = True
@@ -115,3 +125,24 @@ class Book(BookBase):
 
 class BookUpdate(BookBase):
     pass
+
+# class WordBase(BaseModel):
+#     word_level: str
+#     uk_word: str
+#     en_word: str
+
+
+# class WordCreate(WordBase):
+#     book_id: int
+
+
+# class Word(WordBase):
+#     word_id: int
+#     book_id: int
+
+#     class Config:
+#         orm_mode = True
+
+
+# class WordUpdate(WordBase):
+#     pass
