@@ -43,16 +43,28 @@ class Goal(Base):
     
     user: Mapped["User"] = relationship(uselist=False,back_populates='goal')
    
-class Word(Base):
+class DB_word(Base):
 
-    __tablename__ = 'word_table'
+    __tablename__ = 'db_word_table'
+
+    en_word:Mapped[str] = mapped_column(String(50), primary_key=True)
+    word_level: Mapped[str] = mapped_column(String(2))
+    uk_word:Mapped[str] = mapped_column(String(50))
+    
+    user_word: Mapped['User_word'] = relationship(back_populates='db_word')
+    
+
+class User_word(Base):
+
+    __tablename__ = 'user_word_table'
 
     word_id: Mapped[int] = mapped_column(primary_key=True)
     book_id: Mapped[int] = mapped_column(ForeignKey('book_table.book_id'))
-    word_level: Mapped[str] = mapped_column(String(2))
-    uk_word:Mapped[str] = mapped_column(String(50))
-    en_word:Mapped[str] = mapped_column(String(50))
-
+    en_word : Mapped[str] = mapped_column(String(50), ForeignKey('db_word_table.en_word'))
+    is_known: Mapped[bool]
+    
+    db_word: Mapped["DB_word"] = relationship(back_populates='user_word')
+    
 class Book(Base):
 
     __tablename__ = 'book_table'
