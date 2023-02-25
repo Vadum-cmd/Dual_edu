@@ -1,6 +1,6 @@
 ECHO is on.
 
-## Setup dor DataBase
+## Setup for DataBase
 First, install and initialize the alembic in your virtual environment:
 
 ```
