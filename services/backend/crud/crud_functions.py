@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 from typing import List, Dict
 from ..models.model import User, User_level, Book, Goal, User_word, DB_word
 from ..schemas.new_schema import UserCreate, UserUpdate, User_levelCreate, User_levelUpdate, DBWord, DBWordCreate, UserWord, UserWordCreate, UserWordUpdate, BookCreate, BookUpdate, GoalCreate, GoalUpdate
+from random import randint
 #from ..schemas.new_schema import Word
 #from ..schemas.new_schema import WordCreate, WordUpdate
 
@@ -242,11 +243,16 @@ def get_user_prof(db: Session, user_id: str) -> Dict:
                email = db_user.email)
 
 ## Vadym here. №4 /test <- user word (unknown)
-def get_user_test(db: Session, user_id) -> List:
+def get_user_test(db: Session, user_id: int) -> UserWord:
     db_user = get_user(db, user_id)
-    db_words = list()
+    db_words = 
     for book in db_user.books:
         db_book_words = db.query(User_word).filter(User_word.book_id == book.book_id, User_word.is_known == False).all()
         for word in db_book_words:
             db_words.append(word)
     return db_words
+
+def get_test_word(db: Session, words: List) -> Tuple[str, str]:
+    word_index = randint(0, len(db_words) - 1)
+    chosen_word = db.query(DB_word).filter(DB_word.en_word == words[word_index].en_word).first()
+    return tuple(chosen_word.en_word, chosen_word.uk_word)
