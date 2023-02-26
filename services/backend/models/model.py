@@ -30,6 +30,7 @@ class User_level(Base):
 
     user_level_id:Mapped[int] = mapped_column(primary_key=True)
     current_level:Mapped[str] = mapped_column(String(2))
+    current_num_level:Mapped[int] = mapped_column()
     
     user_lvl: Mapped["User"] = relationship(uselist=False,back_populates='user_level')
 
