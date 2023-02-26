@@ -209,7 +209,7 @@ def get_user_id(db: Session, user_name: str) -> str:
     return db_user.user_id
 
 ## Vadym here. №1 /vocabulary <- get all user_words, user_name and user_level
-def get_user_vocab(db: Session, user_id: str) -> Dict[List, str, int]:
+def get_user_vocab(db: Session, user_id: str) -> Dict:
     db_user = get_user(db, user_id)
     # user_name
     db_user_name = db_user.user_name
@@ -230,7 +230,7 @@ def get_user_vocab(db: Session, user_id: str) -> Dict[List, str, int]:
 
 
 ## Vadym here. №3 /profile <- user name, user level, user goal, current english level, user native language, user email
-def get_user_prof(db: Session, user_id: str) -> Dict[str, int, str, str, str, str]:
+def get_user_prof(db: Session, user_id: str) -> Dict:
     db_user = get_user(db, user_id)
     db_user_level = db.query(User_level).filter(User_level.user_level_id == db_user.user_level_id).first()
     db_goal = db.query(Goal).filter(Goal.goal_id == db_user.goal_id).first()
