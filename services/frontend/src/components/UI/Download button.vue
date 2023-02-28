@@ -1,7 +1,7 @@
 <template>
   <div class="btn">
     <button @click="openFileMenu()">
-      <font-awesome-icon icon="fa-solid fa-cloud-arrow-down"/>
+      <font-awesome-icon icon="fa-solid fa-cloud-arrow-down" style="scale: 240%; color: darkgray;"/>
     </button>
     <input ref="fileInput" type="file" @change="onFileSelected" style="display: none;">
   </div>
