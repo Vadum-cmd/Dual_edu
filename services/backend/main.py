@@ -1,6 +1,6 @@
 import shutil
 
-from fastapi import FastAPI, Depends, UploadFile, File
+from fastapi import FastAPI, Depends, UploadFile, File, Form
 from sqlalchemy.orm import Session
 from dependencies import get_db
 from logic.extract_words_and_translate import get_unique_words, extract_text_from_pdf
@@ -17,7 +17,7 @@ app = FastAPI()
 
 
 @app.post("/sendbook")
-async def post_book(file: UploadFile = File(...), level: str = "A1", db: Session = Depends(get_db)):
+async def post_book(file: UploadFile = File(...), selectedLevel: str = Form()):#, level: str = Form()  # , db: Session = Depends(get_db)
     with open(f'{file.filename}', "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
 
@@ -25,9 +25,12 @@ async def post_book(file: UploadFile = File(...), level: str = "A1", db: Session
     words = get_unique_words(text)
     print(words)
 
-    # content = await file.read()
     # split text from book
     # write words to DB using level
     # return words to user
-    return {"file_name": file.filename, "words": words}
 
+    #print(level)
+    #print(level)
+    print(file.filename)
+    print(selectedLevel)
+    return {"file_name": file.filename, "words": words[:100]} # , "words": words
