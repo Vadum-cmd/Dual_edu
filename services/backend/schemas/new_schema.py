@@ -7,17 +7,15 @@ class UserBase(BaseModel):
     user_name: str
     email: str
     native_language: str
-
-
+    goal_level: str
+    user_level: str
 class UserCreate(UserBase):
     password: str
 
-
 class User(UserBase):
     user_id: int
-    goal_id: Optional[int] = None
-    user_level_id: Optional[int] = None
-    frame: Optional[str] = None
+    current_num_level: int 
+    frame_path: Optional[str] = None
     books: List["Book"] = []
 
     class Config:
@@ -31,58 +29,17 @@ class UserUpdate(UserBase):
     password: Optional[str] = None
     frame: Optional[str] = None
 
-
-class User_levelBase(BaseModel):
-    current_level: str
-
-
-class User_levelCreate(User_levelBase):
+class DBWordBase(BaseModel):  
     pass
-
-
-class User_level(User_levelBase):
-    user_level_id: int
-    user_lvl: User
-
-    class Config:
-        orm_mode = True
-
-
-class User_levelUpdate(User_levelBase):
-    pass
-
-
-class GoalBase(BaseModel):
-    goal_level: str
-    date: Optional[datetime] = None
-
-
-class GoalCreate(GoalBase):
-    user_id: int
-
-
-class Goal(GoalBase):
-    goal_id: int
-    user: User
-
-    class Config:
-        orm_mode = True
-
-
-class GoalUpdate(GoalBase):
-    pass
-
-class DBWordBase(BaseModel):
-    en_word: str
-    word_level: Optional[str]
-    uk_word: Optional[str]
 
 
 class DBWordCreate(DBWordBase):
-    pass
+    en_word: str
 
 
 class DBWord(DBWordBase):
+    word_level: Optional[str]
+    uk_word: Optional[str]
     class Config:
         orm_mode = True
 
@@ -109,14 +66,12 @@ class BookBase(BaseModel):
     book_title: str
     book_author: str
 
-
 class BookCreate(BookBase):
     user_id: int
 
 
 class Book(BookBase):
     book_id: int
-    user_id: int
     words: List[UserWord] = []
 
     class Config:

@@ -12,38 +12,17 @@ class User(Base):
     __tablename__ = 'user_table'
 
     user_id: Mapped[int] = mapped_column(primary_key=True)
-    goal_id:Mapped[int] = mapped_column(ForeignKey('goal_table.goal_id'))
-    user_level_id:Mapped[int] = mapped_column(ForeignKey('user_level_table.user_level_id'))
-    password:Mapped[str] =  mapped_column(String(50))
+    current_num_level:Mapped[int] = mapped_column()
+    goal_level:Mapped[str] = mapped_column(String(2))
+    user_level:Mapped[str] = mapped_column(String(3))   
     user_name:Mapped[str] = mapped_column(String(50))
     email:Mapped[str] = mapped_column(String(50))
-    frame:Mapped[str] = mapped_column(String(120))
     native_language:Mapped[str] = mapped_column(String(50))
+    password:Mapped[str] =  mapped_column(String(50))
+    frame_path:Mapped[str] = mapped_column(String(120))
     
     books: Mapped[List["Book"]] = relationship()
-    goal: Mapped["Goal"] = relationship(back_populates="user")
-    user_level:Mapped["User_level"] = relationship(back_populates="user_lvl")
-
-class User_level(Base):
-
-    __tablename__ = 'user_level_table'
-
-    user_level_id:Mapped[int] = mapped_column(primary_key=True)
-    current_level:Mapped[str] = mapped_column(String(2))
-    current_num_level:Mapped[int] = mapped_column()
     
-    user_lvl: Mapped["User"] = relationship(uselist=False,back_populates='user_level')
-
-class Goal(Base):
-
-    __tablename__ = 'goal_table'
-
-    goal_id: Mapped[int] = mapped_column(primary_key=True)
-    goal_level: Mapped[str] = mapped_column(String(2))
-    date:Mapped[datetime]
-    
-    user: Mapped["User"] = relationship(uselist=False,back_populates='goal')
-   
 class DB_word(Base):
 
     __tablename__ = 'db_word_table'
@@ -72,9 +51,9 @@ class Book(Base):
 
     book_id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('user_table.user_id'))
-    book_name:Mapped[str] = mapped_column(String(50))
+    book_title:Mapped[str] = mapped_column(String(50))
     book_author:Mapped[str]  = mapped_column(String(50))
     
-    words: Mapped[List["Word"]] = relationship()
+    words: Mapped[List["User_word"]] = relationship()
     
 
