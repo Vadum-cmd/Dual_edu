@@ -17,7 +17,7 @@ app = FastAPI()
 
 
 @app.post("/sendbook")
-async def post_book(file: UploadFile = File(...), selectedLevel: str = Form()):#, level: str = Form()  # , db: Session = Depends(get_db)
+async def post_book(file: UploadFile = File(...), level: str = Form()):#, level: str = Form()  # , db: Session = Depends(get_db)
     with open(f'{file.filename}', "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
 
@@ -28,9 +28,11 @@ async def post_book(file: UploadFile = File(...), selectedLevel: str = Form()):#
     # split text from book
     # write words to DB using level
     # return words to user
-
-    #print(level)
-    #print(level)
-    print(file.filename)
-    print(selectedLevel)
-    return {"file_name": file.filename, "words": words[:100]} # , "words": words
+    user_words = {}
+    j = 0
+    for word in words:
+        user_words[word] = f"переклад{j}"
+        j += 1
+        if j == 500:
+            break
+    return {"words": user_words}
