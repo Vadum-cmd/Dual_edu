@@ -1,25 +1,22 @@
 <template>
   <div class="content">
     <div class="text">
-      <div class="upload" @click="selectFile()">Upload your book</div>
-      <download-button @file-selected="onFileSelected"></download-button>
+      <div class="upload">Upload your book</div>
+      <input type="file" @change="onFileChange">
     </div>
     <div class="lang_choose" v-if="true">
       <div class="select_lev">Select your english level</div>
-      <select>
-        <option v-for="value in options" :key="value">
-          {{ value }}
-        </option>
+      <select v-model="level">
+        <option v-for="value in options" :key="value">{{ value }}</option>
       </select>
     </div>
-    <div class="submit_btn">
-      <button v-on:click="submitFile()">Submit</button>
-    </div>
+    <button @click="SendLevel">Submit</button>
   </div>
 </template>
-<script>
-import DownloadButton from "@/components/UI/Download button.vue";
 
+<script>
+
+import axios from "axios";
 export default {
   data() {
     return {
@@ -31,44 +28,33 @@ export default {
         'C1',
         'C2'
       ],
-      file: null,
-      downloadUrl: null,
+      level: null,
+      url:'',
+      file:null,
+      formData:null
     }
   },
-  components: {DownloadButton},
   methods: {
-    selectFile() {
-      const input = document.createElement("input");
-      input.type = "file";
-      input.onchange = (e) => {
-        this.file = e.target.files[0];
-      };
-      input.click();
+    onFileChange(event) {
+      this.file = event.target.files[0];
     },
-    onFileSelected(file) {
-      this.file = file;
-    },
-    submitFile() {
-      if (!this.file) {
-        return; // file not selected, do nothing
-      }
-      const formData = new FormData();
-      formData.append("file", this.file);
-      formData.append("level", this.value);
-      fetch("http://localhost:8080/sendbook", {
-        method: "POST",
-        body: formData,
-      })
-          .then((response) => response.json())
-          .then((data) => {
-            this.downloadUrl = data.downloadUrl;
-          })
-          .catch((error) => {
-            console.error("Error:", error);
+    SendLevel() {
+      this.formData = new FormData();
+      this.formData.append('file', this.file);
+      this.formData.append('level', this.level);
+    
+      this.url = 'http://192.168.0.163:8081/sendbook'
+      axios.post(this.url, this.formData)
+          .catch(error => {
+            this.errorMessage = error.message;
+            console.error("There was an error!", error);
           });
-    },
+    }
   },
-};
+
+
+
+}
 </script>
 
 <style scoped>
@@ -79,50 +65,37 @@ export default {
   justify-content: center;
   flex-direction: column;
 }
-
-.upload {
+.upload{
   font-size: 30px;
   font-family: 'Times New Roman', serif;
   color: white;
   margin-right: 10px;
-}
 
-.text {
+}
+input{
+  color: white;
+
+}
+.text{
   display: flex;
   align-items: center;
   margin-bottom: 10px;
+  margin-left: 120px;
 }
-
-.select_lev {
+.select_lev{
   font-size: 30px;
   font-family: 'Times New Roman', serif;
   color: white;
   margin-right: 10px;
 }
-
-.lang_choose {
+.lang_choose{
   display: flex;
   align-items: center;
 }
-
-select {
+select{
   height: 30px;
   font-family: "Times New Roman", serif;
   background-color: #595959;
   color: white;
-}
-
-.submit_btn button {
-  background-color: #595959;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
-  color: white;
-  font-size: 20px;
-  cursor: pointer;
-}
-
-.submit_btn button:hover {
-  background-color: #6c757d;
 }
 </style>
