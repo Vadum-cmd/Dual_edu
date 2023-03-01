@@ -91,12 +91,12 @@ export default {
   }
   .overlay-left {
     @include overlays(-20%);
-    padding: 20% 20% 15% 10%;
+    padding: 25% 5% 15% 5%;
   }
   .overlay-right {
     @include overlays(0);
     right: 0;
-    padding: 20% 10% 15% 20%;
+    padding: 25% 5% 15% 20%;
   }
 }
 h2 {
@@ -175,6 +175,8 @@ form {
   left: 0;
   z-index: 1;
   opacity: 0;
+  padding-right: 25px;
+
 }
 .sign-up-active {
   .sign-in {
