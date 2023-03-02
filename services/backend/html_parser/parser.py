@@ -23,8 +23,8 @@ with open('data.csv', 'w', newline='') as f:
     # Loop through the rows and extract the cells
     for row in rows:
         cells = row.find_all('td')
-        word_cell = cells[0].text.strip()
-        level_cell = cells[2].text.strip()       
+        word_cell = cells[0].text.strip().lower()
+        level_cell = cells[2].text.strip().lower()      
         # Write the data to the CSV file
         if word_cell not in word_list:
             word_list.append(word_cell)

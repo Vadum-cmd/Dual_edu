@@ -3,8 +3,10 @@ from sqlalchemy import String, ForeignKey
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from datetime import datetime
 from typing import List
-from ..db.session import Base
+#from db.base_class import Base
 
+Base = declarative_base()
+metadata = Base.metadata
 metadata = Base.metadata
 
 class User(Base):
