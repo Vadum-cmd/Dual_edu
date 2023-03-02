@@ -1,4 +1,5 @@
 import PyPDF2
+from nltk.tokenize import RegexpTokenizer
 
 
 def extract_text_from_pdf(file_path):
@@ -23,3 +24,9 @@ def get_unique_words(text):
                 else:
                     arr[i] = arr[i][:j] + arr[i][j + 1:]
     return arr
+
+def word_tokenization(text):
+    tokenizer = RegexpTokenizer(r'\w+')
+    words = tokenizer.tokenize(text)
+    words = [word.lower() for word in words if word.isalpha()]
+    return words
