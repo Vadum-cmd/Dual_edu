@@ -11,7 +11,7 @@
 # from sqlalchemy.orm import Session
 # from dependencies import get_db
 # from uuid import uuid4
-#
+# from main import app
 #
 # ACCESS_TOKEN_EXPIRE_MINUTES = 30  # 30 minutes
 # REFRESH_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7  # 7 days

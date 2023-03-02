@@ -2,9 +2,9 @@ from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 from dependencies import get_db
 from crud.crud_functions import get_user_word, get_word
+from main import app
 # from schemas.new_schema import WordUpdate
 
-app = FastAPI()
 
 @app.get("/test")
 def get_random_word(user_id: int, db: Session = Depends(get_db)):

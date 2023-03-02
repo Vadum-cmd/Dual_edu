@@ -2,8 +2,8 @@ from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 from dependencies import get_db
 from crud.crud_functions import get_user_prof
+from main import app
 
-app = FastAPI()
 
 @app.get("/settings")
 def get_settings(user_id: int, db: Session = Depends(get_db)):
