@@ -7,7 +7,6 @@ from typing import List
 
 Base = declarative_base()
 metadata = Base.metadata
-metadata = Base.metadata
 
 class User(Base):
 

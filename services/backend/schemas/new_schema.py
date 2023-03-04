@@ -1,5 +1,4 @@
 from typing import List, Optional
-from datetime import datetime
 from pydantic import BaseModel
 
 
@@ -9,8 +8,11 @@ class UserBase(BaseModel):
     native_language: str
     goal_level: str
     user_level: str
+
+
 class UserCreate(UserBase):
     password: str
+
 
 class User(UserBase):
     user_id: int
@@ -29,6 +31,7 @@ class UserUpdate(UserBase):
     password: Optional[str] = None
     frame: Optional[str] = None
 
+
 class DBWordBase(BaseModel):  
     pass
 
@@ -43,15 +46,15 @@ class DBWord(DBWordBase):
     class Config:
         orm_mode = True
 
-class DBWord(DBWordBase):
-    pass
 
 class UserWordBase(BaseModel):
     en_word: str
     is_known: bool
 
+
 class UserWordCreate(UserWordBase):
     book_id: int
+
 
 class UserWord(UserWordBase):
     word_id: int
@@ -59,12 +62,11 @@ class UserWord(UserWordBase):
     class Config:
         orm_mode = True
 
-class UserWordUpdate(UserWordBase):
-    pass
 
 class BookBase(BaseModel):
     book_title: str
     book_author: str
+
 
 class BookCreate(BookBase):
     user_id: int
@@ -77,9 +79,6 @@ class Book(BookBase):
     class Config:
         orm_mode = True
 
-
-class BookUpdate(BookBase):
-    pass
 
 # class WordBase(BaseModel):
 #     word_level: str
