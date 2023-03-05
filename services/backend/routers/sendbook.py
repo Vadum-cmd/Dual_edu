@@ -1,28 +1,37 @@
-import shutil
-from typing import List
-
-from openpyxl import load_workbook
-from fastapi import FastAPI, Depends, UploadFile, File, Form
+from fastapi import Depends, UploadFile, File, APIRouter
 from sqlalchemy.orm import Session
 from dependencies import get_db
 from logic.extract_words_and_translate import extract_text_from_pdf, word_tokenization, translate_word
-from main import app
 from crud.crud_functions import UserWordCreate, create_user_word, get_db_word
+from crud.crud_functions import BookCreate, create_book, get_db_word_by_en_word, UserWordCreate, create_user_word
+router = APIRouter()
 
-
-# TODO: rewrite this function
-from schemas.new_schema import DBWord
-
-
-@app.post("/sendbook")
+@router.post("/sendbook")
 def post_book(file: UploadFile = File(...), level: str = "a2", db: Session = Depends(get_db)):# -> List[DBWord]:
-    with open(f'{file.filename}', "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+    # with open(f'{file.filename}', "wb") as buffer:
+    #     shutil.copyfileobj(file.file, buffer)
+
+    book = BookCreate()
+    book.user_id = 45
+    book.book_title = file.filename
+    book.book_author = None
+    db_book = create_book(db=db, book=book)
+    print(db_book.book_id)
 
     text = extract_text_from_pdf(file.filename)
     words = word_tokenization(text)
-    user_words = []
-    book_id = 4
+
+    for word in words:
+        db_word = get_db_word_by_en_word(db=db, en_word=word)
+        print(word, db_word)
+        if db_word.word_level > level:
+            user_word = UserWordCreate()
+            user_word.en_word = db_word.en_word
+            user_word.book_id = db_book.book_id
+            user_word.is_known = False
+            user_db_word = create_user_word(db=db, user_word=user_word)
+            print(user_db_word)
+
     # for word in words:
     #     create_user_word(db=db, user_word=UserWordCreate(en_word=word, is_known=False, book_id=book_id))
     #
@@ -31,7 +40,9 @@ def post_book(file: UploadFile = File(...), level: str = "a2", db: Session = Dep
     #     user_words.append(get_db_word(db=db, en_word=word))
     #
     # return user_words
-    return {"words": "words"}
+
+
+    return {"book_id": db_book.book_id}
 
     # split text from book
     # write words to DB using level

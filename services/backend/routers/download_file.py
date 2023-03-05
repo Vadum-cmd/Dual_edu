@@ -1,7 +1,10 @@
+from fastapi import APIRouter
 from fastapi.responses import FileResponse
 from main import app
 
 
-@app.get("/download-vocabulary", response_class=FileResponse)
+router = APIRouter()
+
+@router.get("/download-vocabulary", response_class=FileResponse)
 async def main():
     return #some_file_path

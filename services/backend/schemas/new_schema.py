@@ -2,7 +2,7 @@ from typing import List, Optional
 from pydantic import BaseModel
 
 
-class UserBase(BaseModel):   
+class UserBase(BaseModel):
     user_name: str
     email: str
     native_language: str
@@ -16,7 +16,7 @@ class UserCreate(UserBase):
 
 class User(UserBase):
     user_id: int
-    current_num_level: int 
+    current_num_level: int
     frame_path: Optional[str] = None
     books: List["Book"] = []
 
@@ -32,7 +32,7 @@ class UserUpdate(UserBase):
     frame: Optional[str] = None
 
 
-class DBWordBase(BaseModel):  
+class DBWordBase(BaseModel):
     pass
 
 
@@ -40,9 +40,10 @@ class DBWordCreate(DBWordBase):
     en_word: str
 
 
-class DBWord(DBWordBase):
+class DBWord(DBWordCreate):
     word_level: Optional[str]
     uk_word: Optional[str]
+
     class Config:
         orm_mode = True
 
@@ -59,6 +60,7 @@ class UserWordCreate(UserWordBase):
 class UserWord(UserWordBase):
     word_id: int
     db_word: Optional[DBWord]
+
     class Config:
         orm_mode = True
 
@@ -78,7 +80,6 @@ class Book(BookBase):
 
     class Config:
         orm_mode = True
-
 
 # class WordBase(BaseModel):
 #     word_level: str

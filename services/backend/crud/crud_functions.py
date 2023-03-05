@@ -1,13 +1,8 @@
 from sqlalchemy.orm import Session
 from typing import List, Dict, Tuple
-from ..models.model import User, User_level, Book, Goal, User_word, DB_word
-from ..schemas.new_schema import UserCreate, UserUpdate, User_levelCreate, User_levelUpdate, DBWord, DBWordCreate, \
-    UserWord, UserWordCreate, UserWordUpdate, BookCreate, BookUpdate, GoalCreate, GoalUpdate
-from random import randint
-
-
-# from ..schemas.new_schema import Word
-# from ..schemas.new_schema import WordCreate, WordUpdate
+from models.model import User, Book, User_word, DB_word
+from schemas.new_schema import UserCreate, UserUpdate, DBWord, DBWordCreate, \
+    UserWord, UserWordCreate, BookCreate
 
 
 # from .base import CRUDBase
@@ -54,63 +49,63 @@ def delete_user(db: Session, user: User) -> None:
 
 
 # Returns a user level with the specified user_level_id.
-def get_user_level(db: Session, user_level_id: int) -> User_level:
-    return db.query(User_level).filter(User_level.user_level_id == user_level_id).first()
+# def get_user_level(db: Session, user_level_id: int) -> User_level:
+#     return db.query(User_level).filter(User_level.user_level_id == user_level_id).first()
+#
+#
+# # Creates a new user level with the provided data and returns the newly created user level.
+# def create_user_level(db: Session, user_level: User_levelCreate) -> User_level:
+#     db_user_level = User_level(**user_level.dict())
+#     db.add(db_user_level)
+#     db.commit()
+#     db.refresh(db_user_level)
+#     return db_user_level
+#
+#
+# # Updates a user level with the specified user_level_id with the provided data and returns the updated user level.
+# def update_user_level(db: Session, user_level: User_level, user_level_update: User_levelUpdate) -> User_level:
+#     for field, value in user_level_update:
+#         setattr(user_level, field, value)
+#     db.add(user_level)
+#     db.commit()
+#     db.refresh(user_level)
+#     return user_level
 
 
-# Creates a new user level with the provided data and returns the newly created user level.
-def create_user_level(db: Session, user_level: User_levelCreate) -> User_level:
-    db_user_level = User_level(**user_level.dict())
-    db.add(db_user_level)
-    db.commit()
-    db.refresh(db_user_level)
-    return db_user_level
-
-
-# Updates a user level with the specified user_level_id with the provided data and returns the updated user level.
-def update_user_level(db: Session, user_level: User_level, user_level_update: User_levelUpdate) -> User_level:
-    for field, value in user_level_update:
-        setattr(user_level, field, value)
-    db.add(user_level)
-    db.commit()
-    db.refresh(user_level)
-    return user_level
-
-
-# Deletes a user level with the specified user_level_id.
-def delete_user_level(db: Session, user_level: User_level) -> None:
-    db.delete(user_level)
-    db.commit()
-
-
-def create_goal(db: Session, goal: GoalCreate):
-    db_goal = Goal(goal_level=goal.goal_level, date=goal.date, user_id=goal.user_id)
-    db.add(db_goal)
-    db.commit()
-    db.refresh(db_goal)
-    return db_goal
-
-
-def get_goal(db: Session, goal_id: int):
-    return db.query(Goal).filter(Goal.goal_id == goal_id).first()
-
-
-def update_goal(db: Session, goal_id: int, goal: GoalUpdate):
-    db_goal = db.query(Goal).filter(Goal.goal_id == goal_id).first()
-    if db_goal:
-        for key, value in goal.dict(exclude_unset=True).items():
-            setattr(db_goal, key, value)
-        db.commit()
-        db.refresh(db_goal)
-    return db_goal
-
-
-def delete_goal(db: Session, goal_id: int):
-    db_goal = db.query(Goal).filter(Goal.goal_id == goal_id).first()
-    if db_goal:
-        db.delete(db_goal)
-        db.commit()
-    return db_goal
+# # Deletes a user level with the specified user_level_id.
+# def delete_user_level(db: Session, user_level: User_level) -> None:
+#     db.delete(user_level)
+#     db.commit()
+#
+#
+# def create_goal(db: Session, goal: GoalCreate):
+#     db_goal = Goal(goal_level=goal.goal_level, date=goal.date, user_id=goal.user_id)
+#     db.add(db_goal)
+#     db.commit()
+#     db.refresh(db_goal)
+#     return db_goal
+#
+#
+# def get_goal(db: Session, goal_id: int):
+#     return db.query(Goal).filter(Goal.goal_id == goal_id).first()
+#
+#
+# def update_goal(db: Session, goal_id: int, goal: GoalUpdate):
+#     db_goal = db.query(Goal).filter(Goal.goal_id == goal_id).first()
+#     if db_goal:
+#         for key, value in goal.dict(exclude_unset=True).items():
+#             setattr(db_goal, key, value)
+#         db.commit()
+#         db.refresh(db_goal)
+#     return db_goal
+#
+#
+# def delete_goal(db: Session, goal_id: int):
+#     db_goal = db.query(Goal).filter(Goal.goal_id == goal_id).first()
+#     if db_goal:
+#         db.delete(db_goal)
+#         db.commit()
+#     return db_goal
 
 
 def create_book(db: Session, book: BookCreate):
@@ -129,13 +124,13 @@ def get_books(db: Session, skip: int = 0, limit: int = 100):
     return db.query(Book).offset(skip).limit(limit).all()
 
 
-def update_book(db: Session, book_id: int, book: BookUpdate):
-    db_book = db.query(Book).filter(Book.book_id == book_id).first()
-    for field, value in book:
-        setattr(db_book, field, value) if value else None
-    db.commit()
-    db.refresh(db_book)
-    return db_book
+# def update_book(db: Session, book_id: int, book: BookUpdate):
+#     db_book = db.query(Book).filter(Book.book_id == book_id).first()
+#     for field, value in book:
+#         setattr(db_book, field, value) if value else None
+#     db.commit()
+#     db.refresh(db_book)
+#     return db_book
 
 
 def delete_book(db: Session, book_id: int):
@@ -163,6 +158,14 @@ def create_db_word(db: Session, db_word: DBWordCreate) -> DBWord:
 def get_user_words(db: Session, skip: int = 0, limit: int = 100) -> List[UserWord]:
     return db.query(User_word).offset(skip).limit(limit).all()
 
+#
+def get_user_words_by_book(db: Session, book_id: int) -> List[UserWord]:
+    return db.query(User_word).filter(User_word.book_id == book_id).all()
+def get_book_by_user_id(db: Session, user_id: int) -> List[Book]:
+    return db.query(Book).filter(Book.user_id == user_id).all()
+def get_db_word_by_en_word(db: Session, en_word: str) -> DBWord:
+    return db.query(DBWord).filter(DBWord.en_word == en_word).first()
+#
 
 def create_user_word(db: Session, user_word: UserWordCreate) -> UserWord:
     user_word_obj = User_word(**user_word.dict())
@@ -172,13 +175,13 @@ def create_user_word(db: Session, user_word: UserWordCreate) -> UserWord:
     return user_word_obj
 
 
-def update_user_word(db: Session, user_word: UserWordUpdate) -> UserWord:
-    user_word_obj = db.query(User_word).filter(User_word.word_id == user_word.word_id).first()
-    for key, value in user_word.dict(exclude_unset=True).items():
-        setattr(user_word_obj, key, value)
-    db.commit()
-    db.refresh(user_word_obj)
-    return user_word_obj
+# def update_user_word(db: Session, user_word: UserWordUpdate) -> UserWord:
+#     user_word_obj = db.query(User_word).filter(User_word.word_id == user_word.word_id).first()
+#     for key, value in user_word.dict(exclude_unset=True).items():
+#         setattr(user_word_obj, key, value)
+#     db.commit()
+#     db.refresh(user_word_obj)
+#     return user_word_obj
 
 
 def delete_user_word(db: Session, word_id: int) -> None:
