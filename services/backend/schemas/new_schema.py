@@ -32,11 +32,7 @@ class UserUpdate(UserBase):
     frame: Optional[str] = None
 
 
-class DBWordBase(BaseModel):
-    pass
-
-
-class DBWordCreate(DBWordBase):
+class DBWordCreate(BaseModel):
     en_word: str
 
 
@@ -44,8 +40,8 @@ class DBWord(DBWordCreate):
     word_level: Optional[str]
     uk_word: Optional[str]
 
-    class Config:
-        orm_mode = True
+    # class Config:
+    #     orm_mode = True
 
 
 class UserWordBase(BaseModel):
@@ -61,8 +57,8 @@ class UserWord(UserWordBase):
     word_id: int
     db_word: Optional[DBWord]
 
-    class Config:
-        orm_mode = True
+    # class Config:
+    #     orm_mode = True
 
 
 class BookBase(BaseModel):
@@ -78,26 +74,5 @@ class Book(BookBase):
     book_id: int
     words: List[UserWord] = []
 
-    class Config:
-        orm_mode = True
-
-# class WordBase(BaseModel):
-#     word_level: str
-#     uk_word: str
-#     en_word: str
-
-
-# class WordCreate(WordBase):
-#     book_id: int
-
-
-# class Word(WordBase):
-#     word_id: int
-#     book_id: int
-
-#     class Config:
-#         orm_mode = True
-
-
-# class WordUpdate(WordBase):
-#     pass
+    # class Config:
+    #     orm_mode = True

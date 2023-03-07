@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from typing import List, Dict, Tuple
 from models.model import User, Book, User_word, DB_word
-from schemas.new_schema import UserCreate, UserUpdate, DBWord, DBWordCreate, \
+from schemas.new_schema import UserCreate, UserUpdate, DBWordCreate, DBWord, \
     UserWord, UserWordCreate, BookCreate
 
 
@@ -139,11 +139,11 @@ def delete_book(db: Session, book_id: int):
     db.commit()
 
 
-def get_db_word(db: Session, en_word: str) -> DBWord:
+def get_db_word(db: Session, en_word: str) -> DB_word:
     return db.query(DB_word).filter(DB_word.en_word == en_word).first()
 
 
-def create_db_word(db: Session, db_word: DBWordCreate) -> DBWord:
+def create_db_word(db: Session, db_word: DBWordCreate) -> DB_word:
     db_word_obj = DB_word(**db_word.dict())
     db.add(db_word_obj)
     db.commit()
@@ -159,12 +159,20 @@ def get_user_words(db: Session, skip: int = 0, limit: int = 100) -> List[UserWor
     return db.query(User_word).offset(skip).limit(limit).all()
 
 #
-def get_user_words_by_book(db: Session, book_id: int) -> List[UserWord]:
+def get_user_words_by_book(db: Session, book_id: int):
     return db.query(User_word).filter(User_word.book_id == book_id).all()
+
+
 def get_book_by_user_id(db: Session, user_id: int) -> List[Book]:
     return db.query(Book).filter(Book.user_id == user_id).all()
-def get_db_word_by_en_word(db: Session, en_word: str) -> DBWord:
-    return db.query(DBWord).filter(DBWord.en_word == en_word).first()
+
+
+def get_db_word_by_en_word(db: Session, en_word: str): # -> DB_word:
+    return db.query(DB_word).filter(DB_word.en_word == en_word).first()
+
+
+def get_books_by_user_id(db: Session, user_id: int) -> List[Book]:
+    return db.query(Book).filter(Book.user_id == user_id).all()
 #
 
 def create_user_word(db: Session, user_word: UserWordCreate) -> UserWord:
