@@ -1,13 +1,8 @@
 from sqlalchemy.orm import Session
 from typing import List, Dict, Tuple
-from ..models.model import User, User_level, Book, Goal, User_word, DB_word
-from ..schemas.new_schema import UserCreate, UserUpdate, User_levelCreate, User_levelUpdate, DBWord, DBWordCreate, \
-    UserWord, UserWordCreate, UserWordUpdate, BookCreate, BookUpdate, GoalCreate, GoalUpdate
-from random import randint
-
-
-# from ..schemas.new_schema import Word
-# from ..schemas.new_schema import WordCreate, WordUpdate
+from models.model import User, Book, User_word, DB_word
+from schemas.new_schema import UserCreate, UserUpdate, DBWordCreate, DBWord, \
+    UserWord, UserWordCreate, BookCreate
 
 
 # from .base import CRUDBase
@@ -54,63 +49,63 @@ def delete_user(db: Session, user: User) -> None:
 
 
 # Returns a user level with the specified user_level_id.
-def get_user_level(db: Session, user_level_id: int) -> User_level:
-    return db.query(User_level).filter(User_level.user_level_id == user_level_id).first()
+# def get_user_level(db: Session, user_level_id: int) -> User_level:
+#     return db.query(User_level).filter(User_level.user_level_id == user_level_id).first()
+#
+#
+# # Creates a new user level with the provided data and returns the newly created user level.
+# def create_user_level(db: Session, user_level: User_levelCreate) -> User_level:
+#     db_user_level = User_level(**user_level.dict())
+#     db.add(db_user_level)
+#     db.commit()
+#     db.refresh(db_user_level)
+#     return db_user_level
+#
+#
+# # Updates a user level with the specified user_level_id with the provided data and returns the updated user level.
+# def update_user_level(db: Session, user_level: User_level, user_level_update: User_levelUpdate) -> User_level:
+#     for field, value in user_level_update:
+#         setattr(user_level, field, value)
+#     db.add(user_level)
+#     db.commit()
+#     db.refresh(user_level)
+#     return user_level
 
 
-# Creates a new user level with the provided data and returns the newly created user level.
-def create_user_level(db: Session, user_level: User_levelCreate) -> User_level:
-    db_user_level = User_level(**user_level.dict())
-    db.add(db_user_level)
-    db.commit()
-    db.refresh(db_user_level)
-    return db_user_level
-
-
-# Updates a user level with the specified user_level_id with the provided data and returns the updated user level.
-def update_user_level(db: Session, user_level: User_level, user_level_update: User_levelUpdate) -> User_level:
-    for field, value in user_level_update:
-        setattr(user_level, field, value)
-    db.add(user_level)
-    db.commit()
-    db.refresh(user_level)
-    return user_level
-
-
-# Deletes a user level with the specified user_level_id.
-def delete_user_level(db: Session, user_level: User_level) -> None:
-    db.delete(user_level)
-    db.commit()
-
-
-def create_goal(db: Session, goal: GoalCreate):
-    db_goal = Goal(goal_level=goal.goal_level, date=goal.date, user_id=goal.user_id)
-    db.add(db_goal)
-    db.commit()
-    db.refresh(db_goal)
-    return db_goal
-
-
-def get_goal(db: Session, goal_id: int):
-    return db.query(Goal).filter(Goal.goal_id == goal_id).first()
-
-
-def update_goal(db: Session, goal_id: int, goal: GoalUpdate):
-    db_goal = db.query(Goal).filter(Goal.goal_id == goal_id).first()
-    if db_goal:
-        for key, value in goal.dict(exclude_unset=True).items():
-            setattr(db_goal, key, value)
-        db.commit()
-        db.refresh(db_goal)
-    return db_goal
-
-
-def delete_goal(db: Session, goal_id: int):
-    db_goal = db.query(Goal).filter(Goal.goal_id == goal_id).first()
-    if db_goal:
-        db.delete(db_goal)
-        db.commit()
-    return db_goal
+# # Deletes a user level with the specified user_level_id.
+# def delete_user_level(db: Session, user_level: User_level) -> None:
+#     db.delete(user_level)
+#     db.commit()
+#
+#
+# def create_goal(db: Session, goal: GoalCreate):
+#     db_goal = Goal(goal_level=goal.goal_level, date=goal.date, user_id=goal.user_id)
+#     db.add(db_goal)
+#     db.commit()
+#     db.refresh(db_goal)
+#     return db_goal
+#
+#
+# def get_goal(db: Session, goal_id: int):
+#     return db.query(Goal).filter(Goal.goal_id == goal_id).first()
+#
+#
+# def update_goal(db: Session, goal_id: int, goal: GoalUpdate):
+#     db_goal = db.query(Goal).filter(Goal.goal_id == goal_id).first()
+#     if db_goal:
+#         for key, value in goal.dict(exclude_unset=True).items():
+#             setattr(db_goal, key, value)
+#         db.commit()
+#         db.refresh(db_goal)
+#     return db_goal
+#
+#
+# def delete_goal(db: Session, goal_id: int):
+#     db_goal = db.query(Goal).filter(Goal.goal_id == goal_id).first()
+#     if db_goal:
+#         db.delete(db_goal)
+#         db.commit()
+#     return db_goal
 
 
 def create_book(db: Session, book: BookCreate):
@@ -129,13 +124,13 @@ def get_books(db: Session, skip: int = 0, limit: int = 100):
     return db.query(Book).offset(skip).limit(limit).all()
 
 
-def update_book(db: Session, book_id: int, book: BookUpdate):
-    db_book = db.query(Book).filter(Book.book_id == book_id).first()
-    for field, value in book:
-        setattr(db_book, field, value) if value else None
-    db.commit()
-    db.refresh(db_book)
-    return db_book
+# def update_book(db: Session, book_id: int, book: BookUpdate):
+#     db_book = db.query(Book).filter(Book.book_id == book_id).first()
+#     for field, value in book:
+#         setattr(db_book, field, value) if value else None
+#     db.commit()
+#     db.refresh(db_book)
+#     return db_book
 
 
 def delete_book(db: Session, book_id: int):
@@ -144,11 +139,11 @@ def delete_book(db: Session, book_id: int):
     db.commit()
 
 
-def get_db_word(db: Session, en_word: str) -> DBWord:
+def get_db_word(db: Session, en_word: str) -> DB_word:
     return db.query(DB_word).filter(DB_word.en_word == en_word).first()
 
 
-def create_db_word(db: Session, db_word: DBWordCreate) -> DBWord:
+def create_db_word(db: Session, db_word: DBWordCreate) -> DB_word:
     db_word_obj = DB_word(**db_word.dict())
     db.add(db_word_obj)
     db.commit()
@@ -163,6 +158,22 @@ def create_db_word(db: Session, db_word: DBWordCreate) -> DBWord:
 def get_user_words(db: Session, skip: int = 0, limit: int = 100) -> List[UserWord]:
     return db.query(User_word).offset(skip).limit(limit).all()
 
+#
+def get_user_words_by_book(db: Session, book_id: int):
+    return db.query(User_word).filter(User_word.book_id == book_id).all()
+
+
+def get_book_by_user_id(db: Session, user_id: int) -> List[Book]:
+    return db.query(Book).filter(Book.user_id == user_id).all()
+
+
+def get_db_word_by_en_word(db: Session, en_word: str): # -> DB_word:
+    return db.query(DB_word).filter(DB_word.en_word == en_word).first()
+
+
+def get_books_by_user_id(db: Session, user_id: int) -> List[Book]:
+    return db.query(Book).filter(Book.user_id == user_id).all()
+#
 
 def create_user_word(db: Session, user_word: UserWordCreate) -> UserWord:
     user_word_obj = User_word(**user_word.dict())
@@ -172,13 +183,13 @@ def create_user_word(db: Session, user_word: UserWordCreate) -> UserWord:
     return user_word_obj
 
 
-def update_user_word(db: Session, user_word: UserWordUpdate) -> UserWord:
-    user_word_obj = db.query(User_word).filter(User_word.word_id == user_word.word_id).first()
-    for key, value in user_word.dict(exclude_unset=True).items():
-        setattr(user_word_obj, key, value)
-    db.commit()
-    db.refresh(user_word_obj)
-    return user_word_obj
+# def update_user_word(db: Session, user_word: UserWordUpdate) -> UserWord:
+#     user_word_obj = db.query(User_word).filter(User_word.word_id == user_word.word_id).first()
+#     for key, value in user_word.dict(exclude_unset=True).items():
+#         setattr(user_word_obj, key, value)
+#     db.commit()
+#     db.refresh(user_word_obj)
+#     return user_word_obj
 
 
 def delete_user_word(db: Session, word_id: int) -> None:
@@ -218,72 +229,72 @@ def delete_user_word(db: Session, word_id: int) -> None:
 
 
 ## Vadym here. Function to make things easier
-def get_user_id(db: Session, user_name: str) -> str:
-    db_user = db.query(User).filter(User.user_name == user_name).first()
-    return db_user.user_id
-
-
-## Vadym here. №1 /vocabulary <- get all user_words, user_name and user_level
-def get_user_vocab(db: Session, user_id: int) -> Dict:
-    db_user = get_user(db, user_id)
-    # user_name
-    db_user_name = db_user.user_name
-    # user_level
-    db_user_level = db.query(User_level).filter(
-        User_level.user_level_id == db_user.user_level_id).first().current_num_level
-    # words
-    db_words = list()
-    for book in db_user.books:
-        db_book_words = db.query(User_word).filter(User_word.book_id == book.book_id).all()
-        for word in db_book_words:
-            db_words.append(word)
-    return dict(user_words=db_words,
-                user_name=db_user_name,
-                user_level=db_user_level)
-
-
-## Vadym_here. №2 /settings <- user goal, user level, user email, user level, user name, native language
-## I believe it's the same as №3, only without 'english level'
-
-
-## Vadym here. №3 /profile <- user name, user level, user goal, current english level, user native language, user email
-def get_user_prof(db: Session, user_id: int) -> Dict:
-    db_user = get_user(db, user_id)
-    db_user_level = db.query(User_level).filter(User_level.user_level_id == db_user.user_level_id).first()
-    db_goal = db.query(Goal).filter(Goal.goal_id == db_user.goal_id).first()
-    return dict(user_name=db_user.user_name,
-                user_level=db_user_level.current_num_level,
-                goal=db_goal.goal_level,
-                english_level=db_user_level.current_level,
-                native_language=db_user.native_language,
-                email=db_user.email)
-
-
-# ## Vadym here. №4 /test <- user word (unknown)
-# def get_user_test(db: Session, user_id: int) -> UserWord:
+# def get_user_id(db: Session, user_name: str) -> str:
+#     db_user = db.query(User).filter(User.user_name == user_name).first()
+#     return db_user.user_id
+#
+#
+# ## Vadym here. №1 /vocabulary <- get all user_words, user_name and user_level
+# def get_user_vocab(db: Session, user_id: int) -> Dict:
 #     db_user = get_user(db, user_id)
-#     db_words = []
+#     # user_name
+#     db_user_name = db_user.user_name
+#     # user_level
+#     db_user_level = db.query(User_level).filter(
+#         User_level.user_level_id == db_user.user_level_id).first().current_num_level
+#     # words
+#     db_words = list()
+#     for book in db_user.books:
+#         db_book_words = db.query(User_word).filter(User_word.book_id == book.book_id).all()
+#         for word in db_book_words:
+#             db_words.append(word)
+#     return dict(user_words=db_words,
+#                 user_name=db_user_name,
+#                 user_level=db_user_level)
+#
+#
+# ## Vadym_here. №2 /settings <- user goal, user level, user email, user level, user name, native language
+# ## I believe it's the same as №3, only without 'english level'
+#
+#
+# ## Vadym here. №3 /profile <- user name, user level, user goal, current english level, user native language, user email
+# def get_user_prof(db: Session, user_id: int) -> Dict:
+#     db_user = get_user(db, user_id)
+#     db_user_level = db.query(User_level).filter(User_level.user_level_id == db_user.user_level_id).first()
+#     db_goal = db.query(Goal).filter(Goal.goal_id == db_user.goal_id).first()
+#     return dict(user_name=db_user.user_name,
+#                 user_level=db_user_level.current_num_level,
+#                 goal=db_goal.goal_level,
+#                 english_level=db_user_level.current_level,
+#                 native_language=db_user.native_language,
+#                 email=db_user.email)
+#
+#
+# # ## Vadym here. №4 /test <- user word (unknown)
+# # def get_user_test(db: Session, user_id: int) -> UserWord:
+# #     db_user = get_user(db, user_id)
+# #     db_words = []
+# #     for book in db_user.books:
+# #         db_book_words = db.query(User_word).filter(User_word.book_id == book.book_id, User_word.is_known == False).all()
+# #         for word in db_book_words:
+# #             db_words.append(word)
+# #     return db_words
+# #
+# #
+# # def get_test_word(db: Session, words: List) -> Tuple[str, str]:
+# #     word_index = randint(0, len(db_words) - 1)
+# #     chosen_word = db.query(DB_word).filter(DB_word.en_word == words[word_index].en_word).first()
+# #     return tuple(chosen_word.en_word, chosen_word.uk_word)
+# def get_user_word(db: Session, user_id: int) -> UserWord:
+#     db_user = get_user(db, user_id)
+#     db_words = list()
 #     for book in db_user.books:
 #         db_book_words = db.query(User_word).filter(User_word.book_id == book.book_id, User_word.is_known == False).all()
 #         for word in db_book_words:
 #             db_words.append(word)
-#     return db_words
+#     return db_words[randint(0, len(db_words) - 1)]
 #
 #
-# def get_test_word(db: Session, words: List) -> Tuple[str, str]:
-#     word_index = randint(0, len(db_words) - 1)
-#     chosen_word = db.query(DB_word).filter(DB_word.en_word == words[word_index].en_word).first()
-#     return tuple(chosen_word.en_word, chosen_word.uk_word)
-def get_user_word(db: Session, user_id: int) -> UserWord:
-    db_user = get_user(db, user_id)
-    db_words = list()
-    for book in db_user.books:
-        db_book_words = db.query(User_word).filter(User_word.book_id == book.book_id, User_word.is_known == False).all()
-        for word in db_book_words:
-            db_words.append(word)
-    return db_words[randint(0, len(db_words) - 1)]
-
-
-def get_word(db: Session, word_id: int):
-    return db.query(DB_word).filter(DB_word.word_id == word_id).first()
-
+# def get_word(db: Session, word_id: int):
+#     return db.query(DB_word).filter(DB_word.word_id == word_id).first()
+#

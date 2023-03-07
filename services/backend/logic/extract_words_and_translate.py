@@ -14,7 +14,7 @@ def extract_text_from_pdf(file_path):
 def word_tokenization(text):
     tokenizer = RegexpTokenizer(r'\w+')
     words = tokenizer.tokenize(text)
-    words = [word.lower() for word in words if word.isalpha()]
+    words = set([word.lower() for word in words if word.isalpha()])
     return words
 
 def translate_word(word):

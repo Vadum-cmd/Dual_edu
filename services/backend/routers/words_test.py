@@ -1,17 +1,17 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, APIRouter
 from sqlalchemy.orm import Session
 from dependencies import get_db
 from crud.crud_functions import get_user_word, get_word
-from main import app
-# from schemas.new_schema import WordUpdate
 
 
-@app.get("/test")
+router = APIRouter()
+
+@router.get("/test")
 def get_random_word(user_id: int, db: Session = Depends(get_db)):
     word = get_user_word(db=db, user_id=user_id)
     return {"word_id": word.word_id, "word": word.en_word}
 
-@app.post("/test")
+@router.post("/test")
 def check_word(word_id: int, answer: str, db: Session = Depends(get_db)):
     if answer.lower() == get_word(db=db, word_id=word_id).uk_word.lower():
         #update_word(db=db, word_id=word_id, word=WordUpdate())
