@@ -1,3 +1,5 @@
+from random import randint
+
 from sqlalchemy.orm import Session
 from typing import List, Dict, Tuple
 from models.model import User, Book, User_word, DB_word
@@ -151,30 +153,6 @@ def create_db_word(db: Session, db_word: DBWordCreate) -> DB_word:
     return db_word_obj
 
 
-# def get_user_word(db: Session, word_id: int) -> UserWord:
-#     return db.query(User_word).filter(User_word.word_id == word_id).first()
-
-
-def get_user_words(db: Session, skip: int = 0, limit: int = 100) -> List[UserWord]:
-    return db.query(User_word).offset(skip).limit(limit).all()
-
-#
-def get_user_words_by_book(db: Session, book_id: int):
-    return db.query(User_word).filter(User_word.book_id == book_id).all()
-
-
-def get_book_by_user_id(db: Session, user_id: int) -> List[Book]:
-    return db.query(Book).filter(Book.user_id == user_id).all()
-
-
-def get_db_word_by_en_word(db: Session, en_word: str): # -> DB_word:
-    return db.query(DB_word).filter(DB_word.en_word == en_word).first()
-
-
-def get_books_by_user_id(db: Session, user_id: int) -> List[Book]:
-    return db.query(Book).filter(Book.user_id == user_id).all()
-#
-
 def create_user_word(db: Session, user_word: UserWordCreate) -> UserWord:
     user_word_obj = User_word(**user_word.dict())
     db.add(user_word_obj)
@@ -183,6 +161,55 @@ def create_user_word(db: Session, user_word: UserWordCreate) -> UserWord:
     return user_word_obj
 
 
+def delete_user_word(db: Session, word_id: int) -> None:
+    db.query(User_word).filter(User_word.word_id == word_id).delete()
+    db.commit()
+
+
+#
+def get_user_words_by_book(db: Session, book_id: int):
+    return db.query(User_word).filter(User_word.book_id == book_id).all()
+
+
+def get_random_user_book(db: Session, user_id: int) -> Book:
+    books = db.query(Book).filter(Book.user_id == user_id).all()
+    if len(books) == 0:
+        raise Exception("No book in DB")  # TODO: an exception to front end
+    elif len(books) == 1:
+        return books[0]
+    else:
+        book = books[randint(0, len(books)-1)]
+        return book
+
+def get_unknown_user_word_by_book_id(db: Session, book_id: int) -> DB_word:
+    user_words = db.query(User_word).filter(User_word.book_id == book_id).all()  # and not User_word.is_known
+    # TODO: user_words is empty and also the condition with User_word.is_known should be added
+    if len(user_words) == 0:
+        raise Exception("No user words in DB or every word has benn already learned")  # TODO: an exception to front end
+    elif len(user_words) == 1:
+        return user_words[1]
+    else:
+        user_word = user_words[randint(0, len(user_words)-1)]
+        return db.query(DB_word).filter(DB_word.en_word == user_word.en_word).first()
+
+
+def get_books_by_user_id(db: Session, user_id: int) -> List[Book]:
+    return db.query(Book).filter(Book.user_id == user_id).all()
+
+
+def get_db_word_by_en_word(db: Session, en_word: str):  # -> DB_word:
+    return db.query(DB_word).filter(DB_word.en_word == en_word).first()
+
+
+def get_user_profile(db: Session, user_id: int):
+    return db.query(User).filter(User.user_id == user_id).first()
+
+def change_user_word_status(db: Session, book_id: int, en_word: str):  # TODO: test it
+    user_word = db.query(User_word).filter(Book.book_id == book_id and User_word.en_word == en_word).first()
+    user_word.is_known = True
+    db.commit()
+#
+
 # def update_user_word(db: Session, user_word: UserWordUpdate) -> UserWord:
 #     user_word_obj = db.query(User_word).filter(User_word.word_id == user_word.word_id).first()
 #     for key, value in user_word.dict(exclude_unset=True).items():
@@ -190,11 +217,6 @@ def create_user_word(db: Session, user_word: UserWordCreate) -> UserWord:
 #     db.commit()
 #     db.refresh(user_word_obj)
 #     return user_word_obj
-
-
-def delete_user_word(db: Session, word_id: int) -> None:
-    db.query(User_word).filter(User_word.word_id == word_id).delete()
-    db.commit()
 
 
 # def create_word(db: Session, word: WordCreate):
