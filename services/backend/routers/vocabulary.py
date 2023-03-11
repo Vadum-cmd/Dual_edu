@@ -19,7 +19,8 @@ def get_vocabulary(book_id: int = None, db: Session = Depends(get_db)) -> Set:
         db_words = set()
         for book in books:
             book_words = get_user_words_by_book(db=db, book_id=book.book_id)
-            db_words.update(book_words)
+            for book_word in book_words:
+                db_words.add(get_db_word_by_en_word(db=db, en_word=book_word.en_word))
         return db_words
 
     else:

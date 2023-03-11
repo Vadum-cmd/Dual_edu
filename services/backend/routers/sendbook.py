@@ -9,16 +9,16 @@ router = APIRouter()
 
 @router.post("/sendbook")
 def post_book(file: UploadFile = File(...), level: str = "a2", db: Session = Depends(get_db)):# -> List[DBWord]:
-    with open(f'books/{file.filename}', "wb") as buffer:
+    path = f'books/{file.filename}'
+    with open(path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
-
-    book = BookCreate(**{"user_id": 1, "book_title": file.filename, "book_author": ""})
+    user_id = 2  # TODO: user_id ??
+    book = BookCreate(**{"user_id": user_id, "book_title": file.filename, "book_author": ""})
     db_book = create_book(db=db, book=book)
 
-    text = extract_text_from_pdf(file.filename)
+    text = extract_text_from_pdf(path)
     words = word_tokenization(text)
 
-    print(db_book.book_id)
     for word in words:
         try:
             db_word = get_db_word_by_en_word(db=db, en_word=word)
