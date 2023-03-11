@@ -1,7 +1,7 @@
 # Default ignored files
 __pycache__
 .mypy_cache
-.idea/
+#.idea/
 .node_modules
 .src
 data.csv
