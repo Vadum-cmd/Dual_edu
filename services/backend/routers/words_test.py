@@ -20,5 +20,6 @@ def check_word(en_word: str, answer: str, book_id: int, db: Session = Depends(ge
     if answer.lower() == get_db_word_by_en_word(db=db, en_word=en_word).uk_word.lower():
         change_user_word_status(db=db, book_id=book_id, en_word=en_word)
         return {"result": True}
-    return {"result": False, "correct_answer": get_db_word_by_en_word(db=db, en_word=en_word).uk_word}
+    else:
+        return {"result": False, "correct_answer": get_db_word_by_en_word(db=db, en_word=en_word).uk_word}
 

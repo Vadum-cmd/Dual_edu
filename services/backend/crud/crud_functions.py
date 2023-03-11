@@ -206,9 +206,14 @@ def get_user_profile(db: Session, user_id: int):
     return db.query(User).filter(User.user_id == user_id).first()
 
 def change_user_word_status(db: Session, book_id: int, en_word: str):  # TODO: test it
-    user_word = db.query(User_word).filter(Book.book_id == book_id and User_word.en_word == en_word).first()
-    user_word.is_known = True
-    db.commit()
+    user_words = db.query(User_word).filter(Book.book_id == book_id).all()# and User_word.en_word == en_word
+    for user_word in user_words:
+        if user_word.en_word == en_word:
+            user_word.is_known = True
+            db.commit()
+            break
+
+    #db.commit()
 #
 
 # def update_user_word(db: Session, user_word: UserWordUpdate) -> UserWord:
