@@ -18,4 +18,5 @@ def word_tokenization(text):
     return words
 
 def translate_word(word):
-    return translate_text(query_text=word, from_language="en", to_language="uk")
+    return translate_text(query_text=word, translator="google", from_language="en", to_language="uk")
+
