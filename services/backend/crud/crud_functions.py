@@ -198,7 +198,7 @@ def get_books_by_user_id(db: Session, user_id: int) -> List[Book]:
     return db.query(Book).filter(Book.user_id == user_id).all()
 
 
-def get_db_word_by_en_word(db: Session, en_word: str):  # -> DB_word:
+def get_db_word_by_en_word(db: Session, en_word: str) -> DB_word:
     return db.query(DB_word).filter(DB_word.en_word == en_word).first()
 
 
