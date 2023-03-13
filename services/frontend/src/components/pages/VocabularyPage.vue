@@ -25,13 +25,14 @@
     <button :disabled="currentPage === pageCount" @click="currentPage++">Next</button>
   </div>
 
-  <div>
+  <div class="download">
     <button @click="downloadTable" @mouseover="showObject = true" >Download File</button>
-    <select v-if="showObject" v-model="levelDownload">
+    <div v-if="showObject">
+    <select  v-model="levelDownload">
       <option v-for="value in options" :key="value">{{ value }}</option>
     </select>
     <button @click="showObject = false" ><font-awesome-icon icon="fa-solid fa-circle-xmark" /></button>
-
+    </div>
   </div>
 </template>
 <script>
@@ -157,5 +158,8 @@ input[type="text"] {
   color: white;
   padding: 5px 10px;
   margin: 0 5px;
+}
+.download{
+  display: flex;
 }
 </style>
