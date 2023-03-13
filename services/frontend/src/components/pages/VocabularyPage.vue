@@ -1,34 +1,40 @@
 <template>
-<div>
-<input type="text" v-model="searchTerm" placeholder="Search words...">
-<table>
-  <thead>
-  <tr>
-    <th>№</th>
-    <th>Word</th>
-    <th>Translation</th>
-    <th>lvl</th>
-    <th>Mark as Familiar</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr v-for="(word, index) in displayedWords" :key="word.id">
-    <td>{{ (currentPage - 1) * pageSize + index + 1 }}</td>
-    <td>{{ word.word }}</td>
-    <td>{{ word.translation }}</td>
-    <td>{{ word.lvl }}</td>
-    <td><input type="checkbox" v-model="word.familiar"></td>
-  </tr>
-  </tbody>
-</table>
-<div class="pagination">
-  <button :disabled="currentPage === 1" @click="currentPage--">Prev</button>
-  <span>{{ currentPage }}</span>
-  <button :disabled="currentPage === pageCount" @click="currentPage++">Next</button>
-</div>
-</div>
+  <div>
+    <input type="text" v-model="searchTerm" placeholder="Search words...">
+
+    <table>
+      <thead>
+      <tr>
+        <th>№</th>
+        <th>Word</th>
+        <th>Translation</th>
+        <th>lvl</th>
+        <th>Mark as Familiar</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="(word, index) in displayedWords" :key="word.id">
+        <td>{{ (currentPage - 1) * pageSize + index + 1 }}</td>
+        <td>{{ word.word }}</td>
+        <td>{{ word.translation }}</td>
+        <td>{{ word.lvl }}</td>
+        <td><input type="checkbox" v-model="word.familiar"></td>
+      </tr>
+      </tbody>
+    </table>
+    <div class="pagination">
+      <button :disabled="currentPage === 1" @click="currentPage--">Prev</button>
+      <span>{{ currentPage }}</span>
+      <button :disabled="currentPage === pageCount" @click="currentPage++">Next</button>
+    </div>
+  </div>
+  <div>
+    <button @click="downloadTable">Download File</button>
+  </div>
 </template>
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
@@ -56,51 +62,116 @@ export default {
         {
           id: 15,
           word: 'Oblivious',
-          translation: 'Not aware or concerned about what is happening', lvl: 'B2',
+          translation: 'Not aware or concerned about what is happening',
+          lvl: 'B2',
           familiar: false
         },
-        {id: 16, word: 'Panacea', translation: 'A solution or remedy for all problems', lvl: 'C1', familiar: false},
-        {id: 17, word: 'Quintessential', translation: 'The most typical or ideal example', lvl: 'C1', familiar: false},
-        {id: 18, word: 'Rancor', translation: 'Bitterness or resentment', lvl: 'C1', familiar: false},
-        {id: 19, word: 'Sycophant', translation: 'Someone who flatters to gain advantage', lvl: 'C1', familiar: false},
-        {id: 20, word: 'Truculent', translation: 'Aggressively defiant or hostile', lvl: 'C1', familiar: false}
+        {id: 16, word: 'Pensive', translation: 'Engaged in deep or serious thought', lvl: 'B2', familiar: false},
+        {
+          id: 17,
+          word: 'Quintessential',
+          translation: 'The most perfect or typical example of a quality or class',
+          lvl: 'C1',
+          familiar: false
+        },
+        {
+          id: 18,
+          word: 'Rancorous',
+          translation: 'Characterized by bitterness or resentment',
+          lvl: 'C1',
+          familiar: false
+        },
+        {
+          id: 19,
+          word: 'Sycophant',
+          translation: 'A person who acts obsequiously towards someone important in order to gain advantage',
+          lvl: 'C1',
+          familiar: false
+        },
+        {
+          id: 20,
+          word: 'Taciturn',
+          translation: 'Reserved or uncommunicative in speech; saying little',
+          lvl: 'B2',
+          familiar: false
+        },
+        {
+          id: 21,
+          word: 'Ubiquitous',
+          translation: 'Present, appearing, or found everywhere',
+          lvl: 'C1',
+          familiar: false
+        },
+        {
+          id: 22,
+          word: 'Vex',
+          translation: 'Make (someone) feel annoyed, frustrated, or worried, especially with trivial matters',
+          lvl: 'C1',
+          familiar: false
+        },
+        {
+          id: 23,
+          word: 'Wily',
+          translation: 'Skilled at gaining an advantage, especially deceitfully',
+          lvl: 'C1',
+          familiar: false
+        },
+        {
+          id: 24,
+          word: 'Xenophobia',
+          translation: 'Dislike of or prejudice against people from other countries',
+          lvl: 'C1',
+          familiar: false
+        },
+        {
+          id: 25,
+          word: 'Yoke',
+          translation: 'A wooden crosspiece that is fastened over the necks of two animals and attached to the plow or cart that they are to pull',
+          lvl: 'C1',
+          familiar: false
+        }, {
+          id: 26,
+          word: 'Zealous',
+          translation: 'Having or showing zeal, great energy or enthusiasm in pursuit of a cause or an objective',
+          lvl: 'B2',
+          familiar: false
+        },
       ],
       searchTerm: '',
       currentPage: 1,
       pageSize: 10,
-      familiarWords: [],
     };
   },
   computed: {
     filteredWords() {
-      if (!this.searchTerm) {
-        return this.words;
-      }
-      return this.words.filter(word => {
-        return word.word.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-            word.lvl.toLowerCase().includes(this.searchTerm.toLowerCase());
-      });
+      return this.words.filter((word) =>
+          word.word.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
     },
     pageCount() {
       return Math.ceil(this.filteredWords.length / this.pageSize);
     },
     displayedWords() {
       const startIndex = (this.currentPage - 1) * this.pageSize;
-      const endIndex = startIndex + this.pageSize;
-      return this.filteredWords.slice(startIndex, endIndex);
-    }
-  },
-  watch: {
-    filteredWords() {
-      this.currentPage = 1;
+      return this.filteredWords.slice(startIndex, startIndex + this.pageSize);
     },
-    words: {
-      handler() {
-        this.familiarWords = this.words.filter(word => word.familiar);
-      },
-      deep: true
-    }
-  }
+  },
+  methods: {
+    downloadTable() {
+      axios({
+        url: 'http://192.168.1.104:8081/vocabulary/download?user_id=1',
+        method: 'GET',
+        responseType: 'blob',
+      }).then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'table.xlsx');
+        document.body.appendChild(link);
+        link.click();
+      });
+    },
+  },
 };
 </script>
 
