@@ -1,6 +1,7 @@
 <template>
   <div>
     <input type="text" v-model="searchTerm" placeholder="Search words...">
+
     <table>
       <thead>
       <tr>
@@ -27,8 +28,13 @@
       <button :disabled="currentPage === pageCount" @click="currentPage++">Next</button>
     </div>
   </div>
+  <div>
+    <button @click="downloadTable">Download File</button>
+  </div>
 </template>
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
@@ -133,7 +139,7 @@ export default {
       ],
       searchTerm: '',
       currentPage: 1,
-      pageSize: 12,
+      pageSize: 10,
     };
   },
   computed: {
@@ -148,6 +154,22 @@ export default {
     displayedWords() {
       const startIndex = (this.currentPage - 1) * this.pageSize;
       return this.filteredWords.slice(startIndex, startIndex + this.pageSize);
+    },
+  },
+  methods: {
+    downloadTable() {
+      axios({
+        url: 'http://192.168.1.104:8081/vocabulary/download?user_id=1',
+        method: 'GET',
+        responseType: 'blob',
+      }).then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'table.xlsx');
+        document.body.appendChild(link);
+        link.click();
+      });
     },
   },
 };
