@@ -10,12 +10,11 @@
         <option v-for="value in options" :key="value">{{ value }}</option>
       </select>
     </div>
-    <button @click="SendLevel">Submit</button>
+    <button @click="sendLevel">Submit</button>
+    <div v-if="loading"><i class="fa fa-spinner fa-spin"></i></div>
   </div>
 </template>
-
 <script>
-
 import axios from "axios";
 export default {
   data() {
@@ -31,32 +30,36 @@ export default {
       level: null,
       url:'',
       file:null,
-      formData:null
+      formData:null,
+      loading: false
     }
   },
   methods: {
     onFileChange(event) {
       this.file = event.target.files[0];
     },
-    SendLevel() {
+    sendLevel() {
       this.formData = new FormData();
       this.formData.append('file', this.file);
       this.formData.append('level', this.level);
-    
-      this.url = 'http://192.168.0.163:8081/sendbook'
+
+      this.url = 'http://192.168.1.104:8081/sendbook';
+      this.loading = true;
       axios.post(this.url, this.formData)
+          .then(() => {
+
+          })
           .catch(error => {
             this.errorMessage = error.message;
             console.error("There was an error!", error);
+          })
+          .finally(() => {
+            this.loading = false;
           });
     }
   },
-
-
-
 }
 </script>
-
 <style scoped>
 .content {
   display: flex;
@@ -98,4 +101,12 @@ select{
   background-color: #595959;
   color: white;
 }
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
+
+.fa {
+  font-size: 24px;
+  color: white;
+}
 </style>
+
+
