@@ -47,7 +47,9 @@
         <label for="target-level">Target Level of English:</label>
         <select id="target-level" v-model="targetLevel">
           <option value="A1">A1 - Beginner</option>
-          <option value="A2">A2 - Elementary</option>
+          <option value="A2">A2
+
+            Elementary</option>
           <option value="B1">B1 - Intermediate</option>
           <option value="B2">B2 - Upper Intermediate</option>
           <option value="C1">C1 - Advanced</option>
@@ -59,9 +61,7 @@
         <input type="email" id="email" v-model="email">
       </div>
       <div class="form-group">
-        <label
-
-            for="english-level">English Level:</label>
+        <label for="english-level">English Level:</label>
         <select id="english-level" v-model="englishLevel">
           <option value="A1">A1 - Beginner</option>
           <option value="A2">A2 - Elementary</option>
@@ -83,54 +83,71 @@
         </select>
       </div>
       <button type="submit" class="btn btn-primary">Save Settings</button>
-      <button @click.prevent="cancelEditing" class="btn btn-secondary">Cancel Editing</button>
+      <button @click.prevent="cancelEdit" class="btn btn-secondary">Cancel</button>
     </form>
-
   </div>
 </template>
 <script>
 export default {
   data() {
     return {
-      targetLevel: "",
-      email: "",
-      englishLevel: "",
-      nativeLanguage: "",
       editing: false,
-      savedSettings: {
-        targetLevel: "",
-        email: "",
-        englishLevel: "",
-        nativeLanguage: "",
-      },
-    };
+      targetLevel: 'A1',
+      email: '',
+      englishLevel: 'A1',
+      nativeLanguage: 'English',
+      savedSettings: null,
+      endpoint: 'http://192.168.1.104:8081/settings'
+    }
+  },
+  created() {
+    fetch(this.endpoint)
+        .then(response => response.json())
+        .then(data => {
+          this.savedSettings = data
+          this.targetLevel = data.targetLevel
+          this.email = data.email
+          this.englishLevel = data.englishLevel
+          this.nativeLanguage = data.nativeLanguage
+        })
+        .catch(error => console.error(error))
   },
   methods: {
-    saveSettings() {
-      this.savedSettings.targetLevel = this.targetLevel;
-      this.savedSettings.email = this.email;
-      this.savedSettings.englishLevel = this.englishLevel;
-      this.savedSettings.nativeLanguage = this.nativeLanguage;
-      this.editing = false;
-    },
     editSettings() {
-      this.editing = true;
+      this.editing = true
     },
-    cancelEditing() {
-      this.targetLevel = this.savedSettings.targetLevel;
-      this.email = this.savedSettings.email;
-      this.englishLevel = this.savedSettings.englishLevel;
-      this.nativeLanguage = this.savedSettings.nativeLanguage;
-      this.editing = false;
+    cancelEdit() {
+      this.editing = false
     },
-  },
-  mounted() {
-    this.savedSettings.targetLevel = this.targetLevel;
-    this.savedSettings.email = this.email;
-    this.savedSettings.englishLevel = this.englishLevel;
-    this.savedSettings.nativeLanguage = this.nativeLanguage;
-  },
-};
+    saveSettings() {
+      const data = {
+        targetLevel: this.targetLevel,
+        email: this.email,
+        englishLevel: this.englishLevel,
+        nativeLanguage: this.nativeLanguage
+      }
+      fetch(this.endpoint, {
+        method: 'PUT',
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+          .then(response => {
+            if (response.ok) {
+              this.savedSettings = data
+              this.editing = false
+            } else {
+              throw new Error('Failed to save settings')
+            }
+          })
+          .catch(error => {
+            console.error(error)
+            alert('Failed to save settings')
+          })
+    }
+  }
+}
 </script>
 <style scoped>
 .language-page {
@@ -139,6 +156,7 @@ export default {
   padding: 2rem;
   background-color: white;
   color: #444;
+  border-radius: 40px;
 }
 
 .form-group {
