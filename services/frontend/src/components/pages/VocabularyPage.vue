@@ -54,11 +54,11 @@ export default {
       pageSize: 5,
       currentPage: 1,
       showObject: false,
-      levelDownload:null
+      levelDownload: "B1"
     };
   },
   created() {
-    axios.get('http://192.168.1.104:8081/vocabulary')
+    axios.get('http://192.168.0.163:8081/vocabulary')
         .then(response => {
           this.words = response.data;
         })
@@ -80,7 +80,7 @@ export default {
   },
   methods: {
     downloadTable() {
-      const this_url = 'http://192.168.1.104:8081/vocabulary/download/?user_id=1&level='+this.levelDownload;
+      const this_url = 'http://192.168.0.163:8081/vocabulary/download?user_id=2&level='+this.levelDownload;
       console.log(this_url);
       axios({
         url: this_url,
