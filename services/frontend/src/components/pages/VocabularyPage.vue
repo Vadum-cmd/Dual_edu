@@ -26,14 +26,17 @@
   </div>
 
   <div class="download">
-    <button @click="downloadTable" @mouseover="showObject = true" >Download File</button>
-    <div v-if="showObject">
-    <select  v-model="levelDownload">
-      <option v-for="value in options" :key="value">{{ value }}</option>
-    </select>
-    <button @click="showObject = false" ><font-awesome-icon icon="fa-solid fa-circle-xmark" /></button>
+    <button @click="downloadTable" @mouseover="showObject = true">Download File</button>
+    <div class="levels" v-if="showObject">
+      <div v-for="option in options" :key="option.key">
+        <input type="checkbox" :id="option.value" :value="option.value" v-model="levelDownload">
+        <label :for="option.value">{{ option.value }}</label>
+      </div>
+      <button @click="showObject = false">Close</button>
     </div>
   </div>
+
+
 </template>
 <script>
 import axios from "axios";
@@ -42,19 +45,21 @@ export default {
   data() {
     return {
       options: [
-        'A1',
-        'A2',
-        'B1',
-        'B2',
-        'C1',
-        'C2'
+        { key: 1, value: 'A1'},
+        { key: 2, value: 'A2'},
+        { key: 3, value: 'B1'},
+        { key: 4, value: 'B2'},
+        { key: 5, value: 'C1'},
+        { key: 6, value: 'C2'},
       ],
+
+
       words: [],
       searchTerm: '',
       pageSize: 5,
       currentPage: 1,
       showObject: false,
-      levelDownload:null
+      levelDownload:[]
     };
   },
   created() {
@@ -80,7 +85,8 @@ export default {
   },
   methods: {
     downloadTable() {
-      const this_url = 'http://192.168.1.104:8081/vocabulary/download/?user_id=1&level='+this.levelDownload;
+      const this_url = `http://192.168.1.104:8081/vocabulary/download/?user_id=1&level="${this.levelDownload.join(' ')}"`;
+
       console.log(this_url);
       axios({
         url: this_url,
@@ -160,6 +166,12 @@ input[type="text"] {
   margin: 0 5px;
 }
 .download{
+  display: inline-block;
+}
+.levels {
+  color: white;
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 </style>
