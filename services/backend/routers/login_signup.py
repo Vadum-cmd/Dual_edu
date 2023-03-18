@@ -94,3 +94,13 @@
 #         "access_token": create_access_token(user['email']),
 #         "refresh_token": create_refresh_token(user['email']),
 #     }
+from fastapi import Depends
+
+from auth.db import User
+from main import fastapi_users, app
+
+current_user = fastapi_users.current_user()
+
+@app.get("/protected-route")
+def protected_route(user: User = Depends(current_user)):
+    return f"Hello, {user.email}"
