@@ -5,3 +5,7 @@ __pycache__
 .node_modules
 .src
 data.csv
+fastapi_users
+fastapi_users_db_sqlalchemy
+fastapi_users_db_sqlalchemy-5.0.0.dist-info
+fastapi_users-10.4.1.dist-info
