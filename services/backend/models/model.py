@@ -41,6 +41,7 @@ class DB_word(Base):
     en_word: Mapped[str] = mapped_column(String(50), primary_key=True)
     word_level: Mapped[str] = mapped_column(String(2))
     uk_word: Mapped[str] = mapped_column(String(50))
+    word_type: Mapped[str] = mapped_column(String(50))
 
     user_word: Mapped['User_word'] = relationship(back_populates='db_word')
 
