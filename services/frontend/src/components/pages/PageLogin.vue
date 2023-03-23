@@ -83,15 +83,15 @@ export default {
   methods: {
     async submitForm() {
       const data = {
-        name: this.name,
+        user_name: this.name,
         email: this.email,
         password: this.password,
-        nativeLanguage: this.nativeLanguage,
-        goalLevel: this.goalLevel,
-        currentLevel: this.currentLevel,
+        native_language: this.nativeLanguage,
+        goal_level: this.goalLevel,
+        user_level: this.currentLevel,
       };
       try {
-        const response = await fetch('/api/register', {
+        const response = await fetch('http://192.168.0.163:8081/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),
