@@ -39,7 +39,7 @@
                   <font-awesome-icon icon="fa-solid fa-gear"/>
                   Settings
                 </router-link>
-                <router-link class="drop_menu" to="/game">
+                <router-link class="drop_menu" to="/test">
                   <font-awesome-icon icon="fa-solid fa-puzzle-piece"/>
                   Game
                 </router-link>
@@ -98,7 +98,7 @@
                     <font-awesome-icon icon="fa-solid fa-gear"/>
                     Settings
                   </router-link>
-                  <router-link class="drop_menu" to="/game">
+                  <router-link class="drop_menu" to="/test">
                     <font-awesome-icon icon="fa-solid fa-puzzle-piece"/>
                     Game
                   </router-link>

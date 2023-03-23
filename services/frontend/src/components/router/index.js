@@ -30,7 +30,7 @@ const router = createRouter({
             component: PageSettings
         },
         {
-            path:'/game',
+            path:'/test',
             name: 'Game page',
             component: PageGame
         },
