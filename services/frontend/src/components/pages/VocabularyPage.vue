@@ -85,7 +85,7 @@ export default {
   },
   methods: {
     downloadTable() {
-      const this_url = http://192.168.1.104:8081/vocabulary/download/?user_id=1&level="${this.levelDownload.join(' ')}";
+      const this_url = `http://192.168.1.104:8081/vocabulary/download/?user_id=1&level="${this.levelDownload.join(' ')}"`;
 
       console.log(this_url);
       axios({
