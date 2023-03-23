@@ -6,12 +6,12 @@
           <div class="overlay-left">
             <h2>Welcome Back!</h2>
             <p>Please login with your personal info</p>
-            <button class="invert" id="signIn" @click="signUp = !signUp">Sign In</button>
+            <button class="invert" id="signIn" @click="signUp = false">Sign In</button>
           </div>
           <div class="overlay-right">
             <h2>Hello, Friend!</h2>
             <p>Please enter your personal details</p>
-            <button class="invert" id="signUp" @click="signUp = !signUp">Sign Up</button>
+            <button class="invert" id="signUp" @click="signUp = true">Sign Up</button>
           </div>
         </div>
       </div>
@@ -56,13 +56,13 @@
         </div>
         <button class="sign-up-btn " type="submit">Sign Up</button>
       </form>
-      <form class="sign-in" action="#">
+      <form class="sign-in" @submit.prevent="submitLogin">
         <h2>Sign In</h2>
         <div>Use your account</div>
-        <input type="email" placeholder="Email" />
-        <input type="password" placeholder="Password" />
+        <input type="email" placeholder="Email" v-model="loginEmail" />
+        <input type="password" placeholder="Password" v-model="loginPassword" />
         <a href="#">Forgot your password?</a>
-        <button>Sign In</button>
+        <button class="sign-in-btn" type="submit" id="signInBtn">Sign In</button>
       </form>
     </div>
   </article>
@@ -78,20 +78,22 @@ export default {
       nativeLanguage: '',
       goalLevel: '',
       currentLevel: '',
+      loginEmail: '',
+      loginPassword: '',
     }
   },
   methods: {
     async submitForm() {
       const data = {
-        user_name: this.name,
+        name: this.name,
         email: this.email,
         password: this.password,
-        native_language: this.nativeLanguage,
-        goal_level: this.goalLevel,
-        user_level: this.currentLevel,
+        nativeLanguage: this.nativeLanguage,
+        goalLevel: this.goalLevel,
+        currentLevel: this.currentLevel,
       };
       try {
-        const response = await fetch('http://192.168.0.163:8081/register', {
+        const response = await fetch('/api/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),
@@ -104,10 +106,28 @@ export default {
         console.error(error);
       }
     },
+    async submitLogin() {
+      const data = {
+        email: this.loginEmail,
+        password: this.loginPassword,
+      };
+      try {
+        const response = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        if (!response.ok) {
+          throw new Error('Login failed');
+        }
+        console.log('Login successful');
+      } catch (error) {
+        console.error(error);
+      }
+    },
   },
 }
 </script>
-
 <style lang="scss" scoped>
 .container {
   position: relative;
@@ -281,13 +301,13 @@ select {
 
   background-color: #eee;
   border: none;
-  padding: 8px 48px;
+  padding: 8px 48px 0 10px;
   margin: 6px 0;
   height: 32px;
   width: 180px;
+  color:gray;
   border-radius: 15px;
   border-bottom: 1px solid #ddd;
-  color: gray;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, .4),
   0 -1px 1px #fff,
   0 1px 0 #fff;
@@ -295,7 +315,7 @@ select {
   &:focus {
     outline: none;
     background-color: #fff;}
-  padding-left: 10px;
+
 
 
 }
