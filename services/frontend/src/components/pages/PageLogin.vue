@@ -108,7 +108,7 @@ export default {
     },
     async submitLogin() {
       const data = {
-        email: this.loginEmail,
+        username: this.loginEmail,
         password: this.loginPassword,
       };
       try {
