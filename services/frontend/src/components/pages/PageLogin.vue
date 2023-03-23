@@ -15,13 +15,46 @@
           </div>
         </div>
       </div>
-      <form class="sign-up" action="#">
+      <form class="sign-up" @submit.prevent="submitForm">
         <h2>Create login</h2>
         <div>Use your email for registration</div>
-        <input type="text" placeholder="Name" />
-        <input type="email" placeholder="Email" />
-        <input type="password" placeholder="Password" />
-        <button>Sign Up</button>
+        <input type="text" placeholder="Name" v-model="name" />
+        <input type="email" placeholder="Email" v-model="email" />
+        <input type="password" placeholder="Password" v-model="password" />
+        <div>
+          <select id="native-language" v-model="nativeLanguage" >
+            <option value="" disabled selected>Native language</option>
+            <option value="English">English</option>
+            <option value="Spanish">Spanish</option>
+            <option value="French">French</option>
+            <option value="German">German</option>
+            <option value="Ukrainian">Ukrainian</option>
+            <option value="Arabic">Arabic</option>
+          </select>
+        </div>
+        <div>
+          <select id="goal-level" v-model="goalLevel">
+            <option value="" disabled selected>Goal Level</option>
+            <option value="A1">A1</option>
+            <option value="A2">A2</option>
+            <option value="B1">B1</option>
+            <option value="B2">B2</option>
+            <option value="C1">C1</option>
+            <option value="C2">C2</option>
+          </select>
+        </div>
+        <div>
+          <select id="current-level" v-model="currentLevel">
+            <option value="" disabled selected>Current Level</option>
+            <option value="A1">A1</option>
+            <option value="A2">A2</option>
+            <option value="B1">B1</option>
+            <option value="B2">B2</option>
+            <option value="C1">C1</option>
+            <option value="C2">C2</option>
+          </select>
+        </div>
+        <button class="sign-up-btn " type="submit">Sign Up</button>
       </form>
       <form class="sign-in" action="#">
         <h2>Sign In</h2>
@@ -34,14 +67,44 @@
     </div>
   </article>
 </template>
-
 <script>
 export default {
   data: () => {
     return {
-      signUp: false
+      signUp: false,
+      name: '',
+      email: '',
+      password: '',
+      nativeLanguage: '',
+      goalLevel: '',
+      currentLevel: '',
     }
-  }
+  },
+  methods: {
+    async submitForm() {
+      const data = {
+        name: this.name,
+        email: this.email,
+        password: this.password,
+        nativeLanguage: this.nativeLanguage,
+        goalLevel: this.goalLevel,
+        currentLevel: this.currentLevel,
+      };
+      try {
+        const response = await fetch('/api/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        if (!response.ok) {
+          throw new Error('Registration failed');
+        }
+        console.log('Registration successful');
+      } catch (error) {
+        console.error(error);
+      }
+    },
+  },
 }
 </script>
 
@@ -168,16 +231,15 @@ form {
   }
 }
 .sign-in {
-  left: 0;
+  left: -4%;
   z-index: 2;
 }
 .sign-up {
-  left: 0;
+  top:-5%;
+  left: 2%;
   z-index: 1;
   opacity: 0;
-  padding-right: 25px;
-
-}
+  padding-left: 20px ;}
 .sign-up-active {
   .sign-in {
     transform: translateX(100%);
@@ -215,4 +277,30 @@ form {
     z-index: 10;
   }
 }
+select {
+
+  background-color: #eee;
+  border: none;
+  padding: 8px 48px;
+  margin: 6px 0;
+  height: 32px;
+  width: 180px;
+  border-radius: 15px;
+  border-bottom: 1px solid #ddd;
+  color: gray;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, .4),
+  0 -1px 1px #fff,
+  0 1px 0 #fff;
+  overflow: hidden;
+  &:focus {
+    outline: none;
+    background-color: #fff;}
+  padding-left: 10px;
+
+
+}
+.sign-up-btn{
+  margin-top: 5px;
+}
+
 </style>
