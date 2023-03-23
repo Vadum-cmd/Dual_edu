@@ -1,7 +1,7 @@
 from fastapi_users.authentication import CookieTransport, AuthenticationBackend
 from fastapi_users.authentication import JWTStrategy
 
-cookie_transport = CookieTransport(cookie_max_age=3600, cookie_name="user_auth")
+cookie_transport = CookieTransport(cookie_max_age=3600, cookie_name="user_auth", cookie_secure=False)
 
 SECRET = "SECRET"  # TODO: secret code must be stored in .env
 # and should be long sequence of chars and numbers
