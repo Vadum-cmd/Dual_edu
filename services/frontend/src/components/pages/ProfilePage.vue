@@ -19,26 +19,52 @@
     </div>
   </div>
 </template>
-<script>export default {
+<script>
+import axios from 'axios';
+
+export default {
   name: "ProfilePage",
   data() {
     return {
-      avatarUrl: "https://img.freepik.com/free-vector/cute-cat-gaming-cartoon_138676-2969.jpg?w=826&t=st=1677163950~exp=1677164550~hmac=d8a31715c4c9cfd71e82ff5b33d305e7b88eb649c0c5a79d1eba2f01203ae84d",
-      nickname: "John",
-      level: 5,
-      xp: 120,
-      xpToNextLevel: 200,
-      goal: "Reach level C4.",
-      englishLevel: "A1",
-      nativeLanguage: "Spanish",
-      email: "john.down@example.com"
+
+      avatarUrl: "",
+      nickname: "",
+      level: 0,
+      xp: 0,
+      xpToNextLevel: 0,
+      goal: "",
+      englishLevel: "",
+      nativeLanguage: "",
+      email: ""
     };
-  }, computed: {
+  },
+  computed: {
     xpPercentage() {
       return `${Math.floor((this.xp / this.xpToNextLevel) * 100)}%`;
     }
+  },
+  mounted() {
+
+    axios.get('http://192.168.1.104:8081/profile')
+        .then(response => {
+
+          const data = response.data;
+          this.avatarUrl = data.avatarUrl;
+          this.nickname = data.nickname;
+          this.level = data.level;
+          this.xp = data.xp;
+          this.xpToNextLevel = data.xpToNextLevel;
+          this.goal = data.goal;
+          this.englishLevel = data.englishLevel;
+          this.nativeLanguage = data.nativeLanguage;
+          this.email = data.email;
+        })
+        .catch(error => {
+          console.log(error);
+        });
   }
-};</script>
+};
+</script>
 <style scoped>
 .profile-page {
   display: flex;
