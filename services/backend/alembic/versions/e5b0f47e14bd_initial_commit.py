@@ -21,7 +21,7 @@ def upgrade() -> None:
     op.create_table('db_word',
     sa.Column('en_word', sa.String(length=50), nullable=False),
     sa.Column('word_level', sa.String(length=2), nullable=False),
-    sa.Column('uk_word', sa.String(length=50), nullable=False),
+    sa.Column('uk_word', sa.String(length=90), nullable=False),
     sa.PrimaryKeyConstraint('en_word')
     )
     op.create_table('user',
