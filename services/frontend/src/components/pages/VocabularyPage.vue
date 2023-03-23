@@ -59,7 +59,7 @@ export default {
       pageSize: 5,
       currentPage: 1,
       showObject: false,
-      levelDownload:[]
+      levelDownload: "B1"
     };
   },
   created() {
