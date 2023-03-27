@@ -2,7 +2,7 @@
   <div class="content">
     <div class="text">
       <div class="upload">Upload your book</div>
-      <input type="file" @change="onFileChange">
+      <download-button @change="onFileChange"/>
     </div>
     <div class="lang_choose" v-if="true">
       <div class="select_lev">Select your english level</div>
@@ -10,13 +10,24 @@
         <option v-for="value in options" :key="value">{{ value }}</option>
       </select>
     </div>
-    <button @click="sendLevel">Submit</button>
+    <setting-button @click="sendLevel">Submit</setting-button>
     <div v-if="loading"><i class="fa fa-spinner fa-spin"></i></div>
+
+    <div v-if="books && books.length > 0">
+      <h2>Available Books</h2>
+      <ul>
+        <li v-for="book in books" :key="book.id">{{ book.title }}</li>
+      </ul>
+    </div>
   </div>
 </template>
+
 <script>
 import axios from "axios";
+import SettingButton from "@/components/UI/SettingButton.vue";
+import DownloadButton from "@/components/UI/Download button.vue";
 export default {
+  components: {DownloadButton, SettingButton},
   data() {
     return {
       options: [
@@ -31,7 +42,8 @@ export default {
       url:'',
       file:null,
       formData:null,
-      loading: false
+      loading: false,
+      books: []
     }
   },
   methods: {
@@ -43,7 +55,7 @@ export default {
       this.formData.append('file', this.file);
       this.formData.append('level', this.level);
 
-      this.url = 'http://192.168.0.163:8081/sendbook';
+      this.url = 'http://192.168.1.104:8081/sendbook';
       this.loading = true;
       axios.post(this.url, this.formData)
           .then(() => {
@@ -56,10 +68,23 @@ export default {
           .finally(() => {
             this.loading = false;
           });
+    },
+    fetchBooks() {
+      axios.get('http://192.168.1.104:8081/books')
+          .then(response => {
+            this.books = response.data;
+          })
+          .catch(error => {
+            console.error("There was an error!", error);
+          });
     }
   },
+  mounted() {
+    this.fetchBooks()
+  }
 }
 </script>
+
 <style scoped>
 .content {
   display: flex;
@@ -83,7 +108,7 @@ input{
   display: flex;
   align-items: center;
   margin-bottom: 10px;
-  margin-left: 120px;
+
 }
 .select_lev{
   font-size: 30px;
@@ -101,12 +126,16 @@ select{
   background-color: #595959;
   color: white;
 }
+
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
 
 .fa {
   font-size: 24px;
   color: white;
 }
+
+
+
 </style>
 
 
