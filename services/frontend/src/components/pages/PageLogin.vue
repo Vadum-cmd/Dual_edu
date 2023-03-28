@@ -108,11 +108,15 @@ export default {
     },
     async submitLogin() {
       const data = {
+        grant_type: "",
         username: this.loginEmail,
         password: this.loginPassword,
+        scope: "",
+        client_id: "",
+        client_secret: "",
       };
       try {
-        const response = await fetch('/api/login', {
+        const response = await fetch('http://192.168.0.163:8081/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),

@@ -25,7 +25,7 @@ def word_tokenization(text: str):
         words[i] = WordNetLemmatizer().lemmatize(words[i], 'v')
     return words
 
-def search_phrasal(lst: List):
+def search_phrasal(lst: list):
     phrasal = set()
     for i in range(len(lst) - 2):
         together = lst[i] + " " + lst[i+1]
