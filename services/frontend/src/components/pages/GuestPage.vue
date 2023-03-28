@@ -55,7 +55,7 @@ export default {
       this.formData.append('file', this.file);
       this.formData.append('level', this.level);
 
-      this.url = 'http://192.168.1.104:8081/sendbook';
+      this.url = 'http://192.168.0.163:8081/sendbook';
       this.loading = true;
       axios.post(this.url, this.formData)
           .then(() => {
