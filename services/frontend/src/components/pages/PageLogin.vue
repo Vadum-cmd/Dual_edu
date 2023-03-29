@@ -18,11 +18,11 @@
       <form class="sign-up" @submit.prevent="submitForm">
         <h2>Create login</h2>
         <div>Use your email for registration</div>
-        <input type="text" placeholder="Name" v-model="name" />
-        <input type="email" placeholder="Email" v-model="email" />
-        <input type="password" placeholder="Password" v-model="password" />
+        <input type="text" placeholder="Name" v-model="name"/>
+        <input type="email" placeholder="Email" v-model="email"/>
+        <input type="password" placeholder="Password" v-model="password"/>
         <div>
-          <select id="native-language" v-model="nativeLanguage" >
+          <select id="native-language" v-model="nativeLanguage">
             <option value="" disabled selected>Native language</option>
             <option value="English">English</option>
             <option value="Spanish">Spanish</option>
@@ -59,8 +59,8 @@
       <form class="sign-in" @submit.prevent="submitLogin">
         <h2>Sign In</h2>
         <div>Use your account</div>
-        <input type="email" placeholder="Email" v-model="loginEmail" />
-        <input type="password" placeholder="Password" v-model="loginPassword" />
+        <input type="email" placeholder="Email" v-model="loginEmail"/>
+        <input type="password" placeholder="Password" v-model="loginPassword"/>
         <a href="#">Forgot your password?</a>
         <button class="sign-in-btn" type="submit" id="signInBtn">Sign In</button>
       </form>
@@ -69,6 +69,7 @@
 </template>
 <script>
 export default {
+
   data: () => {
     return {
       signUp: false,
@@ -84,6 +85,10 @@ export default {
   },
   methods: {
     async submitForm() {
+      if (!this.name || !this.email || !this.password || !this.nativeLanguage || !this.goalLevel || !this.currentLevel) {
+        alert('Please fill in all required fields');
+        return;
+      }
       const data = {
         name: this.name,
         email: this.email,
@@ -93,10 +98,9 @@ export default {
         currentLevel: this.currentLevel,
       };
       try {
-        const response = await fetch('/api/register', {
+        const response = await fetch(`/register?user_name=${data.name}&email=${data.email}&password=${data.password}&native_language=${data.nativeLanguage}&goal_level=${data.goalLevel}&user_level=${data.currentLevel}`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
+          headers: {'Content-Type': 'application/json'}
         });
         if (!response.ok) {
           throw new Error('Registration failed');
@@ -106,16 +110,16 @@ export default {
         console.error(error);
       }
     },
+
     async submitLogin() {
       const data = {
-        username: this.loginEmail,
+        email: this.loginEmail,
         password: this.loginPassword,
       };
       try {
-        const response = await fetch('/api/login', {
+        const response = await fetch(`/login?email=${data.email}&password=${data.password}`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
+          headers: {'Content-Type': 'application/json'}
         });
         if (!response.ok) {
           throw new Error('Login failed');
@@ -126,6 +130,7 @@ export default {
       }
     },
   },
+
 }
 </script>
 <style lang="scss" scoped>
@@ -138,6 +143,7 @@ export default {
   box-shadow: 0 15px 30px rgba(0, 0, 0, .2),
   0 10px 10px rgba(0, 0, 0, .2);
   background: linear-gradient(to bottom, #efefef, #ccc);
+
   .overlay-container {
     position: absolute;
     top: 0;
@@ -148,6 +154,7 @@ export default {
     transition: transform .5s ease-in-out;
     z-index: 100;
   }
+
   .overlay {
     position: relative;
     left: -100%;
@@ -159,6 +166,7 @@ export default {
     transition: transform .5s ease-in-out;
 
   }
+
   @mixin overlays($property) {
     position: absolute;
     top: 0;
@@ -172,28 +180,34 @@ export default {
     transform: translateX($property);
     transition: transform .5s ease-in-out;
   }
+
   .overlay-left {
     @include overlays(-20%);
     padding: 25% 5% 15% 5%;
   }
+
   .overlay-right {
     @include overlays(0);
     right: 0;
     padding: 25% 5% 15% 20%;
   }
 }
+
 h2 {
   margin: 0;
 }
+
 p {
   margin: 20px 0 30px;
 }
+
 a {
   color: #222;
   text-decoration: none;
   margin: 15px 0;
   font-size: 1rem;
 }
+
 button {
   border-radius: 20px;
   border: 1px solid #494949;
@@ -206,17 +220,21 @@ button {
   text-transform: uppercase;
   cursor: pointer;
   transition: transform .1s ease-in;
+
   &:active {
     transform: scale(.9);
   }
+
   &:focus {
     outline: none;
   }
 }
+
 button.invert {
   background-color: transparent;
   border-color: #fff;
 }
+
 form {
   position: absolute;
   top: 0;
@@ -229,9 +247,11 @@ form {
   text-align: center;
   background: linear-gradient(to bottom, #efefef, #ccc);
   transition: all .5s ease-in-out;
+
   div {
     font-size: 1rem;
   }
+
   input {
     background-color: #eee;
     border: none;
@@ -244,45 +264,56 @@ form {
     0 -1px 1px #fff,
     0 1px 0 #fff;
     overflow: hidden;
+
     &:focus {
       outline: none;
       background-color: #fff;
     }
   }
 }
+
 .sign-in {
   left: -4%;
   z-index: 2;
 }
+
 .sign-up {
-  top:-5%;
+  top: -5%;
   left: 2%;
   z-index: 1;
   opacity: 0;
-  padding-left: 20px ;}
+  padding-left: 20px;
+}
+
 .sign-up-active {
   .sign-in {
     transform: translateX(100%);
   }
+
   .sign-up {
     transform: translateX(100%);
     opacity: 1;
     z-index: 5;
     animation: show .5s;
   }
+
   .overlay-container {
     transform: translateX(-100%);
   }
+
   .overlay {
     transform: translateX(50%);
   }
+
   .overlay-left {
     transform: translateX(0);
   }
+
   .overlay-right {
     transform: translateX(20%);
   }
 }
+
 @keyframes show {
   0% {
     opacity: 0;
@@ -297,6 +328,7 @@ form {
     z-index: 10;
   }
 }
+
 select {
 
   background-color: #eee;
@@ -305,21 +337,23 @@ select {
   margin: 6px 0;
   height: 32px;
   width: 180px;
-  color:gray;
+  color: gray;
   border-radius: 15px;
   border-bottom: 1px solid #ddd;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, .4),
   0 -1px 1px #fff,
   0 1px 0 #fff;
   overflow: hidden;
+
   &:focus {
     outline: none;
-    background-color: #fff;}
-
+    background-color: #fff;
+  }
 
 
 }
-.sign-up-btn{
+
+.sign-up-btn {
   margin-top: 5px;
 }
 
