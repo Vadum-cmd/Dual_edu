@@ -61,15 +61,28 @@
         <div>Use your account</div>
         <input type="email" placeholder="Email" v-model="loginEmail"/>
         <input type="password" placeholder="Password" v-model="loginPassword"/>
-        <a href="#">Forgot your password?</a>
+        <div class="forgot-password" @click="forgotPassword = true">Forgot your password?</div>
         <button class="sign-in-btn" type="submit" id="signInBtn">Sign In</button>
+        <ModalWindow v-model:is-active="forgotPassword">
+
+            <h2>Reset Password</h2>
+            <div>Enter your email address to reset your password</div>
+            <input type="email" placeholder="Email" v-model="resetEmail"/>
+            <button class="reset-password-btn"  @click="resetPassword" id="resetPasswordBtn">Reset Password</button>
+            <button class="cancel-link" @click="forgotPassword = false"><font-awesome-icon :icon="['fas', 'circle-xmark']"  /></button>
+
+        </ModalWindow>
+
       </form>
     </div>
   </article>
 </template>
 <script>
-export default {
 
+import ModalWindow from "@/components/UI/ModalWindow.vue";
+
+export default {
+  components: {ModalWindow},
   data: () => {
     return {
       signUp: false,
@@ -81,6 +94,8 @@ export default {
       currentLevel: '',
       loginEmail: '',
       loginPassword: '',
+      forgotPassword: false,
+      resetEmail: '',
     }
   },
   methods: {
@@ -112,28 +127,54 @@ export default {
     },
 
     async submitLogin() {
+
+      try {
+        if (!this.forgotPassword) {
+          if (!this.loginEmail || !this.loginPassword) {
+            alert('Please fill in all required fields');
+            return;
+          }
+          const response = await fetch(`/login?email=${this.loginEmail}&password=${this.loginPassword}`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'}
+          });
+          if (!response.ok) {
+            throw new Error('Login failed');
+          }
+          console.log('Login successful');
+        }
+        // clear login form inputs and close the modal
+        this.loginEmail = '';
+        this.loginPassword = '';
+        this.forgotPassword = false;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async resetPassword() {
       const data = {
-        email: this.loginEmail,
-        password: this.loginPassword,
+        email: this.resetEmail,
       };
       try {
-        const response = await fetch(`/login?email=${data.email}&password=${data.password}`, {
+        const response = await fetch(`/reset-password?email=${data.email}`, {
           method: 'POST',
           headers: {'Content-Type': 'application/json'}
         });
         if (!response.ok) {
-          throw new Error('Login failed');
+          throw new Error('Password reset request failed');
         }
-        console.log('Login successful');
+        console.log('Password reset request successful');
       } catch (error) {
         console.error(error);
       }
     },
   },
 
+
 }
 </script>
 <style lang="scss" scoped>
+
 .container {
   position: relative;
   width: 768px;
@@ -152,7 +193,7 @@ export default {
     height: 100%;
     overflow: hidden;
     transition: transform .5s ease-in-out;
-    z-index: 100;
+    z-index: 2;
   }
 
   .overlay {
@@ -238,33 +279,37 @@ button.invert {
 form {
   position: absolute;
   top: 0;
-  display: flex;
+
   align-items: center;
   justify-content: space-around;
-  flex-direction: column;
-  padding: 15% 12% 15% 12%;
+  box-sizing: border-box;
+
 
   text-align: center;
   background: linear-gradient(to bottom, #efefef, #ccc);
   transition: all .5s ease-in-out;
-
+  height: 100%;
   div {
     font-size: 1rem;
   }
 
-  input {
+  input, select {
     background-color: #eee;
     border: none;
-    padding: 8px 15px;
-    margin: 6px 0;
-    width: calc(100% - 30px);
+    padding: 8px 48px 0 10px;
+    margin: 12px 4px;
+    height: 32px;
+
+    color: gray;
     border-radius: 15px;
     border-bottom: 1px solid #ddd;
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, .4),
     0 -1px 1px #fff,
     0 1px 0 #fff;
     overflow: hidden;
-
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
     &:focus {
       outline: none;
       background-color: #fff;
@@ -275,14 +320,30 @@ form {
 .sign-in {
   left: -4%;
   z-index: 2;
+
+  padding: 20% 10%;
+
+  a {
+    cursor: pointer;
+  }
+
+  .reset-password-btn {
+    margin:10px;
+  }
+
 }
 
+.sign-in-btn{
+  margin-top: 10px;
+
+}
 .sign-up {
   top: -5%;
   left: 2%;
   z-index: 1;
   opacity: 0;
-  padding-left: 20px;
+
+  padding: 15% 6.632%;
 }
 
 .sign-up-active {
@@ -328,33 +389,25 @@ form {
     z-index: 10;
   }
 }
-
-select {
-
-  background-color: #eee;
-  border: none;
-  padding: 8px 48px 0 10px;
-  margin: 6px 0;
-  height: 32px;
-  width: 180px;
-  color: gray;
-  border-radius: 15px;
-  border-bottom: 1px solid #ddd;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, .4),
-  0 -1px 1px #fff,
-  0 1px 0 #fff;
-  overflow: hidden;
-
-  &:focus {
-    outline: none;
-    background-color: #fff;
-  }
-
-
+.reset-password-btn{
+  scale: 70%;
 }
+
 
 .sign-up-btn {
   margin-top: 5px;
 }
 
+.forgot-password:hover{
+  color: #00afea;
+}
+.cancel-link:hover{
+  color: #00afea;
+  cursor: pointer;
+}
+.cancel-link{
+
+  border-radius: 50px;
+
+}
 </style>
