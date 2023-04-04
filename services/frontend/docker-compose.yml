@@ -7,9 +7,9 @@ services:
     environment:
       MYSQL_DATABASE: dual_edu
       MYSQL_USER: 'user'
-      MYSQL_PASSWORD: '1q2w3e4r'
+      MYSQL_PASSWORD: '1qazxsw2'
       MYSQL_HOSTNAME: '127.0.0.1'
-      MYSQL_ROOT_PASSWORD: '1q2w3e4r'
+      MYSQL_ROOT_PASSWORD: '2wsxcde3'
     ports:
       - "3307:3306"
     volumes:
@@ -19,7 +19,7 @@ services:
     image: adminer
     restart: always
     ports:
-      - "8081:8081"
+      - "8081:8080"
 
   web:
     build: .
