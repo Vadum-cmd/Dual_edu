@@ -2,17 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c9c9ff5b-21cf-4334-a465-6155c7bb2afc" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/auth/jwt_decoder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logic/get_xlsx.py" beforeDir="false" afterPath="$PROJECT_DIR$/logic/get_xlsx.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routers/download_file.py" beforeDir="false" afterPath="$PROJECT_DIR$/routers/download_file.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routers/profile.py" beforeDir="false" afterPath="$PROJECT_DIR$/routers/profile.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routers/sendbook.py" beforeDir="false" afterPath="$PROJECT_DIR$/routers/sendbook.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routers/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/routers/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routers/vocabulary.py" beforeDir="false" afterPath="$PROJECT_DIR$/routers/vocabulary.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routers/words_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/routers/words_test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/components/pages/PageLogin.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/pages/PageLogin.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic.ini" beforeDir="false" afterPath="$PROJECT_DIR$/alembic.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/env.py" beforeDir="false" afterPath="$PROJECT_DIR$/alembic/env.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth/auth.py" beforeDir="false" afterPath="$PROJECT_DIR$/auth/auth.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth/db.py" beforeDir="false" afterPath="$PROJECT_DIR$/auth/db.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth/jwt_decoder.py" beforeDir="false" afterPath="$PROJECT_DIR$/auth/jwt_decoder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth/manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/auth/manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/config/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crud/crud_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/crud/crud_functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/session.py" beforeDir="false" afterPath="$PROJECT_DIR$/db/session.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies.py" beforeDir="false" afterPath="$PROJECT_DIR$/dependencies.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

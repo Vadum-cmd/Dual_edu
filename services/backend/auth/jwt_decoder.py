@@ -1,5 +1,5 @@
 import jwt
-
+from config.config import SECRET_CODE_JWT, SECRET_CODE_RESET_PASSWORD, AUDIENCE
 
 def decode_user(token: str):
     """
@@ -7,8 +7,20 @@ def decode_user(token: str):
     :return:
     """
     decoded_data = jwt.decode(jwt=token,
-                              key='SECRET',
-                              audience=["fastapi-users:auth"],
+                              key=SECRET_CODE_JWT,
+                              audience=[AUDIENCE],
+                              algorithms=["HS256"])
+
+    return decoded_data
+
+def decode_user_to_reset_password(token: str):
+    """
+        :param token: jwt token
+        :return:
+        """
+    decoded_data = jwt.decode(jwt=token,
+                              key=SECRET_CODE_RESET_PASSWORD,
+                              audience=[AUDIENCE],
                               algorithms=["HS256"])
 
     return decoded_data

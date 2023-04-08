@@ -172,7 +172,7 @@ def get_unknown_user_word_by_book_id(db: Session, book_id: int):# -> DB_word:
         #raise Exception("No user words in DB or every word has been already learned")  # TODO: an exception to front end
         return book_id
     elif len(user_words) == 1:
-        return user_words[1]
+        return user_words[0]
     else:
         user_word = user_words[randint(0, len(user_words)-1)]
         return db.query(DB_word).filter(DB_word.en_word == user_word.en_word).first()
