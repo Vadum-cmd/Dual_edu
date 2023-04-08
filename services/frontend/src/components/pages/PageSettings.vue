@@ -31,12 +31,9 @@
       <div class="form-group">
         <label for="native-language">Native Language:</label>
         <select id="native-language" v-model="nativeLanguage" :disabled="!editing">
-          <option value="English">English</option>
           <option value="Spanish">Spanish</option>
-          <option value="French">French</option>
-          <option value="German">German</option>
           <option value="Ukrainian">Ukrainian</option>
-          <option value="Arabic">Arabic</option>
+
         </select>
       </div>
       <button type="submit" class="btn btn-primary" :disabled="!editing">Save Settings</button>
@@ -47,9 +44,7 @@
         <label for="target-level">Target Level of English:</label>
         <select id="target-level" v-model="targetLevel">
           <option value="A1">A1 - Beginner</option>
-          <option value="A2">A2
-
-            Elementary</option>
+          <option value="A2">A2 - Elementary</option>
           <option value="B1">B1 - Intermediate</option>
           <option value="B2">B2 - Upper Intermediate</option>
           <option value="C1">C1 - Advanced</option>
@@ -74,12 +69,8 @@
       <div class="form-group">
         <label for="native-language">Native Language:</label>
         <select id="native-language" v-model="nativeLanguage">
-          <option value="English">English</option>
           <option value="Spanish">Spanish</option>
-          <option value="French">French</option>
-          <option value="German">German</option>
           <option value="Ukrainian">Ukrainian</option>
-          <option value="Arabic">Arabic</option>
         </select>
       </div>
       <button type="submit" class="btn btn-primary">Save Settings</button>
@@ -97,11 +88,12 @@ export default {
       englishLevel: 'A1',
       nativeLanguage: 'English',
       savedSettings: null,
-      endpoint: 'http://192.168.1.104:8081/settings'
+      endpoint: 'http://192.168.1.104:8081/settings?jwt='
     }
   },
   created() {
-    fetch(this.endpoint)
+    const jwt = localStorage.getItem("jwt");
+    fetch(this.endpoint+jwt)
         .then(response => response.json())
         .then(data => {
           this.savedSettings = data
@@ -126,7 +118,8 @@ export default {
         englishLevel: this.englishLevel,
         nativeLanguage: this.nativeLanguage
       }
-      fetch(this.endpoint, {
+      const jwt = localStorage.getItem("jwt");
+      fetch(this.endpoint+jwt, {
         method: 'PUT',
         body: JSON.stringify(data),
         headers: {
