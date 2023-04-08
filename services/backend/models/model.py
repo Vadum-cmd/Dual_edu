@@ -19,7 +19,6 @@ class User(Base):
     user_name: Mapped[str] = mapped_column(String(50))
     email: Mapped[str] = mapped_column(String(50))
     native_language: Mapped[str] = mapped_column(String(50))
-    #password: Mapped[str] = mapped_column(String(50))
     frame_path: Mapped[str] = mapped_column(String(120))
 
     hashed_password: Mapped[str] = mapped_column(

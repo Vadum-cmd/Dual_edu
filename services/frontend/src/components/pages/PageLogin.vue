@@ -101,15 +101,17 @@ export default {
         return;
       }
       const data = {
-        name: this.name,
+        user_name: this.name,
         email: this.email,
         password: this.password,
-        nativeLanguage: this.nativeLanguage,
-        goalLevel: this.goalLevel,
-        currentLevel: this.currentLevel,
+        native_language: this.nativeLanguage,
+        goal_level: this.goalLevel,
+        user_level: this.currentLevel,
       };
       try {
+
         const response = await fetch(`/register?user_name=${data.name}&email=${data.email}&password=${data.password}&native_language=${data.nativeLanguage}&goal_level=${data.goalLevel}&user_level=${data.currentLevel}`, {
+
           method: 'POST',
           headers: {'Content-Type': 'application/json'}
         });
@@ -167,6 +169,17 @@ export default {
       };
       try {
         const response = await fetch(`/reset-password?email=${data.email}`, {
+
+        /*grant_type: "",
+        username: this.loginEmail,
+        password: this.loginPassword,
+        scope: "",
+        client_id: "",
+        client_secret: null,
+      };
+      try {
+        const response = await fetch('http://192.168.0.163:8081/login', {*/
+
           method: 'POST',
           headers: {'Content-Type': 'application/json'}
         });
