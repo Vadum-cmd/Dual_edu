@@ -2,17 +2,25 @@ import shutil
 
 from fastapi import Depends, UploadFile, File, APIRouter
 from sqlalchemy.orm import Session
+
+from auth.jwt_decoder import decode_user
 from dependencies import get_db
 from logic.extract_words_and_translate import extract_text_from_pdf, word_tokenization
 from crud.crud_functions import BookCreate, create_book, get_db_word_by_en_word, UserWordCreate, create_user_word
 router = APIRouter()
 
 @router.post("/sendbook")
-def post_book(file: UploadFile = File(...), level: str = "a2", db: Session = Depends(get_db)):# -> List[DBWord]:
+def post_book(jwt: str, level: str, file: UploadFile = File(...), db: Session = Depends(get_db)):
+    try:
+        user_id = int(decode_user(jwt)['sub'])
+    except:
+        return None
+
     path = f'books/{file.filename}'
+
     with open(path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
-    user_id = 2  # TODO: user_id ??
+
     book = BookCreate(**{"user_id": user_id, "book_title": file.filename, "book_author": ""})
     db_book = create_book(db=db, book=book)
 

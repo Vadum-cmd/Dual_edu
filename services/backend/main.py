@@ -24,19 +24,19 @@ app.include_router(settings_router)
 app.include_router(words_test_router)
 app.include_router(download_file_router)
 
-fastapi_users = FastAPIUsers[User, int](
+fastapi_users_ = FastAPIUsers[User, int](
     get_user_manager,
     [auth_backend],
 )
 
 app.include_router(
-    fastapi_users.get_auth_router(auth_backend),
+    fastapi_users_.get_auth_router(auth_backend),
     prefix="",
     tags=["auth"],
 )
 
 app.include_router(
-    fastapi_users.get_register_router(UserRead, UserCreate),
+    fastapi_users_.get_register_router(UserRead, UserCreate),
     prefix="",
     tags=["auth"],
 )
@@ -44,13 +44,13 @@ app.include_router(
 # TODO: reset_password_router
 # https://fastapi-users.github.io/fastapi-users/10.4/configuration/routers/reset/
 app.include_router(
-    fastapi_users.get_verify_router(UserRead),
+    fastapi_users_.get_verify_router(UserRead),
     prefix="",
     tags=["auth"],
 )
 
 app.include_router(
-    fastapi_users.get_reset_password_router(),
+    fastapi_users_.get_reset_password_router(),
     prefix="",
     tags=["auth"],
 )
