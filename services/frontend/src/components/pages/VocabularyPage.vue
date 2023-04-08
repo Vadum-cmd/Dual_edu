@@ -59,11 +59,12 @@ export default {
       pageSize: 5,
       currentPage: 1,
       showObject: false,
-      levelDownload: "B1"
+      levelDownload:[]
     };
   },
   created() {
-    axios.get('http://192.168.1.104:8081/vocabulary')
+    const jwt = localStorage.getItem("jwt");
+    axios.get('http://192.168.1.104:8081/vocabulary?jwt='+jwt)
         .then(response => {
           this.words = response.data;
         })
@@ -85,7 +86,8 @@ export default {
   },
   methods: {
     downloadTable() {
-      const this_url = `http://192.168.1.104:8081/vocabulary/download/?user_id=1&level="${this.levelDownload.join(' ')}"`;
+      const jwt = localStorage.getItem("jwt");
+      const this_url = `http://192.168.1.104:8081/vocabulary/download/?jwt=${jwt}&level=${this.levelDownload.join(' ')}`;
 
       console.log(this_url);
       axios({

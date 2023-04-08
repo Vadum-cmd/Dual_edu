@@ -4,7 +4,7 @@
       <div class="upload">Upload your book</div>
       <download-button @change="onFileChange"/>
     </div>
-    <div class="lang_choose" v-if="true">
+    <div class="lang_choose" v-if="isNotLogin">
       <div class="select_lev">Select your english level</div>
       <select v-model="level">
         <option v-for="value in options" :key="value">{{ value }}</option>
@@ -26,6 +26,7 @@
 import axios from "axios";
 import SettingButton from "@/components/UI/SettingButton.vue";
 import DownloadButton from "@/components/UI/Download button.vue";
+
 export default {
   components: {DownloadButton, SettingButton},
   data() {
@@ -43,10 +44,12 @@ export default {
       file:null,
       formData:null,
       loading: false,
-      books: []
+      books: [],
+      isNotLogin:false
     }
   },
   methods: {
+
     onFileChange(event) {
       this.file = event.target.files[0];
     },
@@ -70,7 +73,8 @@ export default {
           });
     },
     fetchBooks() {
-      axios.get('http://192.168.1.104:8081/books')
+      const jwt = localStorage.getItem("jwt");
+      axios.get(`http://192.168.1.104:8081/books?jwt=${jwt}`)
           .then(response => {
             this.books = response.data;
           })
@@ -80,7 +84,13 @@ export default {
     }
   },
   mounted() {
-    this.fetchBooks()
+    const jwt = localStorage.getItem("jwt");
+    if(jwt !== 'null' && this.isNotLogin===true){
+      window.location.reload();
+    }
+    this.isNotLogin = jwt === 'null';
+
+    this.fetchBooks();
   }
 }
 </script>

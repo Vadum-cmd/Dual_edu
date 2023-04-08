@@ -26,7 +26,7 @@ export default {
   name: "ProfilePage",
   data() {
     return {
-
+      decodedToken: null,
       avatarUrl: "",
       nickname: "",
       level: 0,
@@ -44,19 +44,20 @@ export default {
     }
   },
   mounted() {
+    const jwt = localStorage.getItem("jwt");
 
-    axios.get('http://192.168.1.104:8081/profile')
+    axios.get('http://192.168.1.104:8081/profile?jwt='+jwt)
         .then(response => {
 
           const data = response.data;
-          this.avatarUrl = data.avatarUrl;
-          this.nickname = data.nickname;
-          this.level = data.level;
+          this.avatarUrl = data.frame_path;
+          this.nickname = data.user_name;
+          this.level = data.curent_num_level;
           this.xp = data.xp;
           this.xpToNextLevel = data.xpToNextLevel;
-          this.goal = data.goal;
-          this.englishLevel = data.englishLevel;
-          this.nativeLanguage = data.nativeLanguage;
+          this.goal = data.goal_level;
+          this.englishLevel = data.user_level;
+          this.nativeLanguage = data.native_language;
           this.email = data.email;
         })
         .catch(error => {

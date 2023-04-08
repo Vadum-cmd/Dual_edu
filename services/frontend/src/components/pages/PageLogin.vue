@@ -18,18 +18,14 @@
       <form class="sign-up" @submit.prevent="submitForm">
         <h2>Create login</h2>
         <div>Use your email for registration</div>
-        <input type="text" placeholder="Name" v-model="name" />
-        <input type="email" placeholder="Email" v-model="email" />
-        <input type="password" placeholder="Password" v-model="password" />
+        <input type="text" placeholder="Name" v-model="name"/>
+        <input type="email" placeholder="Email" v-model="email"/>
+        <input type="password" placeholder="Password" v-model="password"/>
         <div>
-          <select id="native-language" v-model="nativeLanguage" >
+          <select id="native-language" v-model="nativeLanguage">
             <option value="" disabled selected>Native language</option>
-            <option value="English">English</option>
-            <option value="Spanish">Spanish</option>
-            <option value="French">French</option>
-            <option value="German">German</option>
+            <option value="Spanish">Spanish</option>n>
             <option value="Ukrainian">Ukrainian</option>
-            <option value="Arabic">Arabic</option>
           </select>
         </div>
         <div>
@@ -59,16 +55,30 @@
       <form class="sign-in" @submit.prevent="submitLogin">
         <h2>Sign In</h2>
         <div>Use your account</div>
-        <input type="email" placeholder="Email" v-model="loginEmail" />
-        <input type="password" placeholder="Password" v-model="loginPassword" />
-        <a href="#">Forgot your password?</a>
+        <input type="email" placeholder="Email" v-model="loginEmail"/>
+        <input type="password" placeholder="Password" v-model="loginPassword"/>
+        <div class="forgot-password" @click="forgotPassword = true">Forgot your password?</div>
         <button class="sign-in-btn" type="submit" id="signInBtn">Sign In</button>
+        <ModalWindow v-model:is-active="forgotPassword">
+
+            <h2>Reset Password</h2>
+            <div>Enter your email address to reset your password</div>
+            <input type="email" placeholder="Email" v-model="resetEmail"/>
+            <button class="reset-password-btn"  @click="resetPassword" id="resetPasswordBtn">Reset Password</button>
+            <button class="cancel-link" @click="forgotPassword = false"><font-awesome-icon :icon="['fas', 'circle-xmark']"  /></button>
+
+        </ModalWindow>
+
       </form>
     </div>
   </article>
 </template>
 <script>
+
+import ModalWindow from "@/components/UI/ModalWindow.vue";
+import router from "@/components/router";
 export default {
+  components: {ModalWindow},
   data: () => {
     return {
       signUp: false,
@@ -80,10 +90,16 @@ export default {
       currentLevel: '',
       loginEmail: '',
       loginPassword: '',
+      forgotPassword: false,
+      resetEmail: '',
     }
   },
   methods: {
     async submitForm() {
+      if (!this.name || !this.email || !this.password || !this.nativeLanguage || !this.goalLevel || !this.currentLevel) {
+        alert('Please fill in all required fields');
+        return;
+      }
       const data = {
         user_name: this.name,
         email: this.email,
@@ -93,22 +109,68 @@ export default {
         user_level: this.currentLevel,
       };
       try {
-        const response = await fetch('http://192.168.0.163:8081/register', {
+
+        const response = await fetch(`/register?user_name=${data.name}&email=${data.email}&password=${data.password}&native_language=${data.nativeLanguage}&goal_level=${data.goalLevel}&user_level=${data.currentLevel}`, {
+
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
+          headers: {'Content-Type': 'application/json'}
         });
         if (!response.ok) {
           throw new Error('Registration failed');
         }
+        const cookies = document.cookie.split('; ');
+        const jwtCookie = cookies.find(cookie => cookie.startsWith('user_auth='));
+        const jwt = jwtCookie.split('=')[1];
+        localStorage.setItem('jwt', jwt);
+        router.push('/');
         console.log('Registration successful');
       } catch (error) {
         console.error(error);
       }
     },
+
     async submitLogin() {
+
+      try {
+        if (!this.forgotPassword) {
+          if (!this.loginEmail || !this.loginPassword) {
+            alert('Please fill in all required fields');
+            return;
+          }
+          const response = await fetch(`/login?email=${this.loginEmail}&password=${this.loginPassword}`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'}
+          });
+          if (!response.ok) {
+            alert('Login failed');
+            return;
+          }
+          const cookies = document.cookie.split('; ');
+          const jwtCookie = cookies.find(cookie => cookie.startsWith('user_auth='));
+          const jwt = jwtCookie.split('=')[1];
+          //const jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0IiwiYXVkIjpbImZhc3RhcGktdXNlcnM6YXV0aCJdLCJleHAiOjE2ODAzMzg2NzF9.Izbr5oWxqNJofYTr5y1SqBPDCaqC7ADg8BMEuxnKyto'
+          localStorage.setItem('jwt', jwt);
+
+          router.push('/');
+        }
+        this.loginEmail = '';
+        this.loginPassword = '';
+        this.forgotPassword = false;
+      } catch (error) {
+        console.error(error);
+      }
+
+
+
+    },
+    async resetPassword() {
       const data = {
-        grant_type: "",
+        email: this.resetEmail,
+      };
+      try {
+        const response = await fetch(`/reset-password?email=${data.email}`, {
+
+        /*grant_type: "",
         username: this.loginEmail,
         password: this.loginPassword,
         scope: "",
@@ -116,23 +178,26 @@ export default {
         client_secret: null,
       };
       try {
-        const response = await fetch('http://192.168.0.163:8081/login', {
+        const response = await fetch('http://192.168.0.163:8081/login', {*/
+
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
+          headers: {'Content-Type': 'application/json'}
         });
         if (!response.ok) {
-          throw new Error('Login failed');
+          throw new Error('Password reset request failed');
         }
-        console.log('Login successful');
+        console.log('Password reset request successful');
       } catch (error) {
         console.error(error);
       }
     },
   },
+
+
 }
 </script>
 <style lang="scss" scoped>
+
 .container {
   position: relative;
   width: 768px;
@@ -142,6 +207,7 @@ export default {
   box-shadow: 0 15px 30px rgba(0, 0, 0, .2),
   0 10px 10px rgba(0, 0, 0, .2);
   background: linear-gradient(to bottom, #efefef, #ccc);
+
   .overlay-container {
     position: absolute;
     top: 0;
@@ -150,8 +216,9 @@ export default {
     height: 100%;
     overflow: hidden;
     transition: transform .5s ease-in-out;
-    z-index: 100;
+    z-index: 2;
   }
+
   .overlay {
     position: relative;
     left: -100%;
@@ -163,6 +230,7 @@ export default {
     transition: transform .5s ease-in-out;
 
   }
+
   @mixin overlays($property) {
     position: absolute;
     top: 0;
@@ -176,28 +244,34 @@ export default {
     transform: translateX($property);
     transition: transform .5s ease-in-out;
   }
+
   .overlay-left {
     @include overlays(-20%);
     padding: 25% 5% 15% 5%;
   }
+
   .overlay-right {
     @include overlays(0);
     right: 0;
     padding: 25% 5% 15% 20%;
   }
 }
+
 h2 {
   margin: 0;
 }
+
 p {
   margin: 20px 0 30px;
 }
+
 a {
   color: #222;
   text-decoration: none;
   margin: 15px 0;
   font-size: 1rem;
 }
+
 button {
   border-radius: 20px;
   border: 1px solid #494949;
@@ -210,83 +284,120 @@ button {
   text-transform: uppercase;
   cursor: pointer;
   transition: transform .1s ease-in;
+
   &:active {
     transform: scale(.9);
   }
+
   &:focus {
     outline: none;
   }
 }
+
 button.invert {
   background-color: transparent;
   border-color: #fff;
 }
+
 form {
   position: absolute;
   top: 0;
-  display: flex;
+
   align-items: center;
   justify-content: space-around;
-  flex-direction: column;
-  padding: 15% 12% 15% 12%;
+  box-sizing: border-box;
+
 
   text-align: center;
   background: linear-gradient(to bottom, #efefef, #ccc);
   transition: all .5s ease-in-out;
+  height: 100%;
   div {
     font-size: 1rem;
   }
-  input {
+
+  input, select {
     background-color: #eee;
     border: none;
-    padding: 8px 15px;
-    margin: 6px 0;
-    width: calc(100% - 30px);
+    padding: 8px 48px 0 10px;
+    margin: 12px 4px;
+    height: 32px;
+
+    color: gray;
     border-radius: 15px;
     border-bottom: 1px solid #ddd;
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, .4),
     0 -1px 1px #fff,
     0 1px 0 #fff;
     overflow: hidden;
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
     &:focus {
       outline: none;
       background-color: #fff;
     }
   }
 }
+
 .sign-in {
   left: -4%;
   z-index: 2;
+
+  padding: 20% 10%;
+
+  a {
+    cursor: pointer;
+  }
+
+  .reset-password-btn {
+    margin:10px;
+  }
+
+}
+
+.sign-in-btn{
+  margin-top: 10px;
+
 }
 .sign-up {
-  top:-5%;
+  top: -5%;
   left: 2%;
   z-index: 1;
   opacity: 0;
-  padding-left: 20px ;}
+
+  padding: 15% 6.632%;
+}
+
 .sign-up-active {
   .sign-in {
     transform: translateX(100%);
   }
+
   .sign-up {
     transform: translateX(100%);
     opacity: 1;
     z-index: 5;
     animation: show .5s;
   }
+
   .overlay-container {
     transform: translateX(-100%);
   }
+
   .overlay {
     transform: translateX(50%);
   }
+
   .overlay-left {
     transform: translateX(0);
   }
+
   .overlay-right {
     transform: translateX(20%);
   }
 }
+
 @keyframes show {
   0% {
     opacity: 0;
@@ -301,30 +412,25 @@ form {
     z-index: 10;
   }
 }
-select {
-
-  background-color: #eee;
-  border: none;
-  padding: 8px 48px 0 10px;
-  margin: 6px 0;
-  height: 32px;
-  width: 180px;
-  color:gray;
-  border-radius: 15px;
-  border-bottom: 1px solid #ddd;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, .4),
-  0 -1px 1px #fff,
-  0 1px 0 #fff;
-  overflow: hidden;
-  &:focus {
-    outline: none;
-    background-color: #fff;}
-
-
-
+.reset-password-btn{
+  scale: 70%;
 }
-.sign-up-btn{
+
+
+.sign-up-btn {
   margin-top: 5px;
 }
 
+.forgot-password:hover{
+  color: #00afea;
+}
+.cancel-link:hover{
+  color: #00afea;
+  cursor: pointer;
+}
+.cancel-link{
+
+  border-radius: 50px;
+
+}
 </style>
