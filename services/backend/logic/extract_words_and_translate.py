@@ -27,13 +27,19 @@ def word_tokenization(text: str):
 
 def search_phrasal(lst: list):
     phrasal = set()
-    for i in range(len(lst) - 2):
+    for i in range(len(lst) - 3):
         together = lst[i] + " " + lst[i+1]
         separated = lst[i] + " " + lst[i+2]
+        three_words = lst[i] + " " + lst[i+1] + " " + lst[i+2]
+        four_words = lst[i] + " " + lst[i+1] + " " + lst[i+2] + " " + lst[i+3]
         if together in test_phrasal:
             phrasal.add(together)
         if separated in test_phrasal:
             phrasal.add(separated)
+        if three_words in test_phrasal:
+            phrasal.add(three_words)
+        if four_words in test_phrasal:
+            phrasal.add(four_words)
     return phrasal
 
 def translate_word(word):
