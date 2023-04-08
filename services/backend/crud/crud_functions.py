@@ -165,6 +165,7 @@ def get_random_user_book(db: Session, user_id: int) -> Book:
         book = books[randint(0, len(books)-1)]
         return book
 
+
 def get_unknown_user_word_by_book_id(db: Session, book_id: int):# -> DB_word:
     user_words = db.query(User_word).filter(User_word.book_id == book_id).all()  # and not User_word.is_known
     # TODO: user_words is empty and also the condition with User_word.is_known should be added
@@ -189,6 +190,7 @@ def get_db_word_by_en_word(db: Session, en_word: str) -> DB_word:
 def get_user_profile(db: Session, user_id: int):
     return db.query(User).filter(User.user_id == user_id).first()
 
+
 def change_user_word_status(db: Session, book_id: int, en_word: str):
     user_words = db.query(User_word).filter(Book.book_id == book_id).all()
     for user_word in user_words:
@@ -196,3 +198,13 @@ def change_user_word_status(db: Session, book_id: int, en_word: str):
             user_word.is_known = True
             db.commit()
             break
+
+
+def update_user_info(db: Session, user_id: int, goal_level: str, email_adress: str, user_level: str, native_language: str):
+    user = db.query(User).filter(User.user_id == user_id).first()
+    user.goal_level = goal_level
+    user.email = email_adress
+    user.user_level = user_level
+    user.native_language = native_language
+
+    db.commit()
