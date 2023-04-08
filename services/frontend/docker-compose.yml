@@ -1,0 +1,33 @@
+version: "3.1"
+
+services:
+  db:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: dual_edu
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: '1qazxsw2'
+      MYSQL_HOSTNAME: '127.0.0.1'
+      MYSQL_ROOT_PASSWORD: '2wsxcde3'
+    ports:
+      - "3307:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8081:8080"
+
+  web:
+    build: .
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+volumes:
+  db-data:
