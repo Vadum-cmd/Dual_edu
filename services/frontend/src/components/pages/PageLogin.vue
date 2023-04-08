@@ -24,12 +24,8 @@
         <div>
           <select id="native-language" v-model="nativeLanguage">
             <option value="" disabled selected>Native language</option>
-            <option value="English">English</option>
-            <option value="Spanish">Spanish</option>
-            <option value="French">French</option>
-            <option value="German">German</option>
+            <option value="Spanish">Spanish</option>n>
             <option value="Ukrainian">Ukrainian</option>
-            <option value="Arabic">Arabic</option>
           </select>
         </div>
         <div>
@@ -80,7 +76,7 @@
 <script>
 
 import ModalWindow from "@/components/UI/ModalWindow.vue";
-
+import router from "@/components/router";
 export default {
   components: {ModalWindow},
   data: () => {
@@ -120,6 +116,11 @@ export default {
         if (!response.ok) {
           throw new Error('Registration failed');
         }
+        const cookies = document.cookie.split('; ');
+        const jwtCookie = cookies.find(cookie => cookie.startsWith('user_auth='));
+        const jwt = jwtCookie.split('=')[1];
+        localStorage.setItem('jwt', jwt);
+        router.push('/');
         console.log('Registration successful');
       } catch (error) {
         console.error(error);
@@ -139,17 +140,26 @@ export default {
             headers: {'Content-Type': 'application/json'}
           });
           if (!response.ok) {
-            throw new Error('Login failed');
+            alert('Login failed');
+            return;
           }
-          console.log('Login successful');
+          const cookies = document.cookie.split('; ');
+          const jwtCookie = cookies.find(cookie => cookie.startsWith('user_auth='));
+          const jwt = jwtCookie.split('=')[1];
+          //const jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0IiwiYXVkIjpbImZhc3RhcGktdXNlcnM6YXV0aCJdLCJleHAiOjE2ODAzMzg2NzF9.Izbr5oWxqNJofYTr5y1SqBPDCaqC7ADg8BMEuxnKyto'
+          localStorage.setItem('jwt', jwt);
+
+          router.push('/');
         }
-        // clear login form inputs and close the modal
         this.loginEmail = '';
         this.loginPassword = '';
         this.forgotPassword = false;
       } catch (error) {
         console.error(error);
       }
+
+
+
     },
     async resetPassword() {
       const data = {
