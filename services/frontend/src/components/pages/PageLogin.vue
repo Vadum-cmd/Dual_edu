@@ -113,7 +113,7 @@ export default {
         password: this.loginPassword,
         scope: "",
         client_id: "",
-        client_secret: "",
+        client_secret: null,
       };
       try {
         const response = await fetch('http://192.168.0.163:8081/login', {

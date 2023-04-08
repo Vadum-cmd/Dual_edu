@@ -5,15 +5,19 @@ from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 from dependencies import get_db
 from crud.crud_functions import get_db_word_by_en_word, change_user_word_status, get_random_user_book, \
-    get_unknown_user_word_by_book_id, get_books_by_user_id, get_user_words_by_book
+    get_unknown_user_word_by_book_id, get_books_by_user_id, get_user_words_by_book, get_user_profile
 from logic.get_xlsx import create_xlsx_file
+from auth.jwt_decoder import decode_user
 
 router = APIRouter()
 
-@router.get("/vocabulary/download/")#, response_class=FileResponse
-def download_table(user_id: int, level: str = "a1", db: Session = Depends(get_db)):  # levels_str: str
 
-    levels_str = "A2 B1 B2"
+@router.get("/vocabulary/download/")  # , ressponse_class=FileResponse
+def download_table(jwt: str, levels_str: str, db: Session = Depends(get_db)):
+    try:
+        user_id = int(decode_user(jwt)['sub'])
+    except:
+        return None
 
     books = get_books_by_user_id(db=db, user_id=user_id)
     db_words = set()
@@ -26,10 +30,10 @@ def download_table(user_id: int, level: str = "a1", db: Session = Depends(get_db
             if db_word.word_level in levels:
                 db_words.add(db_word)
 
-    path = create_xlsx_file(db_words)
+    user_info = get_user_profile(db=db, user_id=user_id)
 
-    headers = {'Content-Disposition': f'inline; filename="{path}"'}
-    return FileResponse(path, headers=headers)
+    path = create_xlsx_file(db_words, user_info.user_name, user_info.native_language)  # TODO: uk_word from db
 
-    # print("hello")
-    # return "fklsdjflk"
+    return FileResponse(path, filename=path.split("/")[-1], media_type="multipart/form-data")
+    # headers = {'Content-Disposition': f'inline; filename="{path}"'}
+    #     return FileResponse(path, headers=headers)
