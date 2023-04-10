@@ -93,6 +93,7 @@ export default {
       forgotPassword: false,
       resetEmail: '',
       scope:'',
+      grant_type: '',
       client_id:'',
       client_secret:'',
       is_superuser:false,
@@ -115,7 +116,7 @@ export default {
         currentLevel: this.currentLevel,
       };
       try {
-        const response = await fetch(`/register?user_name=${data.name}&email=${data.email}&password=${data.password}&native_language=${data.nativeLanguage}&goal_level=${data.goalLevel}&user_level=${data.currentLevel}&is_active=${this.is_active}&is_superuser=${this.is_superuser}&is_verified=${this.is_verified}`, {
+        const response = await fetch(`http://192.168.0.163:8081/register?user_name=${data.name}&email=${data.email}&password=${data.password}&native_language=${data.nativeLanguage}&goal_level=${data.goalLevel}&user_level=${data.currentLevel}&is_active=${this.is_active}&is_superuser=${this.is_superuser}&is_verified=${this.is_verified}`, {
           method: 'POST',
           headers: {'Content-Type': 'application/json'}
         });
@@ -141,7 +142,7 @@ export default {
             alert('Please fill in all required fields');
             return;
           }
-          const response = await fetch(`/login?username=${this.loginEmail}&password=${this.loginPassword}&scope=${this.scope}&client_id=${this.client_id}&client_secret=${this.client_secret}`, {
+          const response = await fetch(`http://192.168.0.163:8081/login?grant_type=${this.grant_type}&username=${this.loginEmail}&password=${this.loginPassword}&scope=${this.scope}&client_id=${this.client_id}&client_secret=${this.client_secret}`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'}
           });
