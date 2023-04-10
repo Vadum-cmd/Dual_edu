@@ -92,6 +92,12 @@ export default {
       loginPassword: '',
       forgotPassword: false,
       resetEmail: '',
+      scope:'',
+      client_id:'',
+      client_secret:'',
+      is_superuser:false,
+      is_verified:false,
+      is_active:true
     }
   },
   methods: {
@@ -101,17 +107,15 @@ export default {
         return;
       }
       const data = {
-        user_name: this.name,
+        name: this.name,
         email: this.email,
         password: this.password,
-        native_language: this.nativeLanguage,
-        goal_level: this.goalLevel,
-        user_level: this.currentLevel,
+        nativeLanguage: this.nativeLanguage,
+        goalLevel: this.goalLevel,
+        currentLevel: this.currentLevel,
       };
       try {
-
-        const response = await fetch(`/register?user_name=${data.name}&email=${data.email}&password=${data.password}&native_language=${data.nativeLanguage}&goal_level=${data.goalLevel}&user_level=${data.currentLevel}`, {
-
+        const response = await fetch(`/register?user_name=${data.name}&email=${data.email}&password=${data.password}&native_language=${data.nativeLanguage}&goal_level=${data.goalLevel}&user_level=${data.currentLevel}&is_active=${this.is_active}&is_superuser=${this.is_superuser}&is_verified=${this.is_verified}`, {
           method: 'POST',
           headers: {'Content-Type': 'application/json'}
         });
@@ -137,7 +141,7 @@ export default {
             alert('Please fill in all required fields');
             return;
           }
-          const response = await fetch(`/login?email=${this.loginEmail}&password=${this.loginPassword}`, {
+          const response = await fetch(`/login?username=${this.loginEmail}&password=${this.loginPassword}&scope=${this.scope}&client_id=${this.client_id}&client_secret=${this.client_secret}`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'}
           });
@@ -169,17 +173,6 @@ export default {
       };
       try {
         const response = await fetch(`/reset-password?email=${data.email}`, {
-
-        /*grant_type: "",
-        username: this.loginEmail,
-        password: this.loginPassword,
-        scope: "",
-        client_id: "",
-        client_secret: null,
-      };
-      try {
-        const response = await fetch('http://192.168.0.163:8081/login', {*/
-
           method: 'POST',
           headers: {'Content-Type': 'application/json'}
         });
