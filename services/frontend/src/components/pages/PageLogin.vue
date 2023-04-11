@@ -142,19 +142,26 @@ export default {
             alert('Please fill in all required fields');
             return;
           }
-          const response = await fetch(`http://192.168.0.163:8081/login?grant_type=${this.grant_type}&username=${this.loginEmail}&password=${this.loginPassword}&scope=${this.scope}&client_id=${this.client_id}&client_secret=${this.client_secret}`, {
+          const response = await fetch(`http://192.168.0.163:8081/login`, {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'}
+            headers: {'accept': 'application/json', 'Content-Type': 'application/x-www-form-urlencoded'},
+            body:  `grant_type=${this.grant_type}&username=${this.loginEmail}&password=${this.loginPassword}&scope=${this.scope}&client_id=${this.client_id}&client_secret=${this.client_secret}`,
+            credentials: 'include',
           });
+
           if (!response.ok) {
             alert('Login failed');
             return;
           }
-          const cookies = document.cookie.split('; ');
-          const jwtCookie = cookies.find(cookie => cookie.startsWith('user_auth='));
-          const jwt = jwtCookie.split('=')[1];
+          console.log(...response.headers);
+
+          const cookies = document.cookie;
+          console.log(cookies)
+          //const jwtCookie = cookies.find(cookie => cookie.startsWith('user_auth='));
+          //const jwt = jwtCookie.split('=')[1];
+          //console.log(jwt);
           //const jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0IiwiYXVkIjpbImZhc3RhcGktdXNlcnM6YXV0aCJdLCJleHAiOjE2ODAzMzg2NzF9.Izbr5oWxqNJofYTr5y1SqBPDCaqC7ADg8BMEuxnKyto'
-          localStorage.setItem('jwt', jwt);
+          //localStorage.setItem('jwt', jwt);
 
           router.push('/');
         }
