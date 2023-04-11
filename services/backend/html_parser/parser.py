@@ -4,7 +4,7 @@ import csv
 from translators import translate_text
 
 def translate_word(word):
-    return translate_text(query_text=word, translator="google", from_language="en", to_language="uk")
+    return translate_text(query_text=word, translator="google", from_language="en", to_language="es")
 
 
 # Make request 
@@ -22,20 +22,20 @@ with open('data.csv', 'w', newline='', encoding="utf-8") as f:
     # Find all the rows in the table
     rows = tbody.find_all('tr')
     # Write column names
-    writer.writerow(["en_word", "word_level", "uk_word"])
+    #writer.writerow(["en_word", "word_level", "es_word"])
+    writer.writerow(["en_word", "es_word"])
     # Create word list to avoid duplicates of words
     word_list=[]
     # Loop through the rows and extract the cells
     for row in rows:
         cells = row.find_all('td')
         word_cell = cells[0].text.strip().lower()
-        level_cell = cells[2].text.strip().lower()  
            
         # Write the data to the CSV file
         if word_cell not in word_list:
-            word_list.append(word_cell) 
-            if len(word_list)>=4528:    
-                uk_word=translate_word(str(word_cell)).lower() 
-                writer.writerow([word_cell,level_cell,uk_word])
+            word_list.append(word_cell)
+            if len(word_list)>321:
+                es_word=translate_word(str(word_cell)).lower() 
+                writer.writerow([word_cell,es_word])
 
         
