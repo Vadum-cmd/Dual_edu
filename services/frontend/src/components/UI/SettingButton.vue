@@ -12,9 +12,9 @@ export default {
 
 <style scoped>
 .btn {
-  height: 45px;
-  width: 120px;
-  background-color: #716eff;
+  height: 35px;
+  width: 90px;
+  background-color: #4b4b4b;
   color: #ffffff;
   border-radius: 40px;
   border: none;

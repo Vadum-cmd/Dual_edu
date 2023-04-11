@@ -7,7 +7,7 @@
       <ul v-show="!mobile" class="navigation">
         <li>
           <router-link class="link" to="/">
-            <font-awesome-icon icon="fa-solid fa-book-open" />
+            <font-awesome-icon icon="fa-solid fa-book-open"/>
             Books
           </router-link>
         </li>
@@ -43,7 +43,7 @@
                   <font-awesome-icon icon="fa-solid fa-puzzle-piece"/>
                   Game
                 </router-link>
-                <router-link class="drop_menu" to="/">
+                <router-link class="drop_menu" to="/" @click="logout">
                   <font-awesome-icon icon="fa-solid fa-circle-xmark"/>
                   Logout
                 </router-link>
@@ -53,7 +53,7 @@
         </li>
         <li v-else>
           <router-link class="link" to="/login">
-            <font-awesome-icon icon="fa-solid fa-arrow-right-to-bracket" />
+            <font-awesome-icon icon="fa-solid fa-arrow-right-to-bracket"/>
             Login
           </router-link>
         </li>
@@ -69,7 +69,7 @@
         <ul v-show="mobileNav" class="dropdown-nav">
           <li>
             <router-link class="link" to="/">
-              <font-awesome-icon icon="fa-solid fa-book-open" />
+              <font-awesome-icon icon="fa-solid fa-book-open"/>
               Books
             </router-link>
           </li>
@@ -79,12 +79,15 @@
               My vocabulary
             </router-link>
           </li>
-          <li>
+          <li v-if="isAutorize">
+
             <div class="profile">
-              <div class="link">
+              <div class="nickname">
                 <font-awesome-icon icon="fa-solid fa-circle" style="scale: 300%; margin-right: 15px"/>
                 Nickname
+
               </div>
+
               <div class="dropdown">
                 <button @click="toggle()">
                   <font-awesome-icon icon="fa-solid fa-square-caret-down"/>
@@ -102,13 +105,19 @@
                     <font-awesome-icon icon="fa-solid fa-puzzle-piece"/>
                     Game
                   </router-link>
-                  <router-link class="drop_menu" to="/">
+                  <router-link class="drop_menu" to="/" @click="logout">
                     <font-awesome-icon icon="fa-solid fa-circle-xmark"/>
                     Logout
                   </router-link>
                 </div>
               </div>
             </div>
+          </li>
+          <li v-else>
+            <router-link class="link" to="/login">
+              <font-awesome-icon icon="fa-solid fa-arrow-right-to-bracket"/>
+              Login
+            </router-link>
           </li>
 
         </ul>
@@ -119,7 +128,13 @@
 </template>
 
 <script>
+
+
+
+import router from "@/components/router";
+
 export default {
+
   name: "Navig-ation",
   data() {
     return {
@@ -127,15 +142,20 @@ export default {
       mobile: null,
       mobileNav: null,
       windowWidth: null,
-      active:false,
-      isAutorize:false
+      active: false,
+      isAutorize: false
     }
   },
   created() {
     window.addEventListener('resize', this.checkScreen)
     this.checkScreen()
+
   },
   mounted() {
+    const jwt = localStorage.getItem("jwt");
+
+    this.isAutorize = jwt !== 'null';
+
     window.addEventListener('scroll', this.updateScroll);
   },
   methods: {
@@ -160,11 +180,15 @@ export default {
       this.mobileNav = false;
       return;
     },
-    toggle () {
+    toggle() {
       this.active = !this.active
+    },
+    logout() {
+      localStorage.setItem("jwt",null);
+      this.isAutorize=false;
+      router.push('/login');
     }
   }
-
 
 
 }
@@ -217,21 +241,26 @@ header {
 
       }
     }
-    .nickname{
+
+    .nickname {
       font-size: 14px;
     }
+
     .profile {
       position: relative;
       display: inline-flex;
 
     }
-    .dropdown button{
+
+    .dropdown button {
       scale: 130%;
       margin-left: 10px;
     }
-    .dropdown button:hover{
+
+    .dropdown button:hover {
       color: #00afea;
     }
+
     .dropdown {
       margin-left: 5px;
       position: relative;
@@ -261,7 +290,6 @@ header {
     .dropdown-content .drop_menu:hover {
       background-color: #f1f1f1
     }
-
 
 
     .branding {
