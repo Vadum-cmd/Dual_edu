@@ -147,7 +147,7 @@ export default {
             return;
           }
 
-          const response = await fetch(this.url+`/login?username=${this.loginEmail}&password=${this.loginPassword}&scope=${this.scope}&client_id=${this.client_id}&client_secret=${this.client_secret}`, {
+          const response = await fetch(this.url+`/login?grant_type=&username=${this.loginEmail}&password=${this.loginPassword}&scope=${this.scope}&client_id=${this.client_id}&client_secret=${this.client_secret}`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             credentials: `include`,
