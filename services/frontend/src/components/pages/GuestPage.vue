@@ -26,7 +26,6 @@
 import axios from "axios";
 import SettingButton from "@/components/UI/SettingButton.vue";
 import DownloadButton from "@/components/UI/Download button.vue";
-
 export default {
   components: {DownloadButton, SettingButton},
   data() {
@@ -40,12 +39,12 @@ export default {
         'C2'
       ],
       level: null,
-      url:'',
+      base_url:process.env.VUE_APP_URL,
       file:null,
       formData:null,
       loading: false,
       books: [],
-      isNotLogin:false
+      isNotLogin:false,
     }
   },
   methods: {
@@ -58,7 +57,7 @@ export default {
       this.formData.append('file', this.file);
       this.formData.append('level', this.level);
 
-      this.url = 'http://192.168.1.104:8081/sendbook';
+      this.url = this.base_url+ '/sendbook';
       this.loading = true;
       axios.post(this.url, this.formData)
           .then(() => {
@@ -74,7 +73,7 @@ export default {
     },
     fetchBooks() {
       const jwt = localStorage.getItem("jwt");
-      axios.get(`http://192.168.1.104:8081/books?jwt=${jwt}`)
+      axios.get(this.base_url+`/books?jwt=${jwt}`)
           .then(response => {
             this.books = response.data;
           })
