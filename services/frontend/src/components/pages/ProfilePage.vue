@@ -35,7 +35,8 @@ export default {
       goal: "",
       englishLevel: "",
       nativeLanguage: "",
-      email: ""
+      email: "",
+      url:process.env.VUE_APP_URL
     };
   },
   computed: {
@@ -46,7 +47,7 @@ export default {
   mounted() {
     const jwt = localStorage.getItem("jwt");
 
-    axios.get('http://192.168.1.104:8081/profile?jwt='+jwt)
+    axios.get(this.url+`/profile?jwt=${jwt}`)
         .then(response => {
 
           const data = response.data;
