@@ -59,12 +59,13 @@ export default {
       pageSize: 5,
       currentPage: 1,
       showObject: false,
-      levelDownload:[]
+      levelDownload:[],
+      url:process.env.VUE_APP_URL
     };
   },
   created() {
     const jwt = localStorage.getItem("jwt");
-    axios.get('http://192.168.1.104:8081/vocabulary?jwt='+jwt)
+    axios.get(this.url+`/vocabulary?jwt=${jwt}`)
         .then(response => {
           this.words = response.data;
         })
@@ -87,7 +88,7 @@ export default {
   methods: {
     downloadTable() {
       const jwt = localStorage.getItem("jwt");
-      const this_url = `http://192.168.1.104:8081/vocabulary/download/?jwt=${jwt}&level=${this.levelDownload.join(' ')}`;
+      const this_url = this.url+`/vocabulary/download/?jwt=${jwt}&level=${this.levelDownload.join(' ')}`;
 
       console.log(this_url);
       axios({

@@ -98,7 +98,8 @@ export default {
       client_secret:'',
       is_superuser:false,
       is_verified:false,
-      is_active:true
+      is_active:true,
+      url:process.env.VUE_APP_URL
     }
   },
   methods: {
@@ -116,9 +117,12 @@ export default {
         currentLevel: this.currentLevel,
       };
       try {
-        const response = await fetch(`http://192.168.0.163:8081/register?user_name=${data.name}&email=${data.email}&password=${data.password}&native_language=${data.nativeLanguage}&goal_level=${data.goalLevel}&user_level=${data.currentLevel}&is_active=${this.is_active}&is_superuser=${this.is_superuser}&is_verified=${this.is_verified}`, {
+
+        const response = await fetch(this.url+`/register?user_name=${data.name}&email=${data.email}&password=${data.password}&native_language=${data.nativeLanguage}&goal_level=${data.goalLevel}&user_level=${data.currentLevel}&is_active=${this.is_active}&is_superuser=${this.is_superuser}&is_verified=${this.is_verified}`, {
+
           method: 'POST',
-          headers: {'Content-Type': 'application/json'}
+          headers: {'Content-Type': 'application/json'},
+          credentials: `include`,
         });
         if (!response.ok) {
           throw new Error('Registration failed');
@@ -142,11 +146,11 @@ export default {
             alert('Please fill in all required fields');
             return;
           }
-          const response = await fetch(`http://192.168.0.163:8081/login`, {
+
+          const response = await fetch(this.url+`/login?username=${this.loginEmail}&password=${this.loginPassword}&scope=${this.scope}&client_id=${this.client_id}&client_secret=${this.client_secret}`, {
             method: 'POST',
-            headers: {'accept': 'application/json', 'Content-Type': 'application/x-www-form-urlencoded'},
-            body:  `grant_type=${this.grant_type}&username=${this.loginEmail}&password=${this.loginPassword}&scope=${this.scope}&client_id=${this.client_id}&client_secret=${this.client_secret}`,
-            credentials: 'include',
+            headers: {'Content-Type': 'application/json'},
+            credentials: `include`,
           });
 
           if (!response.ok) {
@@ -180,7 +184,7 @@ export default {
         email: this.resetEmail,
       };
       try {
-        const response = await fetch(`/reset-password?email=${data.email}`, {
+        const response = await fetch(this.url+`/reset-password?email=${data.email}`, {
           method: 'POST',
           headers: {'Content-Type': 'application/json'}
         });
