@@ -7,18 +7,29 @@ from sqlalchemy.orm import Session
 from auth.jwt_decoder import decode_user
 from dependencies import get_db
 from logic.extract_words_and_translate import extract_text_from_pdf, word_tokenization
-from crud.crud_functions import BookCreate, create_book, get_db_word_by_en_word, UserWordCreate, create_user_word
+from crud.crud_functions import BookCreate, create_book, get_db_word_by_en_word, UserWordCreate, create_user_word, \
+    get_books_by_user_id, get_user_words_by_book
 from logic.get_xlsx import create_xlsx_file
 
 router = APIRouter()
 
 @router.post("/sendbook")
 def post_book(jwt: str, level: str, file: UploadFile = File(...), db: Session = Depends(get_db)):
-    # TODO: sendbook without jwt
     try:
         user_id = int(decode_user(jwt)['sub'])
     except:
         return None
+
+    books = get_books_by_user_id(db=db, user_id=user_id)
+    for book in books:
+        book_words = get_user_words_by_book(db=db, book_id=book.book_id)
+        identifier = False
+        for word in book_words:
+            if not (word in book_words):
+                identifier = True
+                break
+        if identifier == False:
+            return {"book_id": book.book_id}
 
     path = f'books/{file.filename}'
 
