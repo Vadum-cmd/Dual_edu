@@ -184,8 +184,9 @@ export default {
       this.active = !this.active
     },
     logout() {
-      localStorage.setItem("jwt",null);
+      localStorage.removeItem('jwt');
       this.isAutorize=false;
+      location.reload();
       router.push('/login');
     }
   }
