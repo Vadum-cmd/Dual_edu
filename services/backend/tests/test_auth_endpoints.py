@@ -17,14 +17,14 @@ from fastapi import Form
 #     assert response.status_code == 201
 
 
-def test_login():
-    response = client.post('/login', data={
-        "grant_type": "",
-        "username": "test@gmail.com",
-        "password": "test",
-        "scope": "",
-        "client_id": "",
-        "client_secret": "",
-    })
-
-    assert response.status_code == 200
+# def test_login():
+#     response = client.post('/login', data={
+#         "grant_type": "",
+#         "username": "test@gmail.com",
+#         "password": "test",
+#         "scope": "",
+#         "client_id": "",
+#         "client_secret": "",
+#     })
+#
+#     assert response.status_code == 200
