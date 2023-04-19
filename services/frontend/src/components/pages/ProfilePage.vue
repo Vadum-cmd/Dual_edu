@@ -1,157 +1,180 @@
 <template>
-  <div class="profile-page">
-    <div class="avatar-container">
-      <div class="avatar-wrapper"><img class="avatar" :src="avatarUrl" alt="Avatar"></div>
-    </div>
-    <div class="nickname-container"><h2 class="nickname">{{ nickname }}</h2></div>
-    <div class="xp-bar">
-      <div class="progress" :style="{ width: xpPercentage }"> Level {{ level }} - {{ xp }}/{{ xpToNextLevel }} XP</div>
-    </div>
-    <div class="profile-lines">
-      <div class="profile-line"><h3>Your goal:</h3>
-        <p>{{ goal }}</p></div>
-      <div class="profile-line"><h3>Your english level:</h3>
-        <p>{{ englishLevel }}</p></div>
-      <div class="profile-line"><h3>Your native language:</h3>
-        <p>{{ nativeLanguage }}</p></div>
-      <div class="profile-line"><h3>Your email:</h3>
-        <p>{{ email }}</p></div>
+  <table>
+    <thead>
+    <tr>
+      <th>№</th>
+      <th>Word</th>
+      <th>Translation</th>
+      <th style="width:10%">lvl</th>
+      <th style="width:15%">Mark as Familiar</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr v-for="(word, index) in displayedWords" :key="word.id">
+      <td>{{ (currentPage - 1) * pageSize + index + 1 }}</td>
+      <td>{{ word.word }}</td>
+      <td>{{ word.translation }}</td>
+      <td>{{ word.lvl }}</td>
+      <td><input type="checkbox" v-model="word.familiar"></td>
+    </tr>
+    </tbody>
+  </table>
+  <div class="pagination">
+    <button :disabled="currentPage === 1" @click="currentPage--">Prev</button>
+    <span>{{ currentPage }}</span>
+    <button :disabled="currentPage === pageCount" @click="currentPage++">Next</button>
+  </div>
+
+  <div class="download">
+    <button @click="downloadTable" @mouseover="showObject = true">Download File</button>
+    <div class="levels" v-if="showObject">
+      <div v-for="option in options" :key="option.key">
+        <input type="checkbox" :id="option.value" :value="option.value" v-model="levelDownload">
+        <label :for="option.value">{{ option.value }}</label>
+      </div>
+      <button @click="showObject = false">Close</button>
     </div>
   </div>
+
+
 </template>
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
-  name: "ProfilePage",
   data() {
     return {
-      decodedToken: null,
-      avatarUrl: "",
-      nickname: "",
-      level: 0,
-      xp: 0,
-      xpToNextLevel: 0,
-      goal: "",
-      englishLevel: "",
-      nativeLanguage: "",
-      email: "",
+      options: [
+        { key: 1, value: 'A1'},
+        { key: 2, value: 'A2'},
+        { key: 3, value: 'B1'},
+        { key: 4, value: 'B2'},
+        { key: 5, value: 'C1'},
+        { key: 6, value: 'C2'},
+      ],
+
+
+      words: [],
+      searchTerm: '',
+      pageSize: 5,
+      currentPage: 1,
+      showObject: false,
+      levelDownload:[],
       url:process.env.VUE_APP_URL
     };
   },
-  computed: {
-    xpPercentage() {
-      return `${Math.floor((this.xp / this.xpToNextLevel) * 100)}%`;
-    }
-  },
-  mounted() {
+  created() {
     const jwt = localStorage.getItem("jwt");
-
-    axios.get(this.url+`/profile?jwt=${jwt}`)
+    axios.get(this.url+`/vocabulary?jwt=${jwt}`)
         .then(response => {
-
-          const data = response.data;
-          this.avatarUrl = data.frame_path;
-          this.nickname = data.user_name;
-          this.level = data.curent_num_level;
-          this.xp = data.xp;
-          this.xpToNextLevel = data.xpToNextLevel;
-          this.goal = data.goal_level;
-          this.englishLevel = data.user_level;
-          this.nativeLanguage = data.native_language;
-          this.email = data.email;
+          this.words = response.data;
         })
         .catch(error => {
-          console.log(error);
+          console.error(error);
         });
-  }
+  },
+  computed: {
+    displayedWords() {
+      const filteredWords = this.words.filter(word => {
+        return word.word.toLowerCase().includes(this.searchTerm.toLowerCase());
+      });
+      const startIndex = (this.currentPage - 1) * this.pageSize;
+      return filteredWords.slice(startIndex, startIndex + this.pageSize);
+    },
+    pageCount() {
+      return Math.ceil(this.displayedWords.length / this.pageSize);
+    }
+  },
+  methods: {
+    downloadTable() {
+      const jwt = localStorage.getItem("jwt");
+      const this_url = this.url+`/vocabulary/download/?jwt=${jwt}&level=${this.levelDownload.join(' ')}`;
+
+      console.log(this_url);
+      axios({
+        url: this_url,
+        method: 'GET',
+        responseType: 'blob',
+      }).then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'table.xlsx');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      });
+    },
+  },
 };
 </script>
-<style scoped>
-.profile-page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: #f4f4f4;
-  padding: 30px;
-  width: 70vh;
-  border-radius: 30%;
+
+<style lang="scss">
+table {
+  width: 150vh;
+  margin-top: 20px;
+  background-color: white;
+
+  th, td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ccc;
+  }
+
+  th {
+    background-color: #f1f1f1;
+    font-weight: bold;
+  }
+
+  tbody tr:hover {
+    background-color: #f5f5f5;
+  }
 }
 
-.avatar-container {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
 
-}
-
-.avatar-wrapper {
-  border: 5px solid #575454;
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  overflow: hidden;
-}
-
-.avatar {
+input[type="text"] {
+  padding: 10px;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  scale: 200%;
+  margin-top: 50px;
+  margin-bottom: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+
+  &:focus {
+    outline: none;
+    border-color: #66afe9;
+    box-shadow: 0 0 5px #66afe9;
+  }
 }
 
-.nickname-container {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-  width: 100%;
+.pagination {
+  margin-left: 42%;
+  margin-top: 12px;
 }
 
-.nickname {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  text-align: center;
+.pagination button {
+  background-color: white;
+  border: 1px solid black;
+  padding: 5px 10px;
+  margin: 0 5px;
+  cursor: pointer;
 }
 
-.xp-bar {
-  width: 80%;
-  height: 25px;
-  background-color: #ddd;
-  margin-bottom: 20px;
-}
 
-.progress {
-  height: 100%;
-  background-color: #666;
+.pagination span {
+  background-color: black;
+  color: white;
+  padding: 5px 10px;
+  margin: 0 5px;
+}
+.download{
+  display: inline-block;
+}
+.levels {
   color: white;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
-  font-weight: bold;
 }
-
-.profile-lines {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  width: 100%;
-}
-
-.profile-line {
-  width: 100%;
-  margin-bottom: 20px;
-}
-
-.profile-line h3 {
-  margin: 0;
-  font-family: Arial, sans-serif;
-}
-
-.profile-line p {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  color: #666;
-  line-height: 1.5;
-}</style>
+</style>
