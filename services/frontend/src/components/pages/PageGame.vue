@@ -12,49 +12,53 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   data() {
     return {
-      translations: [
-        { translation: "Кіт", keyword: "cat" },
-        { translation: "Пeс", keyword: "dog" },
-        { translation: "Тато", keyword: "father" },
-        { translation: "Мама", keyword: "mother" },
-        { translation: "Живородний", keyword: "viviparous" },
-      ],
-      currentQuestion: 0,
+      translation: null,
       guess: "",
       attemptsLeft: 3,
       score: 0,
       gameOver: false,
+      book_id: null,
+      url:process.env.VUE_APP_URL,
+      jwt:localStorage.getItem('jwt')
     };
   },
-  computed: {
-    translation() {
-      return this.translations[this.currentQuestion].translation;
-    },
-  },
   methods: {
-    checkAnswer() {
-      const currentTranslation = this.translations[this.currentQuestion];
-      if (this.guess === currentTranslation.keyword) {
-        this.score++;
-        this.currentQuestion++;
-        this.guess = "";
-        this.attemptsLeft = 3;
-      } else {
-        this.attemptsLeft--;
-        if (this.attemptsLeft === 0) {
-          this.currentQuestion++;
-          this.guess = "";
-          this.attemptsLeft = 3;
-        }
-      }
-      if (this.currentQuestion === this.translations.length) {
-        this.gameOver = true;
-      }
+    getNextWord() {
+      axios.get(this.url+'/test'+this.jwt).then(response => {
+        this.translation = response.data.word.en_word;
+        this.book_id = response.data.book_id;
+      }).catch(error => {
+        console.log(error);
+      });
     },
+    checkAnswer() {
+      axios.post(this.url+'/test'+this.jwt, {
+        en_word: this.translation,
+        answer: this.guess,
+        book_id: this.book_id,
+      }).then(response => {
+        if (response.data.result) {
+          this.score++;
+          this.getNextWord();
+        } else {
+          this.attemptsLeft--;
+          if (this.attemptsLeft === 0) {
+            this.getNextWord();
+          }
+        }
+      }).catch(error => {
+        console.log(error);
+      });
+    }
   },
+  mounted() {
+    this.getNextWord();
+  }
 };
 </script>
 <style>
