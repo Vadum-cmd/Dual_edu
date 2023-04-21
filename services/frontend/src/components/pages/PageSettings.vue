@@ -88,12 +88,12 @@ export default {
       englishLevel: 'A1',
       nativeLanguage: 'English',
       savedSettings: null,
-      endpoint: 'http://192.168.1.104:8081/settings?jwt='
+      url:process.env.VUE_APP_URL
     }
   },
   created() {
     const jwt = localStorage.getItem("jwt");
-    fetch(this.endpoint+jwt)
+    fetch(this.url+`/jwt=${jwt}`)
         .then(response => response.json())
         .then(data => {
           this.savedSettings = data
@@ -119,7 +119,7 @@ export default {
         nativeLanguage: this.nativeLanguage
       }
       const jwt = localStorage.getItem("jwt");
-      fetch(this.endpoint+jwt, {
+      fetch(this.url+`/jwt=${jwt}`, {
         method: 'PUT',
         body: JSON.stringify(data),
         headers: {
