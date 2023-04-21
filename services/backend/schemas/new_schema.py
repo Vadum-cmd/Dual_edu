@@ -15,7 +15,7 @@ class UserCreate(UserBase):
 
 
 class User(UserBase):
-    user_id: int
+    id: int
     current_num_level: int
     frame_path: Optional[str] = None
     books: List["Book"] = []
