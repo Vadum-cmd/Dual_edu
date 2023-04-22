@@ -177,4 +177,5 @@ input[type="text"] {
   flex-wrap: wrap;
   justify-content: center;
 }
+
 </style>
