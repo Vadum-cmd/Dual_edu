@@ -2,15 +2,8 @@ from conftest import client
 
 
 def test_sendbook():
-    response = client.post('/login', data={
-        "grant_type": "",
-        "username": "test@gmail.com",
-        "password": "test",
-        "scope": "",
-        "client_id": "",
-        "client_secret": "",
-    })
-    jwt = response.cookies["user_auth"]
+    with open("tests/jwt_for_test.txt", "r") as file:
+        jwt = file.read()
 
     cookies = {
         'user_auth': jwt
@@ -35,23 +28,11 @@ def test_sendbook():
     filename = "test_books/test2.pdf"
     data = '------WebKitFormBoundaryPlBcf3f9ATosJwJB\r\nContent-Disposition: form-data; name="file"; filename="' + filename + '"\r\nContent-Type: application/pdf\r\n\r\n\r\n------WebKitFormBoundaryPlBcf3f9ATosJwJB--\r\n'
 
-    # response = requests.post(
-    #     'http://192.168.0.163:8081/sendbook',
-    #     params=params,
-    #     cookies=cookies,
-    #     headers=headers,
-    #     data=data,
-    #     verify=False,
-    # )
-    print(data)
-    # with open('tests/test_books/test2.pdf', 'rb') as f:
-    #     file = f.read()
     response = client.post(url=f"/sendbook",
                     params=params,
                     cookies=cookies,
                     headers=headers,
                     data=data,
                            )
-
+    print("BOOK IS NOT ID DB!!! (PROBABLY BECAUSE SOMEBODY ALREADY DOWNLOADED THE SAME BOOK)")
     assert response.status_code == 200
-    # assert response.json() == {}

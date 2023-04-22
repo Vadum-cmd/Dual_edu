@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c9c9ff5b-21cf-4334-a465-6155c7bb2afc" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routers/sendbook.py" beforeDir="false" afterPath="$PROJECT_DIR$/routers/sendbook.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_auth_endpoints.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_auth_endpoints.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_profile_endpoint.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_profile_endpoint.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_settings_endpoints.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_settings_endpoints.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth/manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/auth/manager.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,6 +48,11 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/tests/conftest.py" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\LNU\4 семестр\SoftServe_dual\Dual_edu\services\backend\tests\endpoint_tests" />
+    </key>
   </component>
   <component name="RunManager" selected="Python.conftest">
     <configuration name="config" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
