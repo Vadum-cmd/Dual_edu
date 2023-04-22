@@ -9,7 +9,7 @@ from schemas.new_schema import UserCreate, UserUpdate, DBWordCreate, DBWord, \
 
 # Returns a user with the specified user_id.
 def get_user(db: Session, user_id: int) -> User:
-    return db.query(User).filter(User.user_id == user_id).first()
+    return db.query(User).filter(User.id == user_id).first()
 
 
 # Returns a list of users with optional pagination using the skip and limit parameters.
@@ -188,7 +188,7 @@ def get_db_word_by_en_word(db: Session, en_word: str) -> DB_word:
 
 
 def get_user_profile(db: Session, user_id: int):
-    return db.query(User).filter(User.user_id == user_id).first()
+    return db.query(User).filter(User.id == user_id).first()
 
 
 def change_user_word_status(db: Session, book_id: int, en_word: str):
@@ -201,7 +201,7 @@ def change_user_word_status(db: Session, book_id: int, en_word: str):
 
 
 def update_user_info(db: Session, user_id: int, goal_level: str, email_adress: str, user_level: str, native_language: str):
-    user = db.query(User).filter(User.user_id == user_id).first()
+    user = db.query(User).filter(User.id == user_id).first()
     user.goal_level = goal_level
     user.email = email_adress
     user.user_level = user_level
