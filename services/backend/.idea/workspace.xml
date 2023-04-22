@@ -3,8 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="c9c9ff5b-21cf-4334-a465-6155c7bb2afc" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth/db.py" beforeDir="false" afterPath="$PROJECT_DIR$/auth/db.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routers/sendbook.py" beforeDir="false" afterPath="$PROJECT_DIR$/routers/sendbook.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_auth_endpoints.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_auth_endpoints.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_profile_endpoint.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_profile_endpoint.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_settings_endpoints.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_settings_endpoints.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,9 +51,9 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/auth/jwt_decoder.py" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/tests/conftest.py" />
   </component>
-  <component name="RunManager" selected="Python.jwt_decoder">
+  <component name="RunManager" selected="Python.conftest">
     <configuration name="config" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="backend" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -75,6 +77,37 @@
         </ENTRIES>
       </EXTENSION>
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/config/config.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="conftest" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="backend" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="D:\LNU\4 семестр\SoftServe_dual\Dual_edu\services\backend\venv\Scripts\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="net.ashald.envfile">
+        <option name="IS_ENABLED" value="false" />
+        <option name="IS_SUBST" value="false" />
+        <option name="IS_PATH_MACRO_SUPPORTED" value="false" />
+        <option name="IS_IGNORE_MISSING_FILES" value="false" />
+        <option name="IS_ENABLE_EXPERIMENTAL_INTEGRATIONS" value="false" />
+        <ENTRIES>
+          <ENTRY IS_ENABLED="true" PARSER="runconfig" IS_EXECUTABLE="false" />
+        </ENTRIES>
+      </EXTENSION>
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tests/conftest.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -178,6 +211,7 @@
     </configuration>
     <list>
       <item itemvalue="Python.config" />
+      <item itemvalue="Python.conftest" />
       <item itemvalue="Python.jwt_decoder" />
       <item itemvalue="Python.parser" />
       <item itemvalue="Python.vocabulary" />

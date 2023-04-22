@@ -14,6 +14,7 @@ def get_profile_info(jwt: str, db: Session = Depends(get_db)):
         user_id = int(decode_user(jwt)['sub'])
     except:
         return None
+
     return get_user_profile(db=db, user_id=user_id)
 
 
