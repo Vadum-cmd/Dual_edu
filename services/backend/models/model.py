@@ -63,7 +63,7 @@ class Book(Base):
     __tablename__ = 'book'
 
     book_id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey('user.user_id'))
+    user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
     book_title: Mapped[str] = mapped_column(String(50))
     book_author: Mapped[str] = mapped_column(String(50))
 

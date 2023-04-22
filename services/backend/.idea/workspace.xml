@@ -2,10 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c9c9ff5b-21cf-4334-a465-6155c7bb2afc" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/tests/jwt_for_test.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/test_download_file.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/test_vocabulary_endpoint.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routers/sendbook.py" beforeDir="false" afterPath="$PROJECT_DIR$/routers/sendbook.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/versions/eff6d8e90d72_added_es_word_column_into_db_word_table_.py" beforeDir="false" afterPath="$PROJECT_DIR$/alembic/versions/eff6d8e90d72_added_es_word_column_into_db_word_table_.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crud/crud_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/crud/crud_functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/model.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_auth_endpoints.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_auth_endpoints.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_profile_endpoint.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_profile_endpoint.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_sendbook_endpoint.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_sendbook_endpoint.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_settings_endpoints.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_settings_endpoints.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -52,6 +58,11 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/tests/conftest.py" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\LNU\4 семестр\SoftServe_dual\Dual_edu\services\backend\tests\endpoint_tests" />
+    </key>
   </component>
   <component name="RunManager" selected="Python.conftest">
     <configuration name="config" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
