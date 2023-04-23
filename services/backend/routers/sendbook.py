@@ -18,6 +18,8 @@ def post_book(jwt: str, level: str, file: UploadFile = File(...), db: Session = 
     try:
         user_id = int(decode_user(jwt)['sub'])
     except:
+        # print(jwt)
+        # print("HERE?!")
         return None
 
     books = get_books_by_user_id(db=db, user_id=user_id)
