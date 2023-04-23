@@ -1,7 +1,8 @@
+import json
 from conftest import client
 
 
-def test_sendbook():
+def test_sendbook_endpoint():
     with open("tests/jwt_for_test.txt", "r") as file:
         jwt = file.read()
 
@@ -21,7 +22,7 @@ def test_sendbook():
     }
 
     params = {
-        'jwt': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0IiwiYXVkIjpbImZhc3RhcGktdXNlcnM6YXV0aCJdLCJleHAiOjE2ODE5MjAyOTh9.hNP2nUy3-BwwP0aFxovqng8-IGjW3GcxJUY3mzb7Yfs',
+        'jwt': cookies['user_auth'],
         'level': 'b1',
     }
 
@@ -34,5 +35,10 @@ def test_sendbook():
                     headers=headers,
                     data=data,
                            )
-    print("BOOK IS NOT ID DB!!! (PROBABLY BECAUSE SOMEBODY ALREADY DOWNLOADED THE SAME BOOK)")
+
+    sendbook_answer = json.loads(response.text)
+
+    #print("BOOK IS NOT ID DB!!! (PROBABLY BECAUSE SOMEBODY ALREADY DOWNLOADED THE SAME BOOK)")
+
     assert response.status_code == 200
+    assert type(sendbook_answer["book_id"]) == int
