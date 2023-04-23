@@ -107,14 +107,6 @@ export default {
     }
   },
   methods: {
-    getCookie(name) {
-      const value = `; ${document.cookie}`;
-      const parts = value.split(`; ${name}=`);
-      console.log(parts); // Debugging statement
-      if (parts.length === 2) {
-        return parts.pop().split(';').shift();
-      }
-    },
     async submitRegister() {
       if (!this.name || !this.email || !this.password || !this.nativeLanguage || !this.goalLevel || !this.currentLevel) {
         alert('Please fill in all required fields');
@@ -132,15 +124,12 @@ export default {
           "goal_level": this.goalLevel,
           "user_level": this.currentLevel
         };
-        const response = await fetch(this.url + `/register`, {
+        await fetch(this.url + `/register`, {
           body: JSON.stringify(data),
           method: 'POST',
           headers: {'accept': 'application/json', 'Content-Type': 'application/json'},
           credentials: 'include'
         });
-        if (!response.ok) {
-          throw new Error('Registration failed');
-        }
         alert('Congratulations! Now you have joined a cool community. Now you can log in to your account');
         location.reload();
 

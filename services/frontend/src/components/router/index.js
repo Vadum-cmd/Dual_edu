@@ -7,7 +7,7 @@ import PageLogin from "@/components/pages/PageLogin.vue";
 import PageGuest from "@/components/pages/PageGuest.vue";
 import HomePage from "@/components/pages/HomePage.vue";
 import BooksPage from "@/components/pages/BooksPage.vue";
-
+import ResetPassword from "@/components/pages/ResetPassword.vue";
 const router = createRouter({
     history: createWebHistory(),
     routes: [
@@ -50,7 +50,12 @@ const router = createRouter({
             path:'/books',
             name: 'Books page',
             component: BooksPage
-        }
+        },
+        {
+            path:'/resetpassword',
+            name: 'Reset password',
+            component: ResetPassword
+        },
     ]
 
 })
