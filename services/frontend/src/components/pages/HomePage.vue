@@ -23,6 +23,7 @@ export default {
       loading: false,
       books: [],
       isNotLogin:true,
+      level:null,
     }
   },
   methods: {
@@ -33,10 +34,9 @@ export default {
     sendLevel() {
       const jwt = localStorage.getItem('jwt');
       this.formData = new FormData();
-      this.formData.append('jwt', jwt);
+
       this.formData.append('file', this.file);
-      this.formData.append('level', 'B1')
-      this.url = this.base_url+ '/sendbook';
+      this.url = this.base_url+ `/sendbook?jwt=${jwt}&level=${this.level}`;
       this.loading = true;
       axios.post(this.url, this.formData)
           .then(() => {
@@ -60,6 +60,11 @@ export default {
     }, 50);
 
     this.isNotLogin = jwt === null;
+    axios.get(this.base_url+`/home?jwt=${jwt}`)
+        .then(response => {
+          const data= response.data;
+          this.level= data.user_level;
+        })
 
 
   }

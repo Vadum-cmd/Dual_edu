@@ -93,14 +93,16 @@ export default {
   },
   created() {
     const jwt = localStorage.getItem("jwt");
-    fetch(this.url+`/jwt=${jwt}`)
+    fetch(this.url+`/settings?jwt=${jwt}` ,{
+      body: jwt
+    })
         .then(response => response.json())
         .then(data => {
           this.savedSettings = data
-          this.targetLevel = data.targetLevel
-          this.username = data.username
-          this.englishLevel = data.englishLevel
-          this.nativeLanguage = data.nativeLanguage
+          this.targetLevel = data.goal_level.toUpperCase()
+          this.username = data.user_name
+          this.englishLevel = data.user_level.toUpperCase()
+          this.nativeLanguage = data.native_language
         })
         .catch(error => console.error(error))
   },
@@ -112,15 +114,17 @@ export default {
       this.editing = false
     },
     saveSettings() {
+      const jwt = localStorage.getItem("jwt");
       const data = {
         targetLevel: this.targetLevel,
         username: this.username,
         englishLevel: this.englishLevel,
-        nativeLanguage: this.nativeLanguage
+        nativeLanguage: this.nativeLanguage,
+        jwt:jwt,
       }
-      const jwt = localStorage.getItem("jwt");
-      fetch(this.url+`/jwt=${jwt}`, {
-        method: 'PUT',
+
+      fetch(this.url+`/settings`, {
+        method: 'POST',
         body: JSON.stringify(data),
         headers: {
           'Content-Type': 'application/json'

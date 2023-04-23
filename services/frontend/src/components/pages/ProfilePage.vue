@@ -4,14 +4,17 @@
       <div class="avatar-wrapper"><img class="avatar" :src="avatarUrl" alt="Avatar"></div>
     </div>
     <div class="nickname-container"><h2 class="nickname">{{ nickname }}</h2></div>
-    <div class="xp-bar">
-      <div class="progress" :style="{ width: xpPercentage }"> Level {{ level }} - {{ xp }}/{{ xpToNextLevel }} XP</div>
+<!--    <div class="xp-bar">-->
+<!--      <div class="progress" :style="{ width: xpPercentage }"> Level {{ level }} - {{ xp }}/{{ xpToNextLevel }} XP</div>-->
+<!--    </div>-->
+    <div>
+      Level {{level}}
     </div>
     <div class="profile-lines">
       <div class="profile-line"><h3>Your goal:</h3>
-        <p>{{ goal }}</p></div>
+        <p>{{ goal.toUpperCase() }}</p></div>
       <div class="profile-line"><h3>Your english level:</h3>
-        <p>{{ englishLevel }}</p></div>
+        <p>{{ englishLevel.toUpperCase() }}</p></div>
       <div class="profile-line"><h3>Your native language:</h3>
         <p>{{ nativeLanguage }}</p></div>
       <div class="profile-line"><h3>Your email:</h3>
@@ -29,8 +32,8 @@ export default {
       avatarUrl: "",
       nickname: "",
       level: 0,
-      xp: 0,
-      xpToNextLevel: 0,
+      // xp: 0,
+      // xpToNextLevel: 0,
       goal: "",
       englishLevel: "",
       nativeLanguage: "",
@@ -50,9 +53,9 @@ export default {
           const data = response.data;
           this.avatarUrl = data.frame_path;
           this.nickname = data.user_name;
-          this.level = data.curent_num_level;
-          this.xp = data.xp;
-          this.xpToNextLevel = data.xpToNextLevel;
+          this.level = data.current_num_level;
+          // this.xp = data.xp;
+          // this.xpToNextLevel = data.xpToNextLevel;
           this.goal = data.goal_level;
           this.englishLevel = data.user_level;
           this.nativeLanguage = data.native_language;
