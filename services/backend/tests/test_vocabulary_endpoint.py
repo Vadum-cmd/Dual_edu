@@ -1,5 +1,17 @@
 import json
 from conftest import client
+from crud.crud_functions import get_books_by_user_id, get_user_words_by_book
+
+
+def test_get_vocabulary(mocker):
+    with open("tests/jwt_for_test.txt", "r") as file:
+        jwt = file.read()
+    id = 1
+    get_books_by_user_id_mock = mocker.patch("get_books_by_user_id")
+    get_books_by_user_id_mock.return_value = {}
+
+    get_user_words_by_book_mock = mocker.patch("get_user_words_by_book")
+    get_user_words_by_book_mock.return_value = {}
 
 
 def test_vocabulary_endpoint():

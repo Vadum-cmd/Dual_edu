@@ -4,10 +4,9 @@ from typing import Optional
 
 from fastapi import Depends, Request
 from fastapi_users import BaseUserManager, IntegerIDMixin, exceptions, models, schemas
-from fastapi_mail import FastMail
 
 from auth.db import User, get_user_db
-from config.config import SECRET_CODE_RESET_PASSWORD
+from config.config import SECRET_CODE_RESET_PASSWORD, EMAIL_ADDRESS, EMAIL_PASSWORD
 
 
 class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
@@ -46,14 +45,14 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
         return created_user
 
 
-    async def on_after_forgot_password(  # TODO: forget password
+    async def on_after_forgot_password(
         self, user: User, token: str, request: Optional[Request] = None
     ):
         port = 587  # For starttls
         smtp_server = "smtp.gmail.com"
-        sender_email = "reandjoy@gmail.com"
+        sender_email = EMAIL_ADDRESS
         receiver_email = user.email
-        password = "snxnsgvgekokevve"
+        password = EMAIL_PASSWORD
         message = f"""Subject: Reset password\n\nYour token: {token}"""
 
         context = ssl.create_default_context()

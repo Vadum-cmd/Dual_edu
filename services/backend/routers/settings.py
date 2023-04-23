@@ -23,7 +23,7 @@ def post_settings(jwt: str, goal_level: str, email_adress: str, user_level: str,
         user_id = int(decode_user(jwt)['sub'])
     except:
         return None
-
+    # TODO: goal_level, ... receive as json data not as query
     update_user_info(db=db, user_id=user_id, goal_level=goal_level, email_adress=email_adress, user_level=user_level, native_language=native_language)
 
     return get_user_profile(db=db, user_id=user_id)
