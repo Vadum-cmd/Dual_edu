@@ -29,7 +29,7 @@ export default {
   },
   methods: {
     getNextWord() {
-      axios.get(this.url+'/test'+this.jwt).then(response => {
+      axios.get(this.url+'/test?jwt='+this.jwt).then(response => {
         this.translation = response.data.word.en_word;
         this.book_id = response.data.book_id;
       }).catch(error => {
@@ -37,7 +37,7 @@ export default {
       });
     },
     checkAnswer() {
-      axios.post(this.url+'/test'+this.jwt, {
+      axios.post(this.url+'/test?jwt='+this.jwt, {
         en_word: this.translation,
         answer: this.guess,
         book_id: this.book_id,

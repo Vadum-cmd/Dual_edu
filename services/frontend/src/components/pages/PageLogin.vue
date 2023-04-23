@@ -15,7 +15,7 @@
           </div>
         </div>
       </div>
-      <form class="sign-up" @submit.prevent="submitForm">
+      <form class="sign-up" @submit.prevent="submitRegister">
         <h2>Create login</h2>
         <div>Use your email for registration</div>
         <input type="text" placeholder="Name" v-model="name"/>
@@ -24,7 +24,8 @@
         <div>
           <select id="native-language" v-model="nativeLanguage">
             <option value="" disabled selected>Native language</option>
-            <option value="Spanish">Spanish</option>n>
+            <option value="Spanish">Spanish</option>
+            n>
             <option value="Ukrainian">Ukrainian</option>
           </select>
         </div>
@@ -61,11 +62,13 @@
         <button class="sign-in-btn" type="submit" id="signInBtn">Sign In</button>
         <ModalWindow v-model:is-active="forgotPassword">
 
-            <h2>Reset Password</h2>
-            <div>Enter your email address to reset your password</div>
-            <input type="email" placeholder="Email" v-model="resetEmail"/>
-            <button class="reset-password-btn"  @click="resetPassword" id="resetPasswordBtn">Reset Password</button>
-            <button class="cancel-link" @click="forgotPassword = false"><font-awesome-icon :icon="['fas', 'circle-xmark']"  /></button>
+          <h2>Reset Password</h2>
+          <div>Enter your email address to reset your password</div>
+          <input type="email" placeholder="Email" v-model="resetEmail"/>
+          <button class="reset-password-btn" @click="resetPassword" id="resetPasswordBtn">Reset Password</button>
+          <button class="cancel-link" @click="forgotPassword = false">
+            <font-awesome-icon :icon="['fas', 'circle-xmark']"/>
+          </button>
 
         </ModalWindow>
 
@@ -77,6 +80,7 @@
 
 import ModalWindow from "@/components/UI/ModalWindow.vue";
 import router from "@/components/router";
+
 export default {
   components: {ModalWindow},
   data: () => {
@@ -92,47 +96,54 @@ export default {
       loginPassword: '',
       forgotPassword: false,
       resetEmail: '',
-      scope:'',
+      scope: '',
       grant_type: '',
-      client_id:'',
-      client_secret:'',
-      is_superuser:false,
-      is_verified:false,
-      is_active:true,
-      url:process.env.VUE_APP_URL
+      client_id: '',
+      client_secret: '',
+      is_superuser: false,
+      is_verified: false,
+      is_active: true,
+      url: process.env.VUE_APP_URL
     }
   },
   methods: {
-    async submitForm() {
+    getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      console.log(parts); // Debugging statement
+      if (parts.length === 2) {
+        return parts.pop().split(';').shift();
+      }
+    },
+    async submitRegister() {
       if (!this.name || !this.email || !this.password || !this.nativeLanguage || !this.goalLevel || !this.currentLevel) {
         alert('Please fill in all required fields');
         return;
       }
-      const data = {
-        name: this.name,
-        email: this.email,
-        password: this.password,
-        nativeLanguage: this.nativeLanguage,
-        goalLevel: this.goalLevel,
-        currentLevel: this.currentLevel,
-      };
       try {
-
-        const response = await fetch(this.url+`/register?user_name=${data.name}&email=${data.email}&password=${data.password}&native_language=${data.nativeLanguage}&goal_level=${data.goalLevel}&user_level=${data.currentLevel}&is_active=${this.is_active}&is_superuser=${this.is_superuser}&is_verified=${this.is_verified}`, {
-
+        const data = {
+          "email": this.email,
+          "password": this.password,
+          "is_active": this.is_active,
+          "is_superuser": this.is_superuser,
+          "is_verified": this.is_verified,
+          "user_name": this.name,
+          "native_language": this.nativeLanguage,
+          "goal_level": this.goalLevel,
+          "user_level": this.currentLevel
+        };
+        const response = await fetch(this.url + `/register`, {
+          body: JSON.stringify(data),
           method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          credentials: `include`,
+          headers: {'accept': 'application/json', 'Content-Type': 'application/json'},
+          credentials: 'include'
         });
         if (!response.ok) {
           throw new Error('Registration failed');
         }
-        const cookies = document.cookie.split('; ');
-        const jwtCookie = cookies.find(cookie => cookie.startsWith('user_auth='));
-        const jwt = jwtCookie.split('=')[1];
-        localStorage.setItem('jwt', jwt);
-        router.push('/');
-        console.log('Registration successful');
+        alert('Congratulations! Now you have joined a cool community. Now you can log in to your account');
+        location.reload();
+
       } catch (error) {
         console.error(error);
       }
@@ -147,27 +158,24 @@ export default {
             return;
           }
 
-          const response = await fetch(this.url+`/login?grant_type=&username=${this.loginEmail}&password=${this.loginPassword}&scope=${this.scope}&client_id=${this.client_id}&client_secret=${this.client_secret}`, {
+          const response = await fetch(this.url + `/login`, {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            credentials: `include`,
+            headers: {'accept': 'application/json', 'Content-Type': 'application/x-www-form-urlencoded'},
+            body: `grant_type=${this.grant_type}&username=${this.loginEmail}&password=${this.loginPassword}&scope=${this.scope}&client_id=${this.client_id}&client_secret=${this.client_secret}`,
+            credentials: 'include',
+            mode: "no-cors"
           });
-
           if (!response.ok) {
             alert('Login failed');
-            return;
           }
-          console.log(...response.headers);
+          const cookies = document.cookie.split('; ');
+          const jwtCookie = cookies.find(cookie => cookie.startsWith('user_auth='));
+          const jwt = jwtCookie.split('=')[1];
+          localStorage.setItem('jwt', jwt);
 
-          const cookies = document.cookie;
-          console.log(cookies)
-          //const jwtCookie = cookies.find(cookie => cookie.startsWith('user_auth='));
-          //const jwt = jwtCookie.split('=')[1];
-          //console.log(jwt);
-          //const jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0IiwiYXVkIjpbImZhc3RhcGktdXNlcnM6YXV0aCJdLCJleHAiOjE2ODAzMzg2NzF9.Izbr5oWxqNJofYTr5y1SqBPDCaqC7ADg8BMEuxnKyto'
-          //localStorage.setItem('jwt', jwt);
+          router.push('/home');
 
-          router.push('/');
+
         }
         this.loginEmail = '';
         this.loginPassword = '';
@@ -177,14 +185,13 @@ export default {
       }
 
 
-
     },
     async resetPassword() {
       const data = {
         email: this.resetEmail,
       };
       try {
-        const response = await fetch(this.url+`/reset-password?email=${data.email}`, {
+        const response = await fetch(this.url + `/reset-password?email=${data.email}`, {
           method: 'POST',
           headers: {'Content-Type': 'application/json'}
         });
@@ -317,6 +324,7 @@ form {
   background: linear-gradient(to bottom, #efefef, #ccc);
   transition: all .5s ease-in-out;
   height: 100%;
+
   div {
     font-size: 1rem;
   }
@@ -338,6 +346,7 @@ form {
     display: block;
     box-sizing: border-box;
     width: 100%;
+
     &:focus {
       outline: none;
       background-color: #fff;
@@ -356,15 +365,16 @@ form {
   }
 
   .reset-password-btn {
-    margin:10px;
+    margin: 10px;
   }
 
 }
 
-.sign-in-btn{
+.sign-in-btn {
   margin-top: 10px;
 
 }
+
 .sign-up {
   top: -5%;
   left: 2%;
@@ -417,7 +427,8 @@ form {
     z-index: 10;
   }
 }
-.reset-password-btn{
+
+.reset-password-btn {
   scale: 70%;
 }
 
@@ -426,14 +437,16 @@ form {
   margin-top: 5px;
 }
 
-.forgot-password:hover{
+.forgot-password:hover {
   color: #00afea;
 }
-.cancel-link:hover{
+
+.cancel-link:hover {
   color: #00afea;
   cursor: pointer;
 }
-.cancel-link{
+
+.cancel-link {
 
   border-radius: 50px;
 

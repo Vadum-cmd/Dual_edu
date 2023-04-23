@@ -1,12 +1,13 @@
 <template>
   <header :class="{ 'scrolled-nav': scrolledNav}">
     <nav>
-      <div class="branding">
+      <router-link class="branding" to="/home">
+
         <div class="h">Re&joy</div>
-      </div>
+      </router-link>
       <ul v-show="!mobile" class="navigation">
         <li>
-          <router-link class="link" to="/">
+          <router-link class="link" to="/books">
             <font-awesome-icon icon="fa-solid fa-book-open"/>
             Books
           </router-link>
@@ -20,9 +21,10 @@
         <li v-if="isAutorize">
 
           <div class="profile">
-            <div class="nickname">
-              <font-awesome-icon icon="fa-solid fa-circle" style="scale: 300%; margin-right: 15px"/>
-              Nickname
+            <router-link class="link" to="/profile">
+              <font-awesome-icon icon="fa-solid fa-user"/>
+              Profile
+            </router-link>
 
             </div>
 
@@ -31,10 +33,7 @@
                 <font-awesome-icon icon="fa-solid fa-square-caret-down"/>
               </button>
               <div class="dropdown-content" v-if="active">
-                <router-link class="drop_menu" to="/profile">
-                  <font-awesome-icon icon="fa-solid fa-user"/>
-                  Profile
-                </router-link>
+
                 <router-link class="drop_menu" to="/settings">
                   <font-awesome-icon icon="fa-solid fa-gear"/>
                   Settings
@@ -49,7 +48,7 @@
                 </router-link>
               </div>
             </div>
-          </div>
+
         </li>
         <li v-else>
           <router-link class="link" to="/login">
@@ -68,7 +67,7 @@
       <transition name="mobile-nav">
         <ul v-show="mobileNav" class="dropdown-nav">
           <li>
-            <router-link class="link" to="/">
+            <router-link class="link" to="/books">
               <font-awesome-icon icon="fa-solid fa-book-open"/>
               Books
             </router-link>
@@ -153,8 +152,7 @@ export default {
   },
   mounted() {
     const jwt = localStorage.getItem("jwt");
-
-    this.isAutorize = jwt !== 'null';
+    this.isAutorize = jwt !== null;
 
     window.addEventListener('scroll', this.updateScroll);
   },
@@ -186,7 +184,6 @@ export default {
     logout() {
       localStorage.removeItem('jwt');
       this.isAutorize=false;
-      location.reload();
       router.push('/login');
     }
   }
@@ -251,6 +248,7 @@ header {
       position: relative;
       display: inline-flex;
 
+
     }
 
     .dropdown button {
@@ -296,6 +294,15 @@ header {
     .branding {
       display: flex;
       align-items: center;
+      color: white;
+      transition: 0.5s ease all;
+      padding-bottom: 1px;
+      border-bottom: 1px solid transparent;
+      font-size: 35px;
+      &:hover{
+        color: #00afea;
+        border-color: #00afea;
+      }
     }
 
     .navigation {

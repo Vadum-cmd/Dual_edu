@@ -14,8 +14,8 @@
         </select>
       </div>
       <div class="form-group">
-        <label for="email">Email Address:</label>
-        <input type="email" id="email" v-model="email" :disabled="!editing">
+        <label for="username">Username:</label>
+        <input class="username" id="username" v-model="username" :disabled="!editing">
       </div>
       <div class="form-group">
         <label for="english-level">English Level:</label>
@@ -52,8 +52,8 @@
         </select>
       </div>
       <div class="form-group">
-        <label for="email">Email Address:</label>
-        <input type="email" id="email" v-model="email">
+        <label for="username">Username:</label>
+        <input class="username" id="username" v-model="username">
       </div>
       <div class="form-group">
         <label for="english-level">English Level:</label>
@@ -84,7 +84,7 @@ export default {
     return {
       editing: false,
       targetLevel: 'A1',
-      email: '',
+      username: '',
       englishLevel: 'A1',
       nativeLanguage: 'English',
       savedSettings: null,
@@ -98,7 +98,7 @@ export default {
         .then(data => {
           this.savedSettings = data
           this.targetLevel = data.targetLevel
-          this.email = data.email
+          this.username = data.username
           this.englishLevel = data.englishLevel
           this.nativeLanguage = data.nativeLanguage
         })
@@ -114,7 +114,7 @@ export default {
     saveSettings() {
       const data = {
         targetLevel: this.targetLevel,
-        email: this.email,
+        username: this.username,
         englishLevel: this.englishLevel,
         nativeLanguage: this.nativeLanguage
       }
@@ -162,7 +162,14 @@ label {
   color: #666;
 }
 
-input[type="email"],
+.username{
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  background-color: #f9f9f9;
+  color: #444;
+}
 select {
   width: 100%;
   padding: 0.5rem;

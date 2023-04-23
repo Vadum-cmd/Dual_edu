@@ -4,21 +4,8 @@
       <div class="upload">Upload your book</div>
       <download-button @change="onFileChange"/>
     </div>
-    <div class="lang_choose" v-if="isNotLogin">
-      <div class="select_lev">Select your english level</div>
-      <select v-model="level">
-        <option v-for="value in options" :key="value">{{ value }}</option>
-      </select>
-    </div>
     <setting-button @click="sendLevel">Submit</setting-button>
     <div v-if="loading"><i class="fa fa-spinner fa-spin"></i></div>
-
-    <div v-if="books && books.length > 0">
-      <h2>Available Books</h2>
-      <ul>
-        <li v-for="book in books" :key="book.id">{{ book.title }}</li>
-      </ul>
-    </div>
   </div>
 </template>
 
@@ -30,21 +17,12 @@ export default {
   components: {DownloadButton, SettingButton},
   data() {
     return {
-      options: [
-        'A1',
-        'A2',
-        'B1',
-        'B2',
-        'C1',
-        'C2'
-      ],
-      level: null,
       base_url:process.env.VUE_APP_URL,
       file:null,
       formData:null,
       loading: false,
       books: [],
-      isNotLogin:false,
+      isNotLogin:true,
     }
   },
   methods: {
@@ -53,10 +31,11 @@ export default {
       this.file = event.target.files[0];
     },
     sendLevel() {
+      const jwt = localStorage.getItem('jwt');
       this.formData = new FormData();
+      this.formData.append('jwt', jwt);
       this.formData.append('file', this.file);
-      this.formData.append('level', this.level);
-
+      this.formData.append('level', 'B1')
       this.url = this.base_url+ '/sendbook';
       this.loading = true;
       axios.post(this.url, this.formData)
@@ -71,25 +50,18 @@ export default {
             this.loading = false;
           });
     },
-    fetchBooks() {
-      const jwt = localStorage.getItem("jwt");
-      axios.get(this.base_url+`/books?jwt=${jwt}`)
-          .then(response => {
-            this.books = response.data;
-          })
-          .catch(error => {
-            console.error("There was an error!", error);
-          });
-    }
   },
   mounted() {
     const jwt = localStorage.getItem("jwt");
-    if(jwt !== 'null' && this.isNotLogin===true){
-      window.location.reload();
-    }
-    this.isNotLogin = jwt === 'null';
+    setTimeout(() => {
+      if(jwt != null && this.isNotLogin===true){
+        location.reload();
+      }
+    }, 50);
 
-    this.fetchBooks();
+    this.isNotLogin = jwt === null;
+
+
   }
 }
 </script>
