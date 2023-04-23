@@ -7,41 +7,6 @@ from schemas.new_schema import UserCreate, UserUpdate, DBWordCreate, DBWord, \
     UserWord, UserWordCreate, BookCreate
 
 
-# Returns a user with the specified user_id.
-# def get_user(db: Session, user_id: int) -> User:
-#     return db.query(User).filter(User.id == user_id).first()
-
-
-# Returns a list of users with optional pagination using the skip and limit parameters.
-# def get_users(db: Session, skip: int = 0, limit: int = 100) -> List[User]:
-#     return db.query(User).offset(skip).limit(limit).all()
-
-
-# # Creates a new user with the provided data and returns the newly created user.
-# def create_user(db: Session, user: UserCreate) -> User:
-#     db_user = User(**user.dict())
-#     db.add(db_user)
-#     db.commit()
-#     db.refresh(db_user)
-#     return db_user
-
-
-# Updates a user with the specified user_id with the provided data and returns the updated user.
-# def update_user(db: Session, user: User, user_update: UserUpdate) -> User:
-#     for field, value in user_update:
-#         setattr(user, field, value)
-#     db.add(user)
-#     db.commit()
-#     db.refresh(user)
-#     return user
-#
-#
-# # Deletes a user with the specified user_id.
-# def delete_user(db: Session, user: User) -> None:
-#     db.delete(user)
-#     db.commit()
-
-
 def create_book(db: Session, book: BookCreate):
     db_book = Book(**book.dict())
     db.add(db_book)
@@ -49,31 +14,13 @@ def create_book(db: Session, book: BookCreate):
     db.refresh(db_book)
     return db_book
 
-# TODO: use it for list of books ??!
-def get_book(db: Session, book_id: int):
-    return db.query(Book).filter(Book.book_id == book_id).first()
-
-# TODO: use it for list of books ??!
-def get_books(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(Book).offset(skip).limit(limit).all()
-
-
-# def delete_book(db: Session, book_id: int):
-#     db_book = db.query(Book).filter(Book.book_id == book_id).first()
-#     db.delete(db_book)
-#     db.commit()
-
-
-# def get_db_word(db: Session, en_word: str) -> DB_word:
-#     return db.query(DB_word).filter(DB_word.en_word == en_word).first()
-
-
-# def create_db_word(db: Session, db_word: DBWordCreate) -> DB_word:
-#     db_word_obj = DB_word(**db_word.dict())
-#     db.add(db_word_obj)
-#     db.commit()
-#     db.refresh(db_word_obj)
-#     return db_word_obj
+# # TODO: use it for list of books ??!
+# def get_book(db: Session, book_id: int):
+#     return db.query(Book).filter(Book.book_id == book_id).first()
+#
+# # TODO: use it for list of books ??!
+# def get_books(db: Session, skip: int = 0, limit: int = 100):
+#     return db.query(Book).offset(skip).limit(limit).all()
 
 
 def create_user_word(db: Session, user_word: UserWordCreate) -> UserWord:
@@ -82,13 +29,6 @@ def create_user_word(db: Session, user_word: UserWordCreate) -> UserWord:
     db.commit()
     db.refresh(user_word_obj)
     return user_word_obj
-
-
-# def delete_user_word(db: Session, word_id: int) -> None:
-#     db.query(User_word).filter(User_word.word_id == word_id).delete()
-#     db.commit()
-
-
 
 #
 def get_user_words_by_book(db: Session, book_id: int):

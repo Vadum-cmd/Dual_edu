@@ -26,7 +26,7 @@ def test_login():
         "client_id": "",
         "client_secret": "",
     })
-    print(response)
+
     with open("tests/jwt_for_test.txt", "w") as file:
         file.write(response.cookies["user_auth"])
 

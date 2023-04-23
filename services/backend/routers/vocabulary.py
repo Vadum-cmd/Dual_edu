@@ -21,7 +21,6 @@ def get_vocabulary(jwt: str, book_id: int = None, db: Session = Depends(get_db))
         return None
 
     if book_id is None:
-        user_id = 2
         books = get_books_by_user_id(db=db, user_id=user_id)
         db_words = set()
         for book in books:

@@ -2,7 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c9c9ff5b-21cf-4334-a465-6155c7bb2afc" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/auth/manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/auth/manager.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/test_words_test_endpoint.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crud/crud_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/crud/crud_functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routers/sendbook.py" beforeDir="false" afterPath="$PROJECT_DIR$/routers/sendbook.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routers/vocabulary.py" beforeDir="false" afterPath="$PROJECT_DIR$/routers/vocabulary.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/jwt_for_test.txt" beforeDir="false" afterPath="$PROJECT_DIR$/tests/jwt_for_test.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_auth_endpoints.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_auth_endpoints.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_download_file.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_download_file.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_sendbook_endpoint.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_sendbook_endpoint.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_settings_endpoints.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_settings_endpoints.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_vocabulary_endpoint.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_vocabulary_endpoint.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
