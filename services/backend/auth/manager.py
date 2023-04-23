@@ -1,7 +1,10 @@
+import smtplib
+import ssl
 from typing import Optional
 
 from fastapi import Depends, Request
 from fastapi_users import BaseUserManager, IntegerIDMixin, exceptions, models, schemas
+from fastapi_mail import FastMail
 
 from auth.db import User, get_user_db
 from config.config import SECRET_CODE_RESET_PASSWORD
@@ -43,15 +46,46 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
         return created_user
 
 
-    # async def on_after_forgot_password(  # TODO: forget password
-    #     self, user: User, token: str, request: Optional[Request] = None
-    # ):
-    #     print(f"User {user.id} has forgot their password. Reset token: {token}")
-    #
-    # async def on_after_request_verify(
-    #     self, user: User, token: str, request: Optional[Request] = None
-    # ):
-    #     print(f"Verification requested for user {user.id}. Verification token: {token}")
+    async def on_after_forgot_password(  # TODO: forget password
+        self, user: User, token: str, request: Optional[Request] = None
+    ):
+        port = 587  # For starttls
+        smtp_server = "smtp.gmail.com"
+        sender_email = "reandjoy@gmail.com"
+        receiver_email = user.email
+        password = "snxnsgvgekokevve"
+        message = f"""Subject: Reset password\n\nYour token: {token}"""
+
+        context = ssl.create_default_context()
+        with smtplib.SMTP(smtp_server, port) as server:
+            server.ehlo()  # Can be omitted
+            server.starttls(context=context)
+            server.ehlo()  # Can be omitted
+            server.login(sender_email, password)
+            server.sendmail(sender_email, receiver_email, message, )
+
+        print(f"User {user.id} has forgot their password. Reset token: {token}")
+
+
+    async def on_after_request_verify(
+        self, user: User, token: str, request: Optional[Request] = None
+    ):
+        port = 587  # For starttls
+        smtp_server = "smtp.gmail.com"
+        sender_email = "reandjoy@gmail.com"
+        receiver_email = user.email
+        password = "snxnsgvgekokevve"
+        message = f"""Subject: Verify email\n\nYour token: {token}"""
+
+        context = ssl.create_default_context()
+        with smtplib.SMTP(smtp_server, port) as server:
+            server.ehlo()  # Can be omitted
+            server.starttls(context=context)
+            server.ehlo()  # Can be omitted
+            server.login(sender_email, password)
+            server.sendmail(sender_email, receiver_email, message)
+
+        print(f"Verification requested for user {user.id}. Verification token: {token}")
 
 
 async def get_user_manager(user_db=Depends(get_user_db)):

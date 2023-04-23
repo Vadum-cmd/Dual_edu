@@ -3,7 +3,7 @@ from random import randint
 from sqlalchemy.orm import Session
 from typing import List, Dict, Tuple
 from models.model import User, Book, User_word, DB_word
-from schemas.new_schema import UserCreate, UserUpdate, DBWordCreate, DBWord, \
+from schemas.schema import UserCreate, UserUpdate, DBWordCreate, DBWord, \
     UserWord, UserWordCreate, BookCreate
 
 
