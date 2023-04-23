@@ -13,7 +13,7 @@
     <tr v-for="(word, index) in displayedWords" :key="word.id">
       <td>{{ (currentPage - 1) * pageSize + index + 1 }}</td>
       <td>{{ word.en_word }}</td>
-      <td>{{ word.translation }}</td>
+      <td>{{ word.uk_word }}</td>
       <td>{{ word.word_level }}</td>
       <td><input type="checkbox" v-model="word.familiar"></td>
     </tr>
@@ -68,6 +68,7 @@ export default {
     axios.get(this.url+`/vocabulary?jwt=${jwt}`)
         .then(response => {
           this.words = response.data;
+
         })
         .catch(error => {
           console.error(error);
