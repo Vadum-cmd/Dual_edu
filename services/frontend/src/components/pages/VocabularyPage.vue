@@ -56,7 +56,7 @@ export default {
 
       words: [],
       searchTerm: '',
-      pageSize: 5,
+      pageSize: 10,
       currentPage: 1,
       showObject: false,
       levelDownload:[],
@@ -76,14 +76,12 @@ export default {
   },
   computed: {
     displayedWords() {
-      const filteredWords = this.words.filter(word => {
-        return word.word.toLowerCase().includes(this.searchTerm.toLowerCase());
-      });
       const startIndex = (this.currentPage - 1) * this.pageSize;
-      return filteredWords.slice(startIndex, startIndex + this.pageSize);
+      const endIndex = startIndex + this.pageSize;
+      return this.words.slice(startIndex, endIndex);
     },
     pageCount() {
-      return Math.ceil(this.displayedWords.length / this.pageSize);
+      return Math.ceil(this.words.length / this.pageSize);
     }
   },
   methods: {
