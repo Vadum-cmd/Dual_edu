@@ -80,10 +80,10 @@ def change_user_word_status(db: Session, book_id: int, en_word: str):
             break
 
 
-def update_user_info(db: Session, user_id: int, goal_level: str, email_adress: str, user_level: str, native_language: str):
+def update_user_info(db: Session, user_id: int, goal_level: str, user_name: str, user_level: str, native_language: str):
     user = db.query(User).filter(User.id == user_id).first()
     user.goal_level = goal_level
-    user.email = email_adress
+    user.user_name = user_name
     user.user_level = user_level
     user.native_language = native_language
 

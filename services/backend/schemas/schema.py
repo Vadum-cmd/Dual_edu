@@ -76,3 +76,14 @@ class Book(BookBase):
 
     # class Config:
     #     orm_mode = True
+
+
+# myuser
+class JWT(BaseModel):
+    jwt: str
+
+class SettingsUpdate(BaseModel):
+    goal_level: str
+    user_name: str
+    user_level: str
+    native_language: str
