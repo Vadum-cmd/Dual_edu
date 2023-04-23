@@ -85,25 +85,31 @@ export default {
     }
   },
   methods: {
-    downloadTable() {
+    async downloadTable() {
       const jwt = localStorage.getItem("jwt");
-      const this_url = this.url+`/vocabulary/download/?jwt=${jwt}&level=${this.levelDownload.join(' ')}`;
+      const levels_str = this.levelDownload.join(' ');
+      const url = `http://192.168.1.103:8081/vocabulary/download/?jwt=${jwt}&levels_str=${levels_str}`;
 
-      console.log(this_url);
-      axios({
-        url: this_url,
-        method: 'GET',
-        responseType: 'blob',
-      }).then((response) => {
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', 'table.xlsx');
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+      const response = await fetch(url, {
+        headers: {
+          'Accept-Language': 'en,ru-RU;q=0.9,ru;q=0.8,en-US;q=0.7,uk;q=0.6',
+          'Connection': 'keep-alive',
+          'Cookie': `user_auth=${jwt}`,
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36',
+          'accept': 'application/json'
+        }
       });
-    },
+
+      const blob = await response.blob();
+      const url1 = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url1;
+      link.setAttribute('download', 'table.xlsx');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
   },
 };
 </script>
