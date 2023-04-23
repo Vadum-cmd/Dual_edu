@@ -176,13 +176,11 @@ export default {
 
     },
     async resetPassword() {
-      const data = {
-        email: this.resetEmail,
-      };
       try {
-        const response = await fetch(this.url + `/reset-password?email=${data.email}`, {
+        const response = await fetch(this.url + `/forgot-password`, {
+          body: JSON.stringify({email:`${this.resetEmail}`}),
           method: 'POST',
-          headers: {'Content-Type': 'application/json'}
+          headers: {'Content-Type': 'application/json'},
         });
         if (!response.ok) {
           throw new Error('Password reset request failed');
