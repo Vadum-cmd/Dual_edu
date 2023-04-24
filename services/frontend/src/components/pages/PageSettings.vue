@@ -79,6 +79,7 @@
   </div>
 </template>
 <script>
+
 export default {
   data() {
     return {
@@ -88,21 +89,30 @@ export default {
       englishLevel: 'A1',
       nativeLanguage: 'English',
       savedSettings: null,
-      url:process.env.VUE_APP_URL
+      url: process.env.VUE_APP_URL
     }
   },
   created() {
     const jwt = localStorage.getItem("jwt");
-    fetch(this.url+`/jwt=${jwt}`)
+    fetch(this.url + '/settings', {
+      method: 'GET',
+      headers: {
+        'Cookie': jwt,
+
+      },
+      credentials: 'include',
+    })
         .then(response => response.json())
         .then(data => {
           this.savedSettings = data
-          this.targetLevel = data.targetLevel
-          this.username = data.username
-          this.englishLevel = data.englishLevel
-          this.nativeLanguage = data.nativeLanguage
+          this.targetLevel = data.goal_level.toUpperCase()
+          this.username = data.user_name
+          this.englishLevel = data.user_level.toUpperCase()
+          this.nativeLanguage = data.native_language
         })
         .catch(error => console.error(error))
+
+
   },
   methods: {
     editSettings() {
@@ -112,35 +122,43 @@ export default {
       this.editing = false
     },
     saveSettings() {
-      const data = {
-        targetLevel: this.targetLevel,
-        username: this.username,
-        englishLevel: this.englishLevel,
-        nativeLanguage: this.nativeLanguage
-      }
       const jwt = localStorage.getItem("jwt");
-      fetch(this.url+`/jwt=${jwt}`, {
-        method: 'PUT',
+      const data = {
+        goal_level: this.targetLevel.toLowerCase(),
+        user_name: this.username,
+        user_level: this.englishLevel.toLowerCase(),
+        native_language: this.nativeLanguage,
+      };
+
+      fetch(`${this.url}/settings`, {
+        method: 'POST',
         body: JSON.stringify(data),
         headers: {
-          'Content-Type': 'application/json'
-        }
+          'Accept-Language': 'en,ru-RU;q=0.9,ru;q=0.8,en-US;q=0.7,uk;q=0.6',
+          'Connection': 'keep-alive',
+          'Content-Type': 'application/json',
+          'Cookie': jwt,
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36',
+          'accept': 'application/json'
+        },
+        credentials: 'include',
       })
           .then(response => {
             if (response.ok) {
-              this.savedSettings = data
-              this.editing = false
+              this.savedSettings = data;
+              this.editing = false;
             } else {
-              throw new Error('Failed to save settings')
+              throw new Error('Failed to save settings');
             }
           })
           .catch(error => {
-            console.error(error)
-            alert('Failed to save settings')
-          })
+            console.error(error);
+            alert('Failed to save settings');
+          });
     }
   }
 }
+
 </script>
 <style scoped>
 .language-page {
@@ -162,7 +180,7 @@ label {
   color: #666;
 }
 
-.username{
+.username {
   width: 100%;
   padding: 0.5rem;
   border: 1px solid #ccc;
@@ -170,6 +188,7 @@ label {
   background-color: #f9f9f9;
   color: #444;
 }
+
 select {
   width: 100%;
   padding: 0.5rem;

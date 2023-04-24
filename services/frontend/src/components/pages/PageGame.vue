@@ -5,7 +5,7 @@
     <p v-else class="question">Translate the following word:</p>
     <div v-if="!gameOver" class="form-group">
       <p class="translation">{{ translation }}</p>
-      <input type="text" class="form-control" v-model="guess" @keyup.enter="checkAnswer" />
+      <input type="text" class="form-control" v-model="guess" @keyup.enter="checkAnswer"/>
       <p v-if="attemptsLeft > 0" class="attempts">{{ attemptsLeft }} attempts left.</p>
     </div>
   </div>
@@ -23,13 +23,13 @@ export default {
       score: 0,
       gameOver: false,
       book_id: null,
-      url:process.env.VUE_APP_URL,
-      jwt:localStorage.getItem('jwt')
+      url: process.env.VUE_APP_URL,
+      jwt: localStorage.getItem('jwt')
     };
   },
   methods: {
     getNextWord() {
-      axios.get(this.url+'/test?jwt='+this.jwt).then(response => {
+      axios.get(this.url + '/test?jwt=' + this.jwt).then(response => {
         this.translation = response.data.word.en_word;
         this.book_id = response.data.book_id;
       }).catch(error => {
@@ -37,27 +37,29 @@ export default {
       });
     },
     checkAnswer() {
-      axios.post(this.url+'/test?jwt='+this.jwt, {
-        en_word: this.translation,
-        answer: this.guess,
-        book_id: this.book_id,
-      }).then(response => {
-        if (response.data.result) {
-          this.score++;
-          this.getNextWord();
-        } else {
-          this.attemptsLeft--;
-          if (this.attemptsLeft === 0) {
-            this.getNextWord();
-          }
-        }
-      }).catch(error => {
+      if(this.attemptsLeft<=0){
+        this.gameOver=true;
+      }
+      axios.post(`${this.url}/test?jwt=${this.jwt}&en_word=${this.translation}&answer=${this.guess}&book_id=${this.book_id}`)
+          .then(response => {
+            if (response.data.result) {
+              this.score++;
+              this.getNextWord();
+            } else {
+              this.attemptsLeft--;
+              if (this.attemptsLeft === 0) {
+                this.getNextWord();
+              }
+            }
+          }).catch(error => {
         console.log(error);
       });
+
     }
   },
   mounted() {
     this.getNextWord();
+
   }
 };
 </script>

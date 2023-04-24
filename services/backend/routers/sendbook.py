@@ -17,12 +17,14 @@ router = APIRouter()
 def post_book(jwt: str, level: str, file: UploadFile = File(...), db: Session = Depends(get_db)):
     try:
         user_id = int(decode_user(jwt)['sub'])
+        print(user_id)
     except:
         # print(jwt)
         # print("HERE?!")
         return None
 
     books = get_books_by_user_id(db=db, user_id=user_id)
+    print(books)
     for book in books:
         book_words = get_user_words_by_book(db=db, book_id=book.book_id)
         identifier = False
@@ -43,16 +45,16 @@ def post_book(jwt: str, level: str, file: UploadFile = File(...), db: Session = 
 
     text = extract_text_from_pdf(path)
     words = word_tokenization(text)
-
+    # print(words)
     for word in words:
         try:
             db_word = get_db_word_by_en_word(db=db, en_word=word)
-
+            print(db_word)
             if db_word.word_level > level:
                 user_word = UserWordCreate(**{"en_word": db_word.en_word, "book_id": db_book.book_id, "is_known": False})
                 create_user_word(db=db, user_word=user_word)
         except:
-            pass  # print(word)
+             print(word)
 
     return {"book_id": db_book.book_id}
 
