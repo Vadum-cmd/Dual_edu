@@ -4,7 +4,7 @@
     <div class="books" v-if="books && books.length > 0">
       <h2 class="subtitle">Available Books</h2>
       <ul>
-        <li v-for="book in books" :key="book.id" class="book-item">{{ book.title }}</li>
+        <li v-for="book in books" :key="book.id" class="book-item">{{ book.book_title }}</li>
       </ul>
     </div>
     <div v-else>
@@ -30,7 +30,12 @@ export default {
   methods:{
     fetchBooks() {
       const jwt = localStorage.getItem("jwt");
-      axios.get(this.base_url+`/books?jwt=${jwt}`)
+      axios.get(this.base_url+`/books`,{
+        headers: {
+          'Cookie': jwt,
+        },
+        withCredentials: true,
+      })
           .then(response => {
             this.books = response.data;
           })

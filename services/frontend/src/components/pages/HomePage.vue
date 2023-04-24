@@ -36,9 +36,14 @@ export default {
       this.formData = new FormData();
 
       this.formData.append('file', this.file);
-      this.url = this.base_url+ `/sendbook?jwt=${jwt}&level=${this.level}`;
+      this.url = this.base_url+ `/sendbook?level=${this.level}`;
       this.loading = true;
-      axios.post(this.url, this.formData)
+      axios.post(this.url, this.formData,{
+        headers:{
+          'Cookie':jwt
+        },
+        withCredentials:true,
+      })
           .then(() => {
 
           })
@@ -60,7 +65,12 @@ export default {
     }, 50);
 
     this.isNotLogin = jwt === null;
-    axios.get(this.base_url+`/home?jwt=${jwt}`)
+    axios.get(this.base_url+`/home`,{
+      headers:{
+        'Cookie':jwt
+      },
+      withCredentials:true,
+    })
         .then(response => {
           const data= response.data;
           this.level= data.user_level;

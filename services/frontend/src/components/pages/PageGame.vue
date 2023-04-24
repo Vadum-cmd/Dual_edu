@@ -29,7 +29,12 @@ export default {
   },
   methods: {
     getNextWord() {
-      axios.get(this.url + '/test?jwt=' + this.jwt).then(response => {
+      axios.get(this.url + '/test',{
+        headers:{
+          'Cookie':this.jwt
+        },
+        withCredentials:true,
+      }).then(response => {
         this.translation = response.data.word.en_word;
         this.book_id = response.data.book_id;
       }).catch(error => {
@@ -40,7 +45,12 @@ export default {
       if(this.attemptsLeft<=0){
         this.gameOver=true;
       }
-      axios.post(`${this.url}/test?jwt=${this.jwt}&en_word=${this.translation}&answer=${this.guess}&book_id=${this.book_id}`)
+      axios.post(`${this.url}/test?en_word=${this.translation}&answer=${this.guess}&book_id=${this.book_id}`,{
+        headers:{
+          'Cookie':this.jwt
+        },
+        withCredentials:true,
+      })
           .then(response => {
             if (response.data.result) {
               this.score++;
