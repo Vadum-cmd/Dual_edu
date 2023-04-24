@@ -11,8 +11,8 @@ router = APIRouter()
 
 @router.get("/profile")
 def get_profile_info(jwt: str, request: Request, db: Session = Depends(get_db)):
-    # print(request.headers['accept'])
-    # print(request.headers['Cookie'])
+    print(request.headers['accept'])
+    #print(request.headers['Cookie'])
     try:
         user_id = int(decode_user(jwt)['sub'])
     except:

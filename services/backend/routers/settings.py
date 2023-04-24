@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, APIRouter
+from fastapi import FastAPI, Depends, APIRouter, Request
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
@@ -20,10 +20,10 @@ def get_settings(jwt: JWT, db: Session = Depends(get_db)):
 
 
 @router.post("/settings")
-def post_settings(jwt: JWT, settingsUpdate: SettingsUpdate, db: Session = Depends(get_db)):
-    print(settingsUpdate)
+def post_settings(settingsUpdate: SettingsUpdate, request: Request, db: Session = Depends(get_db)):
+
     try:
-        user_id = int(decode_user(jwt.jwt)['sub'])
+        user_id = int(decode_user(jwt)['sub'])
     except:
         return None
     # # TODO: goal_level, ... receive as json data not as query
