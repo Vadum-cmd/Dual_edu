@@ -33,3 +33,12 @@ alembic revision — autogenerate -m “Your commit”
 alembic upgrade head
 ```
 Once you run the above command your tables will be generated in your database.
+
+
+# Run backend
+
+```
+$ cd ../Dual_edu
+$ uvicorn main:app --host 0.0.0.0 --port 80
+```
+Once you run the above commands your backend will be ready to use.
