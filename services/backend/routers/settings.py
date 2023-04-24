@@ -1,19 +1,17 @@
-from fastapi import FastAPI, Depends, APIRouter, Request
-from pydantic import BaseModel
+from fastapi import Depends, APIRouter, Request
 from sqlalchemy.orm import Session
 
 from auth.jwt_decoder import decode_user
 from dependencies import get_db
 from crud.crud_functions import get_user_profile, update_user_info
-from schemas.schema import SettingsUpdate, JWT
+from schemas.schema import SettingsUpdate
 
 router = APIRouter()
 
 @router.get("/settings")
 def get_settings(request: Request, db: Session = Depends(get_db)):
-    jwt = request.headers['Cookie'].split('=')[1]
-
     try:
+        jwt = request.headers['Cookie'].split('=')[1]
         user_id = int(decode_user(jwt)['sub'])
     except:
         return None
@@ -21,12 +19,10 @@ def get_settings(request: Request, db: Session = Depends(get_db)):
     return get_user_profile(db=db, user_id=user_id)
 
 
-@router.post("/settings")
-def post_settings( settingsUpdate: SettingsUpdate,request: Request, db: Session = Depends(get_db)):
-    jwt = request.headers['Cookie'].split('=')[1]
-
-
+@router.put("/settings")
+def update_settings( settingsUpdate: SettingsUpdate,request: Request, db: Session = Depends(get_db)):
     try:
+        jwt = request.headers['Cookie'].split('=')[1]
         user_id = int(decode_user(jwt)['sub'])
     except:
         return None

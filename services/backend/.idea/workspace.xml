@@ -2,9 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c9c9ff5b-21cf-4334-a465-6155c7bb2afc" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/routers/books.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/routers_logic/download_vocabulary.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/routers_logic/send_book.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/routers_logic/words_test_game.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logic/get_xlsx.py" beforeDir="false" afterPath="$PROJECT_DIR$/logic/get_xlsx.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routers/books.py" beforeDir="false" afterPath="$PROJECT_DIR$/routers/books.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routers/download_file.py" beforeDir="false" afterPath="$PROJECT_DIR$/routers/download_file.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routers/home.py" beforeDir="false" afterPath="$PROJECT_DIR$/routers/home.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routers/profile.py" beforeDir="false" afterPath="$PROJECT_DIR$/routers/profile.py" afterDir="false" />
@@ -12,6 +15,12 @@
       <change beforePath="$PROJECT_DIR$/routers/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/routers/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routers/vocabulary.py" beforeDir="false" afterPath="$PROJECT_DIR$/routers/vocabulary.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routers/words_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/routers/words_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/schemas/schema.py" beforeDir="false" afterPath="$PROJECT_DIR$/schemas/schema.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/xlsx_files/Ihor's_vocabulary.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/xlsx_files/OKmeray's_vocabulary.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/xlsx_files/Roman's_vocabulary.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/xlsx_files/Vitalia's_vocabulary.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/xlsx_files/fsdf's_vocabulary.xlsx" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
