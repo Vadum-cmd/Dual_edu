@@ -46,12 +46,12 @@ def get_random_user_book(db: Session, user_id: int) -> Book:
         return book
 
 
-def get_unknown_user_word_by_book_id(db: Session, book_id: int):# -> DB_word:
+def get_unknown_user_word_by_book_id(db: Session, book_id: int) -> DB_word:
     user_words = db.query(User_word).filter(User_word.book_id == book_id).all()  # and not User_word.is_known
     # TODO: user_words is empty and also the condition with User_word.is_known should be added
     if len(user_words) == 0:
-        #raise Exception("No user words in DB or every word has been already learned")  # TODO: an exception to front end
-        return book_id
+        raise Exception("No user words in DB or every word has been already learned")  # TODO: an exception to front end
+        #return book_id
     elif len(user_words) == 1:
         return user_words[0]
     else:
