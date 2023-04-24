@@ -11,8 +11,8 @@ router = APIRouter()
 
 @router.get("/settings")
 def get_settings(request: Request, db: Session = Depends(get_db)):
-    print(request.headers['Cookie'])
     jwt = request.headers['Cookie'].split('=')[1]
+
     try:
         user_id = int(decode_user(jwt)['sub'])
     except:
@@ -24,25 +24,13 @@ def get_settings(request: Request, db: Session = Depends(get_db)):
 @router.post("/settings")
 def post_settings( settingsUpdate: SettingsUpdate,request: Request, db: Session = Depends(get_db)):
     jwt = request.headers['Cookie'].split('=')[1]
-    print(settingsUpdate)
+
 
     try:
         user_id = int(decode_user(jwt)['sub'])
     except:
         return None
-    # # TODO: goal_level, ... receive as json data not as query
+
     update_user_info(db=db, user_id=user_id, goal_level=settingsUpdate.goal_level, user_name=settingsUpdate.user_name, user_level=settingsUpdate.user_level, native_language=settingsUpdate.native_language)
-    #
+
     return get_user_profile(db=db, user_id=user_id)
-
-
-# @router.post("/settings")
-# def post_settings(jwt: str, goal_level: str, email_adress: str, user_level: str, native_language: str, db: Session = Depends(get_db)):
-#     try:
-#         user_id = int(decode_user(jwt)['sub'])
-#     except:
-#         return None
-#     # TODO: goal_level, ... receive as json data not as query
-#     update_user_info(db=db, user_id=user_id, goal_level=goal_level, email_adress=email_adress, user_level=user_level, native_language=native_language)
-#
-#     return get_user_profile(db=db, user_id=user_id)
