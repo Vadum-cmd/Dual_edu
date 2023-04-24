@@ -74,12 +74,21 @@ class Book(BookBase):
     book_id: int
     words: List[UserWord] = []
 
-    # class Config:
-    #     orm_mode = True
-
+    class Config:
+        orm_mode = True
 
 
 # myuser
+# class User(BaseModel):
+#     current_num_level: int
+#     goal_level: str
+#     user_level: str
+#     user_name: str
+#     email: str
+#     native_language: str
+#     frame_path: str
+#
+
 class SettingsUpdate(BaseModel):
     user_name: str
     user_level: str
