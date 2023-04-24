@@ -10,9 +10,8 @@ router = APIRouter()
 
 @router.get("/vocabulary")
 def get_vocabulary_endpoint(request: Request, book_id: int = None, db: Session = Depends(get_db)):
-    jwt = request.headers['Cookie'].split('=')[1]
-
     try:
+        jwt = request.headers['Cookie'].split('=')[1]
         user_id = int(decode_user(jwt)['sub'])
     except:
         return None

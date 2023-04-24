@@ -78,12 +78,10 @@ class Book(BookBase):
     #     orm_mode = True
 
 
-# myuser
-class JWT(BaseModel):
-    jwt: str
 
+# myuser
 class SettingsUpdate(BaseModel):
-    goal_level: str
     user_name: str
     user_level: str
+    goal_level: str
     native_language: str
