@@ -65,7 +65,12 @@ export default {
   },
   created() {
     const jwt = localStorage.getItem("jwt");
-    axios.get(this.url+`/vocabulary?jwt=${jwt}`)
+    axios.get(this.url+`/vocabulary`,{
+      headers: {
+        'Cookie': jwt,
+      },
+      withCredentials: true,
+    })
         .then(response => {
           this.words = response.data;
 
@@ -88,29 +93,34 @@ export default {
     async downloadTable() {
       const jwt = localStorage.getItem("jwt");
       const levels_str = this.levelDownload.join(' ');
-      const url = `http://192.168.1.103:8081/vocabulary/download/?jwt=${jwt}&levels_str=${levels_str}`;
+      const url = `http://192.168.1.103:8081/vocabulary/download/?levels_str=${levels_str}`;
 
-      const response = await fetch(url, {
-        headers: {
-          'Accept-Language': 'en,ru-RU;q=0.9,ru;q=0.8,en-US;q=0.7,uk;q=0.6',
-          'Connection': 'keep-alive',
-          'Cookie': `user_auth=${jwt}`,
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36',
-          'accept': 'application/json'
-        }
-      });
+      try {
+        const response = await axios.get(url, {
+          headers: {
+            'Accept-Language': 'en,ru-RU;q=0.9,ru;q=0.8,en-US;q=0.7,uk;q=0.6',
+            'Connection': 'keep-alive',
+            'Cookie': jwt,
+            'Referer': 'http://192.168.1.103:8081/docs',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36',
+            'accept': 'application/json'
+          },
+          responseType: 'blob',
+          withCredentials: true,
+        });
 
-      const blob = await response.blob();
-      const url1 = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url1;
-      link.setAttribute('download', 'table.xlsx');
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-
-  },
+        const url1 = window.URL.createObjectURL(response.data);
+        const link = document.createElement('a');
+        link.href = url1;
+        link.setAttribute('download', 'table.xlsx');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  }
 };
 </script>
 

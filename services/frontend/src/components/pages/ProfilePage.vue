@@ -51,9 +51,8 @@ export default {
     axios.get(this.url+`/profile`,{
       headers: {
         'Cookie': jwt,
-
       },
-      credentials: 'include',
+      withCredentials: true,
     })
         .then(response => {
           const data = response.data;
