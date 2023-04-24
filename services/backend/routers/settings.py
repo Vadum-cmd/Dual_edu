@@ -25,6 +25,7 @@ def get_settings(request: Request, db: Session = Depends(get_db)):
 def post_settings( settingsUpdate: SettingsUpdate,request: Request, db: Session = Depends(get_db)):
     jwt = request.headers['Cookie'].split('=')[1]
     print(settingsUpdate)
+
     try:
         user_id = int(decode_user(jwt)['sub'])
     except:
