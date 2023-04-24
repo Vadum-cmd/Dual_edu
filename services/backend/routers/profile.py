@@ -10,9 +10,9 @@ from crud.crud_functions import get_user_profile
 router = APIRouter()
 
 @router.get("/profile")
-def get_profile_info(jwt: str, request: Request, db: Session = Depends(get_db)):
-    print(request.headers['accept'])
-    #print(request.headers['Cookie'])
+def get_profile_info(request: Request, db: Session = Depends(get_db)):
+    jwt = request.headers['Cookie'].split('=')[1]
+
     try:
         user_id = int(decode_user(jwt)['sub'])
     except:

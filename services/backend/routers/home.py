@@ -9,7 +9,9 @@ from crud.crud_functions import get_user_profile
 router = APIRouter()
 
 @router.get("/home")
-def get_user_level(jwt: str, db: Session = Depends(get_db)):
+def get_user_level(request: Request, db: Session = Depends(get_db)):
+    jwt = request.headers['Cookie'].split('=')[1]
+
     try:
         user_id = int(decode_user(jwt)['sub'])
     except:

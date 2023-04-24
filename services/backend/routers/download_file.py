@@ -1,6 +1,4 @@
-from typing import List
-
-from fastapi import Depends, APIRouter
+from fastapi import Depends, APIRouter, Request
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 from dependencies import get_db
@@ -13,7 +11,9 @@ router = APIRouter()
 
 
 @router.get("/vocabulary/download/")  # , ressponse_class=FileResponse
-def download_table(jwt: str, levels_str: str, db: Session = Depends(get_db)):
+def download_table(request: Request, levels_str: str, db: Session = Depends(get_db)):
+    jwt = request.headers['Cookie'].split('=')[1]
+
     try:
         user_id = int(decode_user(jwt)['sub'])
     except:
