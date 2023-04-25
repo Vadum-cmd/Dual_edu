@@ -23,7 +23,7 @@ def get_books_endpoint(request: Request, db: Session = Depends(get_db)):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect email or password",
-            headers={"WWW-Authenticate": "Basic"},
+            #headers={"WWW-Authenticate": "Basic"},
         )
         #return None
 

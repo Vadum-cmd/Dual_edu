@@ -29,7 +29,12 @@ export default {
   },
   methods: {
     getNextWord() {
-      axios.get(this.url + '/test?jwt=' + this.jwt).then(response => {
+      axios.get(this.url + '/test', {
+        headers: {
+          'Cookie': this.jwt
+        },
+        withCredentials: true,
+      }).then(response => {
         this.translation = response.data.word.en_word;
         this.book_id = response.data.book_id;
       }).catch(error => {
@@ -37,12 +42,27 @@ export default {
       });
     },
     checkAnswer() {
-      if(this.attemptsLeft<=0){
-        this.gameOver=true;
+      if (this.attemptsLeft <= 0) {
+        this.gameOver = true;
       }
-      axios.post(`${this.url}/test?jwt=${this.jwt}&en_word=${this.translation}&answer=${this.guess}&book_id=${this.book_id}`)
+
+      return axios.post(`${this.url}/test?en_word=${this.translation}&answer=${this.guess}&book_id=${this.book_id}`, {},
+          {
+            headers: {
+              'Cookie': this.jwt,
+            },
+            withCredentials: true,
+          }
+      )
           .then(response => {
-            if (response.data.result) {
+            if (response.status >= 200 && response.status < 300) {
+              return response.data;
+            } else {
+              throw new Error('Network response was not ok');
+            }
+          })
+          .then(data => {
+            if (data.result) {
               this.score++;
               this.getNextWord();
             } else {
@@ -51,11 +71,12 @@ export default {
                 this.getNextWord();
               }
             }
-          }).catch(error => {
-        console.log(error);
-      });
-
+          })
+          .catch(error => {
+            console.error(error);
+          });
     }
+
   },
   mounted() {
     this.getNextWord();

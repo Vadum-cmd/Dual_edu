@@ -81,21 +81,17 @@
           <li v-if="isAutorize">
 
             <div class="profile">
-              <div class="nickname">
-                <font-awesome-icon icon="fa-solid fa-circle" style="scale: 300%; margin-right: 15px"/>
-                Nickname
-
-              </div>
+                <router-link class="link" to="/profile">
+                  <font-awesome-icon icon="fa-solid fa-user"/>
+                  Profile
+                </router-link>
 
               <div class="dropdown">
                 <button @click="toggle()">
                   <font-awesome-icon icon="fa-solid fa-square-caret-down"/>
                 </button>
                 <div class="dropdown-content" v-if="active">
-                  <router-link class="drop_menu" to="/profile">
-                    <font-awesome-icon icon="fa-solid fa-user"/>
-                    Profile
-                  </router-link>
+
                   <router-link class="drop_menu" to="/settings">
                     <font-awesome-icon icon="fa-solid fa-gear"/>
                     Settings
