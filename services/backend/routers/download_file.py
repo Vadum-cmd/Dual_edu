@@ -1,6 +1,6 @@
 import os
 
-from fastapi import Depends, APIRouter, Request
+from fastapi import Depends, APIRouter, Request, HTTPException, status
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 from dependencies import get_db
@@ -16,7 +16,12 @@ def download_vocabulary_endpoint(request: Request, levels_str: str, db: Session 
         jwt = request.headers['Cookie'].split('=')[1]
         user_id = int(decode_user(jwt)['sub'])
     except:
-        return None
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect email or password",
+            # headers={"WWW-Authenticate": "Basic"},
+        )
+        # return None
 
     path = download_vocabulary(user_id=user_id, levels_str=levels_str, db=db)
 

@@ -16,6 +16,21 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
     async def on_after_register(self, user: User, request: Optional[Request] = None):
         print(f"User {user.id} has registered.")
 
+    # TODO: on_after_login
+    async def on_after_login(
+        self, user: models.UP, request: Optional[Request] = None
+    ) -> None:
+        """
+        Perform logic after user login.
+
+        *You should overload this method to add your own logic.*
+
+        :param user: The user that is logging in
+        :param request: Optional FastAPI request that
+        triggered the operation, defaults to None.
+        """
+        return  # pragma: no cover
+
     async def create(
         self,
         user_create: schemas.UC,
