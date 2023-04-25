@@ -8,6 +8,7 @@ import PageGuest from "@/components/pages/PageGuest.vue";
 import HomePage from "@/components/pages/HomePage.vue";
 import BooksPage from "@/components/pages/BooksPage.vue";
 import ResetPassword from "@/components/pages/ResetPassword.vue";
+import Verification from "@/components/pages/Verification.vue";
 const router = createRouter({
     history: createWebHistory(),
     routes: [
@@ -55,6 +56,11 @@ const router = createRouter({
             path:'/resetpassword',
             name: 'Reset password',
             component: ResetPassword
+        },
+        {
+            path:'/verification',
+            name: 'Verification',
+            component: Verification
         },
     ]
 

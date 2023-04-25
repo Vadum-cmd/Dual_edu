@@ -72,7 +72,9 @@ export default {
   border-radius: 5px;
   margin-bottom: 2rem;
 }
-
+ul{
+  color:lightslategray;
+}
 .book-item {
   font-size: 1.5rem;
   margin-bottom: 1rem;
