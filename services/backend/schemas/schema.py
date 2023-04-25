@@ -94,3 +94,9 @@ class SettingsUpdate(BaseModel):
     user_level: str
     goal_level: str
     native_language: str
+
+
+class WordForVocabulary(BaseModel):
+    word: str
+    translation: str
+    word_level: str

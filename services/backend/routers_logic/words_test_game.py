@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from crud.crud_functions import get_db_word_by_en_word, change_user_word_status, get_random_user_book, \
-    get_unknown_user_word_by_book_id
+    get_unknown_user_word_by_book_id, get_user_profile
+from schemas.schema import WordForVocabulary
 
 
 def get_random_word(user_id: int, db: Session):
@@ -8,7 +9,14 @@ def get_random_word(user_id: int, db: Session):
     book = get_random_user_book(db=db, user_id=user_id)
     word = get_unknown_user_word_by_book_id(db=db, book_id=book.book_id)
 
-    return {"word": word, "book_id": book.book_id} #.en_word
+    user_language = get_user_profile(user_id=user_id, db=db).native_language
+    if user_language == "Ukrainian":
+        translation = word.uk_word
+    else:
+        translation = word.es_word
+    new_word = WordForVocabulary(**{"word": word.en_word, "translation": translation, "word_level": word.word_level})
+
+    return {"word": new_word, "book_id": book.book_id} #.en_word
 
 
 def check_user_answer(en_word: str, answer: str, book_id: int, db: Session):

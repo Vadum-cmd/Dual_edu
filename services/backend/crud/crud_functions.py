@@ -67,7 +67,7 @@ def get_db_word_by_en_word(db: Session, en_word: str) -> DB_word:
     return db.query(DB_word).filter(DB_word.en_word == en_word).first()
 
 
-def get_user_profile(db: Session, user_id: int):
+def get_user_profile(db: Session, user_id: int) -> User:
     return db.query(User).filter(User.id == user_id).first()
 
 
