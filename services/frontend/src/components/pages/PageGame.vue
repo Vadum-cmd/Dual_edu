@@ -5,7 +5,7 @@
     <p v-else class="question">Translate the following word:</p>
     <div v-if="!gameOver" class="form-group">
       <p class="translation">{{ translation }}</p>
-      <input type="text" class="form-control" v-model="guess" @keyup.enter="checkAnswer" />
+      <input type="text" class="form-control" v-model="guess" @keyup.enter="checkAnswer"/>
       <p v-if="attemptsLeft > 0" class="attempts">{{ attemptsLeft }} attempts left.</p>
     </div>
   </div>
@@ -23,13 +23,18 @@ export default {
       score: 0,
       gameOver: false,
       book_id: null,
-      url:process.env.VUE_APP_URL,
-      jwt:localStorage.getItem('jwt')
+      url: process.env.VUE_APP_URL,
+      jwt: localStorage.getItem('jwt')
     };
   },
   methods: {
     getNextWord() {
-      axios.get(this.url+'/test?jwt='+this.jwt).then(response => {
+      axios.get(this.url + '/test', {
+        headers: {
+          'Cookie': this.jwt
+        },
+        withCredentials: true,
+      }).then(response => {
         this.translation = response.data.word.en_word;
         this.book_id = response.data.book_id;
       }).catch(error => {
@@ -37,27 +42,45 @@ export default {
       });
     },
     checkAnswer() {
-      axios.post(this.url+'/test?jwt='+this.jwt, {
-        en_word: this.translation,
-        answer: this.guess,
-        book_id: this.book_id,
-      }).then(response => {
-        if (response.data.result) {
-          this.score++;
-          this.getNextWord();
-        } else {
-          this.attemptsLeft--;
-          if (this.attemptsLeft === 0) {
-            this.getNextWord();
+      if (this.attemptsLeft <= 0) {
+        this.gameOver = true;
+      }
+
+      return axios.post(`${this.url}/test?en_word=${this.translation}&answer=${this.guess}&book_id=${this.book_id}`, {},
+          {
+            headers: {
+              'Cookie': this.jwt,
+            },
+            withCredentials: true,
           }
-        }
-      }).catch(error => {
-        console.log(error);
-      });
+      )
+          .then(response => {
+            if (response.status >= 200 && response.status < 300) {
+              return response.data;
+            } else {
+              throw new Error('Network response was not ok');
+            }
+          })
+          .then(data => {
+            if (data.result) {
+              this.score++;
+              this.getNextWord();
+            } else {
+              this.attemptsLeft--;
+              if (this.attemptsLeft === 0) {
+                this.getNextWord();
+              }
+            }
+          })
+          .catch(error => {
+            console.error(error);
+          });
     }
+
   },
   mounted() {
     this.getNextWord();
+
   }
 };
 </script>

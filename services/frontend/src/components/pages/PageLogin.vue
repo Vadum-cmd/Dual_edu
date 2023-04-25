@@ -79,7 +79,7 @@
 <script>
 
 import ModalWindow from "@/components/UI/ModalWindow.vue";
-import router from "@/components/router";
+
 
 export default {
   components: {ModalWindow},
@@ -147,23 +147,20 @@ export default {
             return;
           }
 
-          const response = await fetch(this.url + `/login`, {
+          await fetch(this.url + `/login`, {
             method: 'POST',
             headers: {'accept': 'application/json', 'Content-Type': 'application/x-www-form-urlencoded'},
             body: `grant_type=${this.grant_type}&username=${this.loginEmail}&password=${this.loginPassword}&scope=${this.scope}&client_id=${this.client_id}&client_secret=${this.client_secret}`,
             credentials: 'include',
             mode: "no-cors"
           });
-          if (!response.ok) {
-            alert('Login failed');
-          }
+
           const cookies = document.cookie.split('; ');
           const jwtCookie = cookies.find(cookie => cookie.startsWith('user_auth='));
           const jwt = jwtCookie.split('=')[1];
           localStorage.setItem('jwt', jwt);
-
-          router.push('/home');
-
+          location.reload();
+          alert('Wow, you are part of our community now! You can enjoy our site and upload your first book by clicking on our logo.');
 
         }
         this.loginEmail = '';

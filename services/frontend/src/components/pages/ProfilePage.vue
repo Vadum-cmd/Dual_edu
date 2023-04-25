@@ -42,13 +42,18 @@ export default {
     };
   },
   computed: {
-    xpPercentage() {
-      return `${Math.floor((this.xp / this.xpToNextLevel) * 100)}%`;
-    }
+    // xpPercentage() {
+    //   return `${Math.floor((this.xp / this.xpToNextLevel) * 100)}%`;
+    // }
   },
   mounted() {
     const jwt = localStorage.getItem("jwt");
-    axios.get(this.url+`/profile?jwt=${jwt}`)
+    axios.get(this.url+`/profile`,{
+      headers: {
+        'Cookie': jwt,
+      },
+      withCredentials: true,
+    })
         .then(response => {
           const data = response.data;
           this.avatarUrl = data.frame_path;

@@ -20,7 +20,7 @@ def create_xlsx_file(words: Set[DB_word], filename, native_language):
         if native_language == "Ukrainian":
             sheet[f'B{i}'] = word.uk_word
         elif native_language == "Spanish":
-            sheet[f'B{i}'] = word.sp_word
+            sheet[f'B{i}'] = word.es_word
         sheet[f'C{i}'] = word.word_level
         i += 1
 

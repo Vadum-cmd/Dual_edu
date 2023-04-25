@@ -16,6 +16,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
     async def on_after_register(self, user: User, request: Optional[Request] = None):
         print(f"User {user.id} has registered.")
 
+
     async def create(
         self,
         user_create: schemas.UC,
@@ -35,8 +36,9 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
         )
         password = user_dict.pop("password")
         user_dict["hashed_password"] = self.password_helper.hash(password)
-        user_dict["current_num_level"] = 1
-        user_dict["frame_path"] = "DSFKJLKFD"  # TODO: correct this
+        #user_dict["experience"] = 0  # TODO:
+        user_dict["current_num_level"] = 0
+        user_dict["frame_path"] = "../avatars/avatar1.png"
 
         created_user = await self.user_db.create(user_dict)
 
@@ -53,7 +55,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
         sender_email = EMAIL_ADDRESS
         receiver_email = user.email
         password = EMAIL_PASSWORD
-        message = f"""Subject: Reset password\n\nYour token: {token}"""
+        message = f"""Subject: Reset password\n\n http://192.168.0.163:8080/resetpassword?token={token}"""
 
         context = ssl.create_default_context()
         with smtplib.SMTP(smtp_server, port) as server:
@@ -74,7 +76,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
         sender_email = "reandjoy@gmail.com"
         receiver_email = user.email
         password = "snxnsgvgekokevve"
-        message = f"""Subject: Verify email\n\nYour token: {token}"""
+        message = f"""Subject: Verify email\n\n http://192.168.0.163:8080/verification?token={token}"""
 
         context = ssl.create_default_context()
         with smtplib.SMTP(smtp_server, port) as server:
