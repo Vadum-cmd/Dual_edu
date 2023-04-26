@@ -1,5 +1,16 @@
 <template>
   <article>
+    <ModalWindow v-model:is-active="verification">
+      <div class="verification_window_container">
+        <div class="verification_window">
+          <h1>Hello, please verify your email address.</h1>
+          <p>Check inbox messages <i>(if it is not there check spam)</i>.</p>
+          <button class="close" @click="verification = false">
+            <font-awesome-icon :icon="['fas', 'circle-xmark']"/>
+          </button>
+        </div>
+      </div>
+    </ModalWindow>
     <div class="container" :class="{'sign-up-active' : signUp}">
       <div class="overlay-container">
         <div class="overlay">
@@ -25,7 +36,6 @@
           <select id="native-language" v-model="nativeLanguage">
             <option value="" disabled selected>Native language</option>
             <option value="Spanish">Spanish</option>
-            n>
             <option value="Ukrainian">Ukrainian</option>
           </select>
         </div>
@@ -52,7 +62,9 @@
           </select>
         </div>
         <button class="sign-up-btn " type="submit">Sign Up</button>
+
       </form>
+
       <form class="sign-in" @submit.prevent="submitLogin">
         <h2>Sign In</h2>
         <div>Use your account</div>
@@ -81,6 +93,7 @@
 import ModalWindow from "@/components/UI/ModalWindow.vue";
 
 
+
 export default {
   components: {ModalWindow},
   data: () => {
@@ -103,7 +116,8 @@ export default {
       is_superuser: false,
       is_verified: false,
       is_active: true,
-      url: process.env.VUE_APP_URL
+      url: process.env.VUE_APP_URL,
+      verification:false
     }
   },
   methods: {
@@ -130,8 +144,7 @@ export default {
           headers: {'accept': 'application/json', 'Content-Type': 'application/json'},
           credentials: 'include'
         });
-        alert('Congratulations! Now you have joined a cool community. Now you can log in to your account');
-        location.reload();
+        this.verification=true;
 
       } catch (error) {
         console.error(error);
@@ -139,7 +152,6 @@ export default {
     },
 
     async submitLogin() {
-
       try {
         if (!this.forgotPassword) {
           if (!this.loginEmail || !this.loginPassword) {
@@ -159,8 +171,12 @@ export default {
           const jwtCookie = cookies.find(cookie => cookie.startsWith('user_auth='));
           const jwt = jwtCookie.split('=')[1];
           localStorage.setItem('jwt', jwt);
-          location.reload();
-          alert('Wow, you are part of our community now! You can enjoy our site and upload your first book by clicking on our logo.');
+
+          // Wait for 1 second to allow the JWT to be set in localStorage
+          await new Promise(resolve => setTimeout(resolve, 0));
+
+          // Redirect to /home after the page reloads
+          window.location.href = '/home';
 
         }
         this.loginEmail = '';
@@ -169,8 +185,6 @@ export default {
       } catch (error) {
         console.error(error);
       }
-
-
     },
     async resetPassword() {
       try {
@@ -435,4 +449,16 @@ form {
   border-radius: 50px;
 
 }
+.verification_window_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.verification_window {
+  background-color: white;
+  padding: 20px;
+  text-align: center;
+}
+
 </style>
