@@ -379,7 +379,7 @@ form {
   z-index: 1;
   opacity: 0;
 
-  padding: 15% 6.021%;
+  padding: 15% 6.421%;
 }
 
 .sign-up-active {
