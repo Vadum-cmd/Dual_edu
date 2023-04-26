@@ -74,16 +74,29 @@ class Book(BookBase):
     book_id: int
     words: List[UserWord] = []
 
-    # class Config:
-    #     orm_mode = True
+    class Config:
+        orm_mode = True
 
 
 # myuser
-class JWT(BaseModel):
-    jwt: str
+# class User(BaseModel):
+#     current_num_level: int
+#     goal_level: str
+#     user_level: str
+#     user_name: str
+#     email: str
+#     native_language: str
+#     frame_path: str
+#
 
 class SettingsUpdate(BaseModel):
-    goal_level: str
     user_name: str
     user_level: str
+    goal_level: str
     native_language: str
+
+
+class WordForVocabulary(BaseModel):
+    word: str
+    translation: str
+    word_level: str

@@ -13,34 +13,30 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
       password: '',
-      successMessage: ''
+      successMessage: '',
+      url: process.env.VUE_APP_URL,
+      token: ''
     }
   },
   methods: {
-    async resetPassword() {
-      try {
-        const response = await fetch('/api/reset_password', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            password: this.password
-          })
-        })
-        const data = await response.json()
-        this.successMessage = data.message
-        this.email = ''
-        this.password = ''
-      } catch (error) {
-        console.error(error)
-        // Handle error and display error message to user
+    resetPassword() {
+      const data = {
+        password: this.password,
+        token: this.token
       }
+      axios.post(this.url + '/reset-password', data);
     }
+  },
+  mounted() {
+    this.token = window.location.href.split('token=')[1];
+    console.log(this.token);
+
   }
 }
 </script>

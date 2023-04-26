@@ -1,7 +1,7 @@
 <template>
   <div class="profile-page">
     <div class="avatar-container">
-      <div class="avatar-wrapper"><img class="avatar" :src="avatarUrl" alt="Avatar"></div>
+      <img class="avatar" :src="avatarUrl" alt="Avatar">
     </div>
     <div class="nickname-container"><h2 class="nickname">{{ nickname }}</h2></div>
 <!--    <div class="xp-bar">-->
@@ -29,7 +29,7 @@ export default {
   data() {
     return {
       decodedToken: null,
-      avatarUrl: "",
+      avatarUrl: null,
       nickname: "",
       level: 0,
       // xp: 0,
@@ -42,13 +42,18 @@ export default {
     };
   },
   computed: {
-    xpPercentage() {
-      return `${Math.floor((this.xp / this.xpToNextLevel) * 100)}%`;
-    }
+    // xpPercentage() {
+    //   return `${Math.floor((this.xp / this.xpToNextLevel) * 100)}%`;
+    // }
   },
   mounted() {
     const jwt = localStorage.getItem("jwt");
-    axios.get(this.url+`/profile?jwt=${jwt}`)
+    axios.get(this.url+`/profile`,{
+      headers: {
+        'Cookie': jwt,
+      },
+      withCredentials: true,
+    })
         .then(response => {
           const data = response.data;
           this.avatarUrl = data.frame_path;
@@ -92,10 +97,10 @@ export default {
   overflow: hidden;
 }
 .avatar {
-  width: 100%;
-  height: 100%;
+  width: 50%;
+  height: 50%;
   object-fit: cover;
-  scale: 200%;
+
 }
 .nickname-container {
   display: flex;

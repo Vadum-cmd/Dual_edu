@@ -1,5 +1,16 @@
 <template>
   <article>
+    <ModalWindow v-model:is-active="verification">
+      <div class="verification_window_container">
+        <div class="verification_window">
+          <h1>Hello, please verify your email address.</h1>
+          <p>Check inbox messages <i>(if it is not there check spam)</i>.</p>
+          <button class="close" @click="verification = false">
+            <font-awesome-icon :icon="['fas', 'circle-xmark']"/>
+          </button>
+        </div>
+      </div>
+    </ModalWindow>
     <div class="container" :class="{'sign-up-active' : signUp}">
       <div class="overlay-container">
         <div class="overlay">
@@ -16,7 +27,7 @@
         </div>
       </div>
       <form class="sign-up" @submit.prevent="submitRegister">
-        <h2>Create login</h2>
+        <h2>Create account</h2>
         <div>Use your email for registration</div>
         <input type="text" placeholder="Name" v-model="name"/>
         <input type="email" placeholder="Email" v-model="email"/>
@@ -25,7 +36,6 @@
           <select id="native-language" v-model="nativeLanguage">
             <option value="" disabled selected>Native language</option>
             <option value="Spanish">Spanish</option>
-            n>
             <option value="Ukrainian">Ukrainian</option>
           </select>
         </div>
@@ -52,7 +62,9 @@
           </select>
         </div>
         <button class="sign-up-btn " type="submit">Sign Up</button>
+
       </form>
+
       <form class="sign-in" @submit.prevent="submitLogin">
         <h2>Sign In</h2>
         <div>Use your account</div>
@@ -79,7 +91,8 @@
 <script>
 
 import ModalWindow from "@/components/UI/ModalWindow.vue";
-import router from "@/components/router";
+
+
 
 export default {
   components: {ModalWindow},
@@ -103,7 +116,8 @@ export default {
       is_superuser: false,
       is_verified: false,
       is_active: true,
-      url: process.env.VUE_APP_URL
+      url: process.env.VUE_APP_URL,
+      verification:false
     }
   },
   methods: {
@@ -130,8 +144,7 @@ export default {
           headers: {'accept': 'application/json', 'Content-Type': 'application/json'},
           credentials: 'include'
         });
-        alert('Congratulations! Now you have joined a cool community. Now you can log in to your account');
-        location.reload();
+        this.verification=true;
 
       } catch (error) {
         console.error(error);
@@ -139,7 +152,6 @@ export default {
     },
 
     async submitLogin() {
-
       try {
         if (!this.forgotPassword) {
           if (!this.loginEmail || !this.loginPassword) {
@@ -147,23 +159,24 @@ export default {
             return;
           }
 
-          const response = await fetch(this.url + `/login`, {
+          await fetch(this.url + `/login`, {
             method: 'POST',
             headers: {'accept': 'application/json', 'Content-Type': 'application/x-www-form-urlencoded'},
             body: `grant_type=${this.grant_type}&username=${this.loginEmail}&password=${this.loginPassword}&scope=${this.scope}&client_id=${this.client_id}&client_secret=${this.client_secret}`,
             credentials: 'include',
             mode: "no-cors"
           });
-          if (!response.ok) {
-            alert('Login failed');
-          }
+
           const cookies = document.cookie.split('; ');
           const jwtCookie = cookies.find(cookie => cookie.startsWith('user_auth='));
           const jwt = jwtCookie.split('=')[1];
           localStorage.setItem('jwt', jwt);
 
-          router.push('/home');
+          // Wait for 1 second to allow the JWT to be set in localStorage
+          await new Promise(resolve => setTimeout(resolve, 0));
 
+          // Redirect to /home after the page reloads
+          window.location.href = '/home';
 
         }
         this.loginEmail = '';
@@ -172,8 +185,6 @@ export default {
       } catch (error) {
         console.error(error);
       }
-
-
     },
     async resetPassword() {
       try {
@@ -368,7 +379,7 @@ form {
   z-index: 1;
   opacity: 0;
 
-  padding: 15% 6.632%;
+  padding: 15% 6.021%;
 }
 
 .sign-up-active {
@@ -438,4 +449,16 @@ form {
   border-radius: 50px;
 
 }
+.verification_window_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.verification_window {
+  background-color: white;
+  padding: 20px;
+  text-align: center;
+}
+
 </style>

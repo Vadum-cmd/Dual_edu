@@ -2,20 +2,18 @@
   <table>
     <thead>
     <tr>
-      <th>№</th>
-      <th>Word</th>
-      <th>Translation</th>
-      <th style="width:10%">lvl</th>
-      <th style="width:15%">Mark as Familiar</th>
+      <th class="number">№</th>
+      <th class="word">Word</th>
+      <th class="translation">Translation</th>
+      <th class="level" style="width:10%">lvl</th>
     </tr>
     </thead>
     <tbody>
     <tr v-for="(word, index) in displayedWords" :key="word.id">
-      <td>{{ (currentPage - 1) * pageSize + index + 1 }}</td>
-      <td>{{ word.en_word }}</td>
+      <td class="number">{{ (currentPage - 1) * pageSize + index + 1 }}</td>
+      <td>{{ word.word }}</td>
       <td>{{ word.translation }}</td>
-      <td>{{ word.word_level }}</td>
-      <td><input type="checkbox" v-model="word.familiar"></td>
+      <td class="level">{{ word.word_level }}</td>
     </tr>
     </tbody>
   </table>
@@ -56,7 +54,7 @@ export default {
 
       words: [],
       searchTerm: '',
-      pageSize: 5,
+      pageSize: 10,
       currentPage: 1,
       showObject: false,
       levelDownload:[],
@@ -65,9 +63,15 @@ export default {
   },
   created() {
     const jwt = localStorage.getItem("jwt");
-    axios.get(this.url+`/vocabulary?jwt=${jwt}`)
+    axios.get(this.url+`/vocabulary`,{
+      headers: {
+        'Cookie': jwt,
+      },
+      withCredentials: true,
+    })
         .then(response => {
           this.words = response.data;
+
         })
         .catch(error => {
           console.error(error);
@@ -75,37 +79,46 @@ export default {
   },
   computed: {
     displayedWords() {
-      const filteredWords = this.words.filter(word => {
-        return word.word.toLowerCase().includes(this.searchTerm.toLowerCase());
-      });
       const startIndex = (this.currentPage - 1) * this.pageSize;
-      return filteredWords.slice(startIndex, startIndex + this.pageSize);
+      const endIndex = startIndex + this.pageSize;
+      return this.words.slice(startIndex, endIndex);
     },
     pageCount() {
-      return Math.ceil(this.displayedWords.length / this.pageSize);
+      return Math.ceil(this.words.length / this.pageSize);
     }
   },
   methods: {
-    downloadTable() {
+    async downloadTable() {
       const jwt = localStorage.getItem("jwt");
-      const this_url = this.url+`/vocabulary/download/?jwt=${jwt}&level=${this.levelDownload.join(' ')}`;
+      const levels_str = this.levelDownload.join(' ');
+      const url = `http://192.168.1.103:8081/vocabulary/download/?levels_str=${levels_str}`;
 
-      console.log(this_url);
-      axios({
-        url: this_url,
-        method: 'GET',
-        responseType: 'blob',
-      }).then((response) => {
-        const url = window.URL.createObjectURL(new Blob([response.data]));
+      try {
+        const response = await axios.get(url, {
+          headers: {
+            'Accept-Language': 'en,ru-RU;q=0.9,ru;q=0.8,en-US;q=0.7,uk;q=0.6',
+            'Connection': 'keep-alive',
+            'Cookie': jwt,
+            'Referer': 'http://192.168.1.103:8081/docs',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36',
+            'accept': 'application/json'
+          },
+          responseType: 'blob',
+          withCredentials: true,
+        });
+
+        const url1 = window.URL.createObjectURL(response.data);
         const link = document.createElement('a');
-        link.href = url;
+        link.href = url1;
         link.setAttribute('download', 'table.xlsx');
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-      });
+      } catch (error) {
+        console.log(error);
+      }
     },
-  },
+  }
 };
 </script>
 
@@ -177,5 +190,15 @@ input[type="text"] {
   flex-wrap: wrap;
   justify-content: center;
 }
-
+@media (max-width: 1225px){
+  .level{
+    display: none;
+  }
+  .number{
+    display: none;
+  }
+  table{
+    width: 100%;
+  }
+}
 </style>
