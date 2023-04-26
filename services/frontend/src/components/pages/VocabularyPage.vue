@@ -6,16 +6,14 @@
       <th>Word</th>
       <th>Translation</th>
       <th style="width:10%">lvl</th>
-      <th style="width:15%">Mark as Familiar</th>
     </tr>
     </thead>
     <tbody>
     <tr v-for="(word, index) in displayedWords" :key="word.id">
       <td>{{ (currentPage - 1) * pageSize + index + 1 }}</td>
-      <td>{{ word.en_word }}</td>
-      <td>{{ word.uk_word }}</td>
+      <td>{{ word.word }}</td>
+      <td>{{ word.translation }}</td>
       <td>{{ word.word_level }}</td>
-      <td><input type="checkbox" v-model="word.familiar"></td>
     </tr>
     </tbody>
   </table>

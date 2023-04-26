@@ -27,7 +27,7 @@
         </div>
       </div>
       <form class="sign-up" @submit.prevent="submitRegister">
-        <h2>Create login</h2>
+        <h2>Create account</h2>
         <div>Use your email for registration</div>
         <input type="text" placeholder="Name" v-model="name"/>
         <input type="email" placeholder="Email" v-model="email"/>
@@ -379,7 +379,7 @@ form {
   z-index: 1;
   opacity: 0;
 
-  padding: 15% 6.632%;
+  padding: 15% 6.021%;
 }
 
 .sign-up-active {
