@@ -3,6 +3,8 @@ import os
 
 load_dotenv()
 
+FRONTEND_URL = os.environ.get("FRONTEND_URL")
+
 DB_HOST = os.environ.get("DB_HOST")
 DB_PORT = os.environ.get("DB_PORT")
 DB_NAME = os.environ.get("DB_NAME")
