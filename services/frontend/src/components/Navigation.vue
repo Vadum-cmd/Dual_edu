@@ -2,53 +2,47 @@
   <header :class="{ 'scrolled-nav': scrolledNav}">
     <nav>
       <router-link class="branding" to="/home">
-
         <div class="h">Re&joy</div>
       </router-link>
       <ul v-show="!mobile" class="navigation">
-        <li>
+        <li v-if="isAutorize">
           <router-link class="link" to="/books">
             <font-awesome-icon icon="fa-solid fa-book-open"/>
             Books
           </router-link>
         </li>
-        <li>
+        <li v-if="isAutorize">
           <router-link class="link" to="/vocabulary">
             <font-awesome-icon icon="fa-solid fa-clipboard"/>
             My vocabulary
           </router-link>
         </li>
         <li v-if="isAutorize">
-
           <div class="profile">
             <router-link class="link" to="/profile">
               <font-awesome-icon icon="fa-solid fa-user"/>
               Profile
             </router-link>
-
+          </div>
+          <div class="dropdown">
+            <button @click="toggle()">
+              <font-awesome-icon icon="fa-solid fa-square-caret-down"/>
+            </button>
+            <div class="dropdown-content" v-if="active">
+              <router-link class="drop_menu" to="/settings">
+                <font-awesome-icon icon="fa-solid fa-gear"/>
+                Settings
+              </router-link>
+              <router-link class="drop_menu" to="/test">
+                <font-awesome-icon icon="fa-solid fa-puzzle-piece"/>
+                Game
+              </router-link>
+              <router-link class="drop_menu" to="/" @click="logout">
+                <font-awesome-icon icon="fa-solid fa-circle-xmark"/>
+                Logout
+              </router-link>
             </div>
-
-            <div class="dropdown">
-              <button @click="toggle()">
-                <font-awesome-icon icon="fa-solid fa-square-caret-down"/>
-              </button>
-              <div class="dropdown-content" v-if="active">
-
-                <router-link class="drop_menu" to="/settings">
-                  <font-awesome-icon icon="fa-solid fa-gear"/>
-                  Settings
-                </router-link>
-                <router-link class="drop_menu" to="/test">
-                  <font-awesome-icon icon="fa-solid fa-puzzle-piece"/>
-                  Game
-                </router-link>
-                <router-link class="drop_menu" to="/" @click="logout">
-                  <font-awesome-icon icon="fa-solid fa-circle-xmark"/>
-                  Logout
-                </router-link>
-              </div>
-            </div>
-
+          </div>
         </li>
         <li v-else>
           <router-link class="link" to="/login">
@@ -56,48 +50,45 @@
             Login
           </router-link>
         </li>
-
       </ul>
       <div class="icon">
         <i @click="toggleMobileNav" v-show="mobile" class="" :class="{'icon-active': mobileNav}">
           <font-awesome-icon icon="fa-solid fa-bars"/>
         </i>
-
       </div>
       <transition name="mobile-nav">
         <ul v-show="mobileNav" class="dropdown-nav">
-          <li>
+          <li v-if="isAutorize">
             <router-link class="link" to="/books">
               <font-awesome-icon icon="fa-solid fa-book-open"/>
               Books
             </router-link>
           </li>
-          <li>
+          <li v-if="isAutorize">
             <router-link class="link" to="/vocabulary">
               <font-awesome-icon icon="fa-solid fa-clipboard"/>
               My vocabulary
             </router-link>
           </li>
           <li v-if="isAutorize">
-
             <div class="profile">
-                <router-link class="link" to="/profile">
-                  <font-awesome-icon icon="fa-solid fa-user"/>
-                  Profile
-                </router-link>
-
+              <router-link class="link" to="/profile">
+                <font-awesome-icon icon="fa-solid fa-user"/>
+                Profile
+              </router-link>
               <div class="dropdown">
                 <button @click="toggle()">
                   <font-awesome-icon icon="fa-solid fa-square-caret-down"/>
                 </button>
                 <div class="dropdown-content" v-if="active">
-
                   <router-link class="drop_menu" to="/settings">
                     <font-awesome-icon icon="fa-solid fa-gear"/>
                     Settings
                   </router-link>
                   <router-link class="drop_menu" to="/test">
                     <font-awesome-icon icon="fa-solid fa-puzzle-piece"/>
+
+
                     Game
                   </router-link>
                   <router-link class="drop_menu" to="/" @click="logout">
@@ -114,12 +105,11 @@
               Login
             </router-link>
           </li>
-
         </ul>
       </transition>
     </nav>
-  </header>
 
+  </header>
 </template>
 
 <script>

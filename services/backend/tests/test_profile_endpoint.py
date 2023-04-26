@@ -13,7 +13,7 @@ def test_profile_get():
     # TODO: what about hashed password ???!
     # TODO: what about frames
     assert response.status_code == 200
-    assert profile_info["current_num_level"] == 1
+    assert profile_info["experience"] == 1
     assert profile_info["goal_level"] == "C2"
     assert profile_info["user_level"] == "B2"
     assert profile_info["user_name"] == "Test"

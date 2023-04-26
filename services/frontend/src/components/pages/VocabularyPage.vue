@@ -2,20 +2,18 @@
   <table>
     <thead>
     <tr>
-      <th>№</th>
-      <th>Word</th>
-      <th>Translation</th>
-      <th style="width:10%">lvl</th>
-      <th style="width:15%">Mark as Familiar</th>
+      <th class="number">№</th>
+      <th class="word">Word</th>
+      <th class="translation">Translation</th>
+      <th class="level" style="width:10%">lvl</th>
     </tr>
     </thead>
     <tbody>
     <tr v-for="(word, index) in displayedWords" :key="word.id">
-      <td>{{ (currentPage - 1) * pageSize + index + 1 }}</td>
-      <td>{{ word.en_word }}</td>
-      <td>{{ word.uk_word }}</td>
-      <td>{{ word.word_level }}</td>
-      <td><input type="checkbox" v-model="word.familiar"></td>
+      <td class="number">{{ (currentPage - 1) * pageSize + index + 1 }}</td>
+      <td>{{ word.word }}</td>
+      <td>{{ word.translation }}</td>
+      <td class="level">{{ word.word_level }}</td>
     </tr>
     </tbody>
   </table>
@@ -192,5 +190,15 @@ input[type="text"] {
   flex-wrap: wrap;
   justify-content: center;
 }
-
+@media (max-width: 1225px){
+  .level{
+    display: none;
+  }
+  .number{
+    display: none;
+  }
+  table{
+    width: 100%;
+  }
+}
 </style>

@@ -35,7 +35,7 @@ export default {
         },
         withCredentials: true,
       }).then(response => {
-        this.translation = response.data.word.en_word;
+        this.translation = response.data.word.word;
         this.book_id = response.data.book_id;
       }).catch(error => {
         console.log(error);

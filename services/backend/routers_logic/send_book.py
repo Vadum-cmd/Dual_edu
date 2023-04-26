@@ -39,9 +39,11 @@ def send_book(user_id: int, level: str, file: UploadFile, db: Session):
     for word in words:
         try:
             db_word = get_db_word_by_en_word(db=db, en_word=word)
-            if db_word.word_level > level:
+            if str(db_word.word_level).lower() > str(level).lower():
                 user_word = UserWordCreate(**{"en_word": db_word.en_word, "book_id": db_book.book_id, "is_known": False})
                 create_user_word(db=db, user_word=user_word)
+            else:
+                print(str(db_word.word_level).lower(), str(level).lower())
         except:
             # print(word)
             pass
