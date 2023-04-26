@@ -24,6 +24,7 @@ def upgrade() -> None:
     op.drop_constraint('user_word_ibfk_1', 'user_word', type_='foreignkey')
     op.create_foreign_key(None, 'user_word', 'db_word', ['en_word'], ['en_word'])
     op.create_foreign_key(None, 'user_word', 'book', ['book_id'], ['book_id'])
+    op.alter_column('db_word', 'es_word', type_=sa.String(90, collation='utf8mb4_spanish_ci'))
     # ### end Alembic commands ###
 
 
