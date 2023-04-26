@@ -30,10 +30,15 @@ export default {
       const data = {
         token: this.token,
       }
-      const response = axios.post(this.url + '/verify', data)
-      if(response.ok){
-        this.isNotVerificated=false;
-      }
+      axios.post(this.url + '/verify', data)
+          .then(response => {
+            if (response.status === 200) {
+              this.isNotVerificated = false;
+            } else {
+              alert("Something went wrong. Please try again.");
+            }
+          })
+
     },
     loginRedirect(){
       router.push('/login');
