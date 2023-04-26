@@ -91,7 +91,7 @@ export default {
     async downloadTable() {
       const jwt = localStorage.getItem("jwt");
       const levels_str = this.levelDownload.join(' ');
-      const url = `http://192.168.1.103:8081/vocabulary/download/?levels_str=${levels_str}`;
+      const url = this.url+`/vocabulary/download/?levels_str=${levels_str}`;
 
       try {
         const response = await axios.get(url, {
