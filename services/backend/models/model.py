@@ -14,7 +14,7 @@ class User(Base):
 
     # user_id: Mapped[int] = mapped_column(primary_key=True)
     id: Mapped[int] = mapped_column(primary_key=True)
-    current_num_level: Mapped[int] = mapped_column()
+    experience: Mapped[int] = mapped_column()
     goal_level: Mapped[str] = mapped_column(String(2))
     user_level: Mapped[str] = mapped_column(String(3))
     user_name: Mapped[str] = mapped_column(String(50))

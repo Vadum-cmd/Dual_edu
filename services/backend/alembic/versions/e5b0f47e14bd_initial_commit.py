@@ -26,7 +26,7 @@ def upgrade() -> None:
     )
     op.create_table('user',
     sa.Column('user_id', sa.Integer(), nullable=False),
-    sa.Column('current_num_level', sa.Integer(), nullable=False),
+    sa.Column('experience', sa.Integer(), nullable=False),
     sa.Column('goal_level', sa.String(length=2), nullable=False),
     sa.Column('user_level', sa.String(length=3), nullable=False),
     sa.Column('user_name', sa.String(length=50), nullable=False),

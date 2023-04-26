@@ -36,7 +36,7 @@ fastapi_users_ = FastAPIUsers[User, int](
 )
 
 app.include_router(
-    fastapi_users_.get_auth_router(auth_backend),  #, requires_verification=True
+    fastapi_users_.get_auth_router(auth_backend, requires_verification=True),  #
     prefix="",
     tags=["auth"],
 )

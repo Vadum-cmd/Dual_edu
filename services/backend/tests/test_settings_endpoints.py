@@ -12,7 +12,7 @@ def test_settings_get():
     settings = json.loads(response.text)
 
     assert response.status_code == 200
-    assert settings["current_num_level"] == 1
+    assert settings["experience"] == 1
     assert settings["goal_level"] == "C2"
     assert settings["user_level"] == "B2"
     assert settings["user_name"] == "Test"

@@ -16,7 +16,7 @@ class UserCreate(UserBase):
 
 class User(UserBase):
     id: int
-    current_num_level: int
+    experience: int
     frame_path: Optional[str] = None
     books: List["Book"] = []
 
@@ -80,7 +80,7 @@ class Book(BookBase):
 
 # myuser
 # class User(BaseModel):
-#     current_num_level: int
+#     experience: int
 #     goal_level: str
 #     user_level: str
 #     user_name: str
