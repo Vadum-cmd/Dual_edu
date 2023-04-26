@@ -73,7 +73,7 @@
         <div class="forgot-password" @click="forgotPassword = true">Forgot your password?</div>
         <button class="sign-in-btn" type="submit" id="signInBtn">Sign In</button>
         <ModalWindow v-model:is-active="forgotPassword">
-
+          <div v-if="!resetpass">
           <h2>Reset Password</h2>
           <div>Enter your email address to reset your password</div>
           <input type="email" placeholder="Email" v-model="resetEmail"/>
@@ -81,7 +81,10 @@
           <button class="cancel-link" @click="forgotPassword = false">
             <font-awesome-icon :icon="['fas', 'circle-xmark']"/>
           </button>
-
+          </div>
+          <div v-else>
+            <h1>Now you can check your email</h1>
+          </div>
         </ModalWindow>
 
       </form>
@@ -117,7 +120,8 @@ export default {
       is_verified: false,
       is_active: true,
       url: process.env.VUE_APP_URL,
-      verification:false
+      verification:false,
+      resetpass:false,
     }
   },
   methods: {
@@ -217,6 +221,7 @@ export default {
       } catch (error) {
         console.error(error);
       }
+      this.resetpass = true;
     },
   },
 
