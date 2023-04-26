@@ -6,7 +6,7 @@ from fastapi import Depends, Request
 from fastapi_users import BaseUserManager, IntegerIDMixin, exceptions, models, schemas
 
 from auth.db import User, get_user_db
-from config.config import SECRET_CODE_RESET_PASSWORD, EMAIL_ADDRESS, EMAIL_PASSWORD
+from config.config import SECRET_CODE_RESET_PASSWORD, EMAIL_ADDRESS, EMAIL_PASSWORD, FRONTEND_URL
 
 
 class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
@@ -55,7 +55,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
         sender_email = EMAIL_ADDRESS
         receiver_email = user.email
         password = EMAIL_PASSWORD
-        message = f"""Subject: Reset password\n\n http://192.168.0.163:8080/resetpassword?token={token}"""
+        message = f"""Subject: Reset password\n\n {FRONTEND_URL}/resetpassword?token={token}"""
 
         context = ssl.create_default_context()
         with smtplib.SMTP(smtp_server, port) as server:
@@ -73,10 +73,10 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
     ):
         port = 587  # For starttls
         smtp_server = "smtp.gmail.com"
-        sender_email = "reandjoy@gmail.com"
+        sender_email = EMAIL_ADDRESS
         receiver_email = user.email
-        password = "snxnsgvgekokevve"
-        message = f"""Subject: Verify email\n\n http://192.168.0.163:8080/verification?token={token}"""
+        password = EMAIL_PASSWORD
+        message = f"""Subject: Verify email\n\n {FRONTEND_URL}/verification?token={token}"""
 
         context = ssl.create_default_context()
         with smtplib.SMTP(smtp_server, port) as server:
