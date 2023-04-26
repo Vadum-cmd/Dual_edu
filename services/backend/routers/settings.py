@@ -30,8 +30,13 @@ def update_settings( settingsUpdate: SettingsUpdate,request: Request, db: Sessio
         jwt = request.headers['Cookie'].split('=')[1]
         user_id = int(decode_user(jwt)['sub'])
     except:
-        return None
-
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect email or password",
+            # headers={"WWW-Authenticate": "Basic"},
+        )
+        # return None
+    #print(**dict(settingsUpdate))
     update_user_info(db=db, user_id=user_id, goal_level=settingsUpdate.goal_level, user_name=settingsUpdate.user_name, user_level=settingsUpdate.user_level, native_language=settingsUpdate.native_language)
 
     return get_user_profile(db=db, user_id=user_id)

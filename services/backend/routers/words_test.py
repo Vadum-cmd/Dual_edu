@@ -32,7 +32,12 @@ def check_word(request: Request, en_word: str, answer: str, book_id: int, db: Se
         jwt = request.headers['Cookie'].split('=')[1]
         user_id = int(decode_user(jwt)['sub'])
     except:
-        return None
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect email or password",
+            # headers={"WWW-Authenticate": "Basic"},
+        )
+        # return None
 
     return check_user_answer(en_word=en_word, answer=answer, book_id=book_id, db=db)
 
