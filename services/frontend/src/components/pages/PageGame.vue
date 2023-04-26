@@ -62,9 +62,11 @@ export default {
             }
           })
           .then(data => {
+            this.guess='';
             if (data.result) {
               this.score++;
               this.getNextWord();
+
             } else {
               this.attemptsLeft--;
               if (this.attemptsLeft === 0) {
@@ -75,6 +77,7 @@ export default {
           .catch(error => {
             console.error(error);
           });
+
     }
 
   },

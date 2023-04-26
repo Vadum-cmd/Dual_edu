@@ -46,7 +46,8 @@ export default {
           title: "Call to Register",
           text: "So why wait? Join our community of language learners and start reading books in English like a pro! Register now on our website and start exploring the world of English literature."
         }
-      ]
+      ],
+      isNotAutorize:false
     };
   },
   computed: {
@@ -71,6 +72,14 @@ export default {
     nextSlide() {
       this.currentSlideIndex =
           this.currentSlideIndex === this.slides.length - 1? 0: this.currentSlideIndex + 1;
+    }
+  },
+  mounted() {
+    const jwt = localStorage.getItem('jwt')
+    if(jwt!=null && this.isNotAutorize===false){
+      localStorage.removeItem('jwt');
+      this.isNotAutorize=true;
+      window.location.reload()
     }
   }
 };
