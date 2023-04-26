@@ -4,16 +4,24 @@ services:
   backend:
     build: ./backend
     ports:
-      - "8008:8000"
+      - "8000:8000"
     volumes:
       - ./backend:/app
-    # environment:
-    #   - DB_HOST = 127.0.0.1
-    #   - DB_PORT = 3307
-    #   - DB_NAME = dual_edu
-    #   - DB_USER = user
-    #   - DB_PASS = 1qazxsw2
-    #command: alembic upgrade head
+    environment:
+      FRONTEND_URL: http://localhost:8080/
+
+      DB_HOST: flask-backend-db
+      DB_PORT: 3306
+      DB_NAME: dual_edu
+      DB_USER: root
+      DB_PASS: 2wsxcde3  
+
+      EMAIL_ADDRESS: reandjoy@gmail.com
+      EMAIL_PASSWORD: snxnsgvgekokevve
+
+      SECRET_CODE_JWT : SECRET$)(!&^$CODE@&$)TO$*!@(GET(@$_USER
+      SECRET_CODE_RESET_PASSWORD : "SECRET!*CODE@*(TO@$RESET$@PASSWORD"
+      AUDIENCE: fastapi-users:auth
     depends_on:
       - db
     networks:
