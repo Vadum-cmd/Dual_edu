@@ -146,7 +146,7 @@ export default {
             'accept': 'application/json'
           },
           body: JSON.stringify(data),
-          withCredentials:true,
+          credentials: 'include',
         });
 
         if (response.ok) {
