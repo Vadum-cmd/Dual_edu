@@ -127,7 +127,6 @@ export default {
     async saveSettings() {
       const jwt = localStorage.getItem("jwt");
       const data = {
-
         user_name: this.username,
         user_level: this.englishLevel.toLowerCase(),
         goal_level: this.targetLevel.toLowerCase(),
@@ -160,6 +159,7 @@ export default {
         alert('Failed to save settings');
       }
     }
+
   }
 }
 
