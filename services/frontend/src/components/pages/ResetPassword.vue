@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!success">
     <h1>Reset Password</h1>
     <form @submit.prevent="resetPassword">
       <div>
@@ -8,18 +8,23 @@
       </div>
       <button type="submit">Reset Password</button>
     </form>
-    <div v-if="successMessage">{{ successMessage }}</div>
+  </div>
+  <div v-else>
+    <h1>You can finally login</h1>
+    <setting-button @click="loginRedirect">Login</setting-button>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-
+import router from "@/components/router/index.js";
+import SettingButton from "@/components/UI/SettingButton.vue";
 export default {
+  components: {SettingButton},
   data() {
     return {
       password: '',
-      successMessage: '',
+      success: false,
       url: process.env.VUE_APP_URL,
       token: ''
     }
@@ -30,8 +35,18 @@ export default {
         password: this.password,
         token: this.token
       }
-      axios.post(this.url + '/reset-password', data);
-    }
+      axios.post(this.url + '/reset-password', data)
+          .then(response => {
+            if (response.status === 200) {
+              this.success = true;
+            } else {
+              alert("Something went wrong. Please try again.");
+            }
+          })
+    },
+    loginRedirect(){
+      router.push('/login');
+    },
   },
   mounted() {
     this.token = window.location.href.split('token=')[1];
