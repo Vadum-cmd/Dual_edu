@@ -73,6 +73,17 @@ def get_user_profile(db: Session, user_id: int) -> User:
     return db.query(User).filter(User.id == user_id).first()
 
 
+def get_user_id_by_book_id(db: Session, book_id):
+    return db.query(Book).filter(Book.book_id == book_id).user_id
+
+
+def add_exp(db: Session, user_id: int, exp: int):
+    user = db.query(User).filter(User.id == user_id).first()
+    user.experience += exp
+
+    db.commit()
+
+
 def change_user_word_status(db: Session, book_id: int, en_word: str):
     user_words = db.query(User_word).filter(Book.book_id == book_id).all()
     for user_word in user_words:
