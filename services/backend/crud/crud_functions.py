@@ -101,3 +101,7 @@ def update_user_info(db: Session, user_id: int, goal_level: str, user_name: str,
     user.native_language = native_language
 
     db.commit()
+
+
+def get_phrasal_verbs(db: Session):
+    return db.query(DB_word).filter(DB_word.word_type == "phrasal verb").all()
