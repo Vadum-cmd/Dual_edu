@@ -48,7 +48,6 @@ export default {
 
   mounted() {
     this.token = window.location.href.split('token=')[1];
-    console.log(this.token);
 
   }
 }

@@ -42,7 +42,7 @@ export default {
       });
     },
     checkAnswer() {
-      if (this.attemptsLeft <= 0) {
+      if (this.attemptsLeft <= 1) {
         this.gameOver = true;
       }
 
