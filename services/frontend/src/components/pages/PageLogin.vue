@@ -84,6 +84,9 @@
           </div>
           <div v-else>
             <h1>Now you can check your email</h1>
+            <button class="cancel-link" @click="forgotPassword = false">
+              <font-awesome-icon :icon="['fas', 'circle-xmark']"/>
+            </button>
           </div>
         </ModalWindow>
 
@@ -145,12 +148,9 @@ export default {
         await fetch(this.url + `/register`, {
           body: JSON.stringify(data),
           method: 'POST',
-          headers: {'accept': 'application/json', 'Content-Type': 'application/json'},
-          credentials: 'include'
+          headers: {'accept': 'application/json', 'Content-Type': 'application/json'}
         });
-        // await fetch(this.url + `/register`, {
 
-        // });
         fetch(this.url + `/request-verify-token`, {
           method: 'POST',
           headers: {
