@@ -23,8 +23,8 @@ def check_user_answer(en_word: str, answer: str, book_id: int, db: Session):
     if answer.lower() == get_db_word_by_en_word(db=db, en_word=en_word).uk_word.lower():
         level = get_db_word_by_en_word(db=db, en_word=en_word).word_level
         change_user_word_status(db=db, book_id=book_id, en_word=en_word)
-        user_id = get_user_id_by_book_id(db=db, book_id=book_id)
-        print(user_id)
+        book = get_user_id_by_book_id(db=db, book_id=book_id)
+
         if level == "a2":
             exp = 25
         elif level == "b1":
@@ -37,7 +37,7 @@ def check_user_answer(en_word: str, answer: str, book_id: int, db: Session):
             exp = 45
         else:
             exp = 20
-        add_exp(db=db, user_id=user_id, exp=exp)
+        add_exp(db=db, user_id=book.user_id, exp=exp)
 
         return {"result": True}
     else:

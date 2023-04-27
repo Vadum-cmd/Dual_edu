@@ -74,7 +74,7 @@ def get_user_profile(db: Session, user_id: int) -> User:
 
 
 def get_user_id_by_book_id(db: Session, book_id):
-    return db.query(Book).filter(Book.book_id == book_id).first().user_id
+    return db.query(Book).filter(Book.book_id == book_id).first()
 
 
 def add_exp(db: Session, user_id: int, exp: int):
@@ -101,3 +101,7 @@ def update_user_info(db: Session, user_id: int, goal_level: str, user_name: str,
     user.native_language = native_language
 
     db.commit()
+
+
+def get_phrasal_verbs(db: Session):
+    return db.query(DB_word).filter(DB_word.word_type == "phrasal verb").all()

@@ -32,7 +32,7 @@ def send_book(user_id: int, level: str, file: UploadFile, db: Session):
     db_book = create_book(db=db, book=book)
 
     text = extract_text_from_pdf(path)
-    words = word_tokenization(text)
+    words = word_tokenization(text, db=db)
 
     os.remove(f"books/{file.filename}")
 
@@ -43,7 +43,8 @@ def send_book(user_id: int, level: str, file: UploadFile, db: Session):
                 user_word = UserWordCreate(**{"en_word": db_word.en_word, "book_id": db_book.book_id, "is_known": False})
                 create_user_word(db=db, user_word=user_word)
             else:
-                print(str(db_word.word_level).lower(), str(level).lower())
+                #print(str(db_word.word_level).lower(), str(level).lower())
+                pass
         except:
             # print(word)
             pass
