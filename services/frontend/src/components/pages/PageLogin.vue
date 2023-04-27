@@ -148,16 +148,16 @@ export default {
           headers: {'accept': 'application/json', 'Content-Type': 'application/json'},
           credentials: 'include'
         });
-        await fetch(this.url + `/register`, {
+        // await fetch(this.url + `/register`, {
 
-        });
+        // });
         fetch(this.url + `/request-verify-token`, {
           method: 'POST',
           headers: {
             'Accept-Language': 'en-US,en;q=0.9,uk-UA;q=0.8,uk;q=0.7,ru;q=0.6',
             'Connection': 'keep-alive',
             'Content-Type': 'application/json',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36',
+            //'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36',
             'accept': 'application/json'
           },
           // body: '{\n  "email": "yar.rom.rom@gmail.com"\n}',
