@@ -1,32 +1,25 @@
-from typing import Set
-
-from fastapi import Depends, APIRouter
+from fastapi import Depends, APIRouter, Request, HTTPException, status
 from sqlalchemy.orm import Session
+
+from auth.jwt_decoder import decode_user
 from dependencies import get_db
-from crud.crud_functions import get_books_by_user_id
-from crud.crud_functions import get_user_words_by_book, get_db_word_by_en_word
-
-
+from routers_logic.get_vocabulary import get_vocabulary
 
 router = APIRouter()
 
 
 @router.get("/vocabulary")
-def get_vocabulary(book_id: int = None, db: Session = Depends(get_db)) -> Set:
-    if book_id is None:
-        user_id = 2
-        books = get_books_by_user_id(db=db, user_id=user_id)
-        db_words = set()
-        for book in books:
-            book_words = get_user_words_by_book(db=db, book_id=book.book_id)
-            for book_word in book_words:
-                db_words.add(get_db_word_by_en_word(db=db, en_word=book_word.en_word))
-        return db_words
+def get_vocabulary_endpoint(request: Request, book_id: int = None, db: Session = Depends(get_db)):
+    try:
+        jwt = request.headers['Cookie'].split('=')[1]
+        user_id = int(decode_user(jwt)['sub'])
+    except:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect email or password",
+            # headers={"WWW-Authenticate": "Basic"},
+        )
+        # return None
 
-    else:
-        book_words = get_user_words_by_book(db=db, book_id=book_id)
-        db_words = set()
-        for book_word in book_words:
-            db_words.add(get_db_word_by_en_word(db=db, en_word=book_word.en_word))
-        return db_words
+    return get_vocabulary(user_id=user_id, book_id=book_id, db=db)
 

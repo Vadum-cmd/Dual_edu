@@ -7,26 +7,23 @@ from sqlalchemy import Boolean, String, Integer
 from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase, SQLAlchemyBaseUserTable
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from config.config import DB_HOST, DB_PORT, DB_PASS, DB_USER, DB_NAME
 
-DATABASE_URL = "mysql+asyncmy://root:uTnw0PIh65_!@127.0.0.1:3306/dual_edu"  # TODO : async stated after "mysql:..."
+DATABASE_URL = f"mysql+asyncmy://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
 class Base(DeclarativeBase):
     pass
 
 
 class User(SQLAlchemyBaseUserTable[int], Base):
-    user_id: Mapped[int] = mapped_column(primary_key=True)
-    current_num_level: Mapped[int] = mapped_column()
+    id: Mapped[int] = mapped_column(primary_key=True)
+    experience: Mapped[int] = mapped_column()
     goal_level: Mapped[str] = mapped_column(String(2))
     user_level: Mapped[str] = mapped_column(String(3))
     user_name: Mapped[str] = mapped_column(String(50))
     email: Mapped[str] = mapped_column(String(50))
     native_language: Mapped[str] = mapped_column(String(50))
-    # password: Mapped[str] = mapped_column(String(50))
     frame_path: Mapped[str] = mapped_column(String(120))
-
-    #books: Mapped[List["Book"]] = relationship()  # TODO: ?!
-    # TODO: foreign key might be different
 
     hashed_password: Mapped[str] = mapped_column(
         String(length=1024), nullable=False

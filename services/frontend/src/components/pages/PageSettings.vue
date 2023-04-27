@@ -3,20 +3,11 @@
     <h1>Language Settings</h1>
     <form v-if="!editing" @submit.prevent="saveSettings">
       <div class="form-group">
-        <label for="target-level">Target Level of English:</label>
-        <select id="target-level" v-model="targetLevel" :disabled="!editing">
-          <option value="A1">A1 - Beginner</option>
-          <option value="A2">A2 - Elementary</option>
-          <option value="B1">B1 - Intermediate</option>
-          <option value="B2">B2 - Upper Intermediate</option>
-          <option value="C1">C1 - Advanced</option>
-          <option value="C2">C2 - Proficient</option>
-        </select>
+        <label for="username">Username:</label>
+        <input class="username" id="username" v-model="username" :disabled="!editing">
       </div>
-      <div class="form-group">
-        <label for="email">Email Address:</label>
-        <input type="email" id="email" v-model="email" :disabled="!editing">
-      </div>
+
+
       <div class="form-group">
         <label for="english-level">English Level:</label>
         <select id="english-level" v-model="englishLevel" :disabled="!editing">
@@ -29,27 +20,10 @@
         </select>
       </div>
       <div class="form-group">
-        <label for="native-language">Native Language:</label>
-        <select id="native-language" v-model="nativeLanguage" :disabled="!editing">
-          <option value="English">English</option>
-          <option value="Spanish">Spanish</option>
-          <option value="French">French</option>
-          <option value="German">German</option>
-          <option value="Ukrainian">Ukrainian</option>
-          <option value="Arabic">Arabic</option>
-        </select>
-      </div>
-      <button type="submit" class="btn btn-primary" :disabled="!editing">Save Settings</button>
-      <button @click.prevent="editSettings" class="btn btn-secondary" :disabled="editing">Edit Settings</button>
-    </form>
-    <form v-if="editing" @submit.prevent="saveSettings">
-      <div class="form-group">
         <label for="target-level">Target Level of English:</label>
-        <select id="target-level" v-model="targetLevel">
+        <select id="target-level" v-model="targetLevel" :disabled="!editing">
           <option value="A1">A1 - Beginner</option>
-          <option value="A2">A2
-
-            Elementary</option>
+          <option value="A2">A2 - Elementary</option>
           <option value="B1">B1 - Intermediate</option>
           <option value="B2">B2 - Upper Intermediate</option>
           <option value="C1">C1 - Advanced</option>
@@ -57,8 +31,21 @@
         </select>
       </div>
       <div class="form-group">
-        <label for="email">Email Address:</label>
-        <input type="email" id="email" v-model="email">
+        <label for="native-language">Native Language:</label>
+        <select id="native-language" v-model="nativeLanguage" :disabled="!editing">
+          <option value="Spanish">Spanish</option>
+          <option value="Ukrainian">Ukrainian</option>
+
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary" :disabled="!editing">Save Settings</button>
+      <button @click.prevent="editSettings" class="btn btn-secondary" :disabled="editing">Edit Settings</button>
+    </form>
+    <form v-if="editing" @submit.prevent="saveSettings">
+
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input class="username" id="username" v-model="username">
       </div>
       <div class="form-group">
         <label for="english-level">English Level:</label>
@@ -72,14 +59,21 @@
         </select>
       </div>
       <div class="form-group">
+        <label for="target-level">Target Level of English:</label>
+        <select id="target-level" v-model="targetLevel">
+          <option value="A1">A1 - Beginner</option>
+          <option value="A2">A2 - Elementary</option>
+          <option value="B1">B1 - Intermediate</option>
+          <option value="B2">B2 - Upper Intermediate</option>
+          <option value="C1">C1 - Advanced</option>
+          <option value="C2">C2 - Proficient</option>
+        </select>
+      </div>
+      <div class="form-group">
         <label for="native-language">Native Language:</label>
         <select id="native-language" v-model="nativeLanguage">
-          <option value="English">English</option>
           <option value="Spanish">Spanish</option>
-          <option value="French">French</option>
-          <option value="German">German</option>
           <option value="Ukrainian">Ukrainian</option>
-          <option value="Arabic">Arabic</option>
         </select>
       </div>
       <button type="submit" class="btn btn-primary">Save Settings</button>
@@ -88,29 +82,40 @@
   </div>
 </template>
 <script>
+
 export default {
   data() {
     return {
       editing: false,
       targetLevel: 'A1',
-      email: '',
+      username: '',
       englishLevel: 'A1',
       nativeLanguage: 'English',
       savedSettings: null,
-      endpoint: 'http://192.168.1.104:8081/settings'
+      url: process.env.VUE_APP_URL
     }
   },
   created() {
-    fetch(this.endpoint)
+    const jwt = localStorage.getItem("jwt");
+    fetch(this.url + '/settings', {
+      method: 'GET',
+      headers: {
+        'Cookie': jwt,
+
+      },
+      credentials: 'include',
+    })
         .then(response => response.json())
         .then(data => {
           this.savedSettings = data
-          this.targetLevel = data.targetLevel
-          this.email = data.email
-          this.englishLevel = data.englishLevel
-          this.nativeLanguage = data.nativeLanguage
+          this.targetLevel = data.goal_level.toUpperCase()
+          this.username = data.user_name
+          this.englishLevel = data.user_level.toUpperCase()
+          this.nativeLanguage = data.native_language
         })
         .catch(error => console.error(error))
+
+
   },
   methods: {
     editSettings() {
@@ -119,35 +124,45 @@ export default {
     cancelEdit() {
       this.editing = false
     },
-    saveSettings() {
+    async saveSettings() {
+      const jwt = localStorage.getItem("jwt");
       const data = {
-        targetLevel: this.targetLevel,
-        email: this.email,
-        englishLevel: this.englishLevel,
-        nativeLanguage: this.nativeLanguage
-      }
-      fetch(this.endpoint, {
-        method: 'PUT',
-        body: JSON.stringify(data),
-        headers: {
-          'Content-Type': 'application/json'
+        user_name: this.username,
+        user_level: this.englishLevel.toLowerCase(),
+        goal_level: this.targetLevel.toLowerCase(),
+        native_language: this.nativeLanguage,
+      };
+
+      try {
+        const response = await fetch(`${this.url}/settings`, {
+          method: 'PUT',
+          headers: {
+            'Accept-Language': 'en,ru-RU;q=0.9,ru;q=0.8,en-US;q=0.7,uk;q=0.6',
+            'Connection': 'keep-alive',
+            'Content-Type': 'application/json',
+            'Cookie': jwt,
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36',
+            'accept': 'application/json'
+          },
+          body: JSON.stringify(data),
+          credentials: 'include',
+        });
+
+        if (response.ok) {
+          this.savedSettings = data;
+          this.editing = false;
+        } else {
+          throw new Error('Failed to save settings');
         }
-      })
-          .then(response => {
-            if (response.ok) {
-              this.savedSettings = data
-              this.editing = false
-            } else {
-              throw new Error('Failed to save settings')
-            }
-          })
-          .catch(error => {
-            console.error(error)
-            alert('Failed to save settings')
-          })
+      } catch (error) {
+        console.error(error);
+        alert('Failed to save settings');
+      }
     }
+
   }
 }
+
 </script>
 <style scoped>
 .language-page {
@@ -169,7 +184,15 @@ label {
   color: #666;
 }
 
-input[type="email"],
+.username {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  background-color: #f9f9f9;
+  color: #444;
+}
+
 select {
   width: 100%;
   padding: 0.5rem;

@@ -1,17 +1,24 @@
 <template>
   <div class="profile-page">
-    <div class="avatar-container">
-      <div class="avatar-wrapper"><img class="avatar" :src="avatarUrl" alt="Avatar"></div>
+    <div v-if="level <= 10" class="avatar-container">
+      <img class="avatar" src="../avatars/avatar2.png" alt="Avatar">
     </div>
+    <div v-else class="avatar-container">
+      <img class="avatar" src="../avatars/avatar1.png" alt="Avatar">
+    </div>
+
     <div class="nickname-container"><h2 class="nickname">{{ nickname }}</h2></div>
     <div class="xp-bar">
-      <div class="progress" :style="{ width: xpPercentage }"> Level {{ level }} - {{ xp }}/{{ xpToNextLevel }} XP</div>
+      <div class="progress" :style="{ width: xpPercentage }"> {{ xp }}/{{ xpToNextLevel }} XP</div>
+    </div>
+    <div>
+      Level {{level}}
     </div>
     <div class="profile-lines">
       <div class="profile-line"><h3>Your goal:</h3>
-        <p>{{ goal }}</p></div>
+        <p>{{ goal.toUpperCase() }}</p></div>
       <div class="profile-line"><h3>Your english level:</h3>
-        <p>{{ englishLevel }}</p></div>
+        <p>{{ englishLevel.toUpperCase() }}</p></div>
       <div class="profile-line"><h3>Your native language:</h3>
         <p>{{ nativeLanguage }}</p></div>
       <div class="profile-line"><h3>Your email:</h3>
@@ -19,44 +26,47 @@
     </div>
   </div>
 </template>
+
 <script>
 import axios from 'axios';
-
 export default {
   name: "ProfilePage",
   data() {
     return {
-
-      avatarUrl: "",
+      imagePath:'',
       nickname: "",
-      level: 0,
-      xp: 0,
-      xpToNextLevel: 0,
+      level: null,
+      xp: null,
+      xpToNextLevel: null,
       goal: "",
       englishLevel: "",
       nativeLanguage: "",
-      email: ""
+      email: "",
+      url:process.env.VUE_APP_URL
     };
   },
   computed: {
     xpPercentage() {
       return `${Math.floor((this.xp / this.xpToNextLevel) * 100)}%`;
-    }
+    },
   },
-  mounted() {
-
-    axios.get('http://192.168.1.104:8081/profile')
+  created() {
+    const jwt = localStorage.getItem("jwt");
+    axios.get(this.url+`/profile`,{
+      headers: {
+        'Cookie': jwt,
+      },
+      withCredentials: true,
+    })
         .then(response => {
-
           const data = response.data;
-          this.avatarUrl = data.avatarUrl;
-          this.nickname = data.nickname;
-          this.level = data.level;
-          this.xp = data.xp;
-          this.xpToNextLevel = data.xpToNextLevel;
-          this.goal = data.goal;
-          this.englishLevel = data.englishLevel;
-          this.nativeLanguage = data.nativeLanguage;
+          this.nickname = data.user_name;
+          this.level = Math.floor(data.experience / 100)+1 ;
+          this.xp = data.experience % 100;
+          this.xpToNextLevel = 100 ;
+          this.goal = data.goal_level;
+          this.englishLevel = data.user_level;
+          this.nativeLanguage = data.native_language;
           this.email = data.email;
         })
         .catch(error => {
@@ -81,9 +91,7 @@ export default {
   display: flex;
   justify-content: center;
   margin-bottom: 20px;
-
 }
-
 .avatar-wrapper {
   border: 5px solid #575454;
   width: 100px;
@@ -91,44 +99,41 @@ export default {
   border-radius: 50%;
   overflow: hidden;
 }
-
 .avatar {
-  width: 100%;
-  height: 100%;
+  width: 50%;
+  height: 50%;
   object-fit: cover;
-  scale: 200%;
-}
 
+}
 .nickname-container {
   display: flex;
   justify-content: center;
   margin-bottom: 20px;
   width: 100%;
 }
-
 .nickname {
   margin: 0;
   font-family: Arial, sans-serif;
   text-align: center;
 }
-
 .xp-bar {
   width: 80%;
-  height: 25px;
-  background-color: #ddd;
+  height: 28px;
+  background-color: #cecece;
   margin-bottom: 20px;
+  border-radius: 25px;
 }
-
 .progress {
   height: 100%;
-  background-color: #666;
+  background-color: #595959;
   color: white;
   display: flex;
   justify-content: center;
   align-items: center;
   font-weight: bold;
+  font-size: 12px;
+  border-radius: 25px;
 }
-
 .profile-lines {
   display: flex;
   flex-direction: column;
@@ -136,17 +141,14 @@ export default {
   text-align: center;
   width: 100%;
 }
-
 .profile-line {
   width: 100%;
   margin-bottom: 20px;
 }
-
 .profile-line h3 {
   margin: 0;
   font-family: Arial, sans-serif;
 }
-
 .profile-line p {
   margin: 0;
   font-family: Arial, sans-serif;

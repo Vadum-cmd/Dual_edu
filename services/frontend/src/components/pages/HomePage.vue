@@ -2,50 +2,48 @@
   <div class="content">
     <div class="text">
       <div class="upload">Upload your book</div>
-      <input type="file" @change="onFileChange">
+      <download-button @change="onFileChange"/>
     </div>
-    <div class="lang_choose" v-if="true">
-      <div class="select_lev">Select your english level</div>
-      <select v-model="level">
-        <option v-for="value in options" :key="value">{{ value }}</option>
-      </select>
-    </div>
-    <button @click="sendLevel">Submit</button>
+    <setting-button @click="sendLevel">Submit</setting-button>
     <div v-if="loading"><i class="fa fa-spinner fa-spin"></i></div>
   </div>
 </template>
+
 <script>
 import axios from "axios";
+import SettingButton from "@/components/UI/SettingButton.vue";
+import DownloadButton from "@/components/UI/Download button.vue";
 export default {
+  components: {DownloadButton, SettingButton},
   data() {
     return {
-      options: [
-        'A1',
-        'A2',
-        'B1',
-        'B2',
-        'C1',
-        'C2'
-      ],
-      level: null,
-      url:'',
+      base_url:process.env.VUE_APP_URL,
       file:null,
       formData:null,
-      loading: false
+      loading: false,
+      books: [],
+      isNotLogin:true,
+      level:null,
     }
   },
   methods: {
+
     onFileChange(event) {
       this.file = event.target.files[0];
     },
     sendLevel() {
+      const jwt = localStorage.getItem('jwt');
       this.formData = new FormData();
-      this.formData.append('file', this.file);
-      this.formData.append('level', this.level);
 
-      this.url = 'http://192.168.0.163:8081/sendbook';
+      this.formData.append('file', this.file);
+      this.url = this.base_url+ `/sendbook?level=${this.level}`;
       this.loading = true;
-      axios.post(this.url, this.formData)
+      axios.post(this.url, this.formData,{
+        headers:{
+          'Cookie':jwt
+        },
+        withCredentials:true,
+      })
           .then(() => {
 
           })
@@ -56,10 +54,33 @@ export default {
           .finally(() => {
             this.loading = false;
           });
-    }
+    },
   },
+  mounted() {
+    const jwt = localStorage.getItem("jwt");
+    setTimeout(() => {
+      if(jwt != null && this.isNotLogin===true){
+        location.reload();
+      }
+    }, 50);
+
+    this.isNotLogin = jwt === null;
+    axios.get(this.base_url+`/home`,{
+      headers:{
+        'Cookie':jwt
+      },
+      withCredentials:true,
+    })
+        .then(response => {
+          const data= response.data;
+          this.level= data.user_level;
+        })
+
+
+  }
 }
 </script>
+
 <style scoped>
 .content {
   display: flex;
@@ -83,7 +104,7 @@ input{
   display: flex;
   align-items: center;
   margin-bottom: 10px;
-  margin-left: 120px;
+
 }
 .select_lev{
   font-size: 30px;
@@ -101,12 +122,16 @@ select{
   background-color: #595959;
   color: white;
 }
+
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
 
 .fa {
   font-size: 24px;
   color: white;
 }
+
+
+
 </style>
 
 

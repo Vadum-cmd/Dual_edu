@@ -12,8 +12,9 @@ metadata = Base.metadata
 class User(Base):
     __tablename__ = 'user'
 
-    user_id: Mapped[int] = mapped_column(primary_key=True)
-    current_num_level: Mapped[int] = mapped_column()
+    # user_id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    experience: Mapped[int] = mapped_column()
     goal_level: Mapped[str] = mapped_column(String(2))
     user_level: Mapped[str] = mapped_column(String(3))
     user_name: Mapped[str] = mapped_column(String(50))
@@ -41,6 +42,7 @@ class DB_word(Base):
     en_word: Mapped[str] = mapped_column(String(50), primary_key=True)
     word_level: Mapped[str] = mapped_column(String(2))
     uk_word: Mapped[str] = mapped_column(String(90))
+    es_word: Mapped[str] = mapped_column(String(90, collation="utf8mb4_spanish_ci"))
     word_type: Mapped[str] = mapped_column(String(20))
 
     user_word: Mapped['User_word'] = relationship(back_populates='db_word')
@@ -61,7 +63,7 @@ class Book(Base):
     __tablename__ = 'book'
 
     book_id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey('user.user_id'))
+    user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
     book_title: Mapped[str] = mapped_column(String(50))
     book_author: Mapped[str] = mapped_column(String(50))
 

@@ -1,108 +1,97 @@
 <template>
   <header :class="{ 'scrolled-nav': scrolledNav}">
     <nav>
-      <div class="branding">
+      <router-link class="branding" to="/home">
         <div class="h">Re&joy</div>
-      </div>
+      </router-link>
       <ul v-show="!mobile" class="navigation">
-        <li>
-          <router-link class="link" to="/">
-            <font-awesome-icon icon="fa-solid fa-book-open" />
+        <li v-if="isAutorize">
+          <router-link class="link" to="/books">
+            <font-awesome-icon icon="fa-solid fa-book-open"/>
             Books
           </router-link>
         </li>
-        <li>
+        <li v-if="isAutorize">
           <router-link class="link" to="/vocabulary">
             <font-awesome-icon icon="fa-solid fa-clipboard"/>
             My vocabulary
           </router-link>
         </li>
         <li v-if="isAutorize">
-
           <div class="profile">
-            <div class="nickname">
-              <font-awesome-icon icon="fa-solid fa-circle" style="scale: 300%; margin-right: 15px"/>
-              Nickname
-
-            </div>
-
-            <div class="dropdown">
-              <button @click="toggle()">
-                <font-awesome-icon icon="fa-solid fa-square-caret-down"/>
-              </button>
-              <div class="dropdown-content" v-if="active">
-                <router-link class="drop_menu" to="/profile">
-                  <font-awesome-icon icon="fa-solid fa-user"/>
-                  Profile
-                </router-link>
-                <router-link class="drop_menu" to="/settings">
-                  <font-awesome-icon icon="fa-solid fa-gear"/>
-                  Settings
-                </router-link>
-                <router-link class="drop_menu" to="/test">
-                  <font-awesome-icon icon="fa-solid fa-puzzle-piece"/>
-                  Game
-                </router-link>
-                <router-link class="drop_menu" to="/">
-                  <font-awesome-icon icon="fa-solid fa-circle-xmark"/>
-                  Logout
-                </router-link>
-              </div>
+            <router-link class="link" to="/profile">
+              <font-awesome-icon icon="fa-solid fa-user"/>
+              Profile
+            </router-link>
+          </div>
+          <div class="dropdown">
+            <button @click="toggle()">
+              <font-awesome-icon icon="fa-solid fa-square-caret-down"/>
+            </button>
+            <div class="dropdown-content" v-if="active">
+              <router-link class="drop_menu" to="/settings">
+                <font-awesome-icon icon="fa-solid fa-gear"/>
+                Settings
+              </router-link>
+              <router-link class="drop_menu" to="/test">
+                <font-awesome-icon icon="fa-solid fa-puzzle-piece"/>
+                Game
+              </router-link>
+              <router-link class="drop_menu" to="/" @click="logout">
+                <font-awesome-icon icon="fa-solid fa-circle-xmark"/>
+                Logout
+              </router-link>
             </div>
           </div>
         </li>
         <li v-else>
           <router-link class="link" to="/login">
-            <font-awesome-icon icon="fa-solid fa-arrow-right-to-bracket" />
+            <font-awesome-icon icon="fa-solid fa-arrow-right-to-bracket"/>
             Login
           </router-link>
         </li>
-
       </ul>
       <div class="icon">
         <i @click="toggleMobileNav" v-show="mobile" class="" :class="{'icon-active': mobileNav}">
           <font-awesome-icon icon="fa-solid fa-bars"/>
         </i>
-
       </div>
       <transition name="mobile-nav">
         <ul v-show="mobileNav" class="dropdown-nav">
-          <li>
-            <router-link class="link" to="/">
-              <font-awesome-icon icon="fa-solid fa-book-open" />
+          <li v-if="isAutorize">
+            <router-link class="link" to="/books">
+              <font-awesome-icon icon="fa-solid fa-book-open"/>
               Books
             </router-link>
           </li>
-          <li>
+          <li v-if="isAutorize">
             <router-link class="link" to="/vocabulary">
               <font-awesome-icon icon="fa-solid fa-clipboard"/>
               My vocabulary
             </router-link>
           </li>
-          <li>
+          <li v-if="isAutorize">
             <div class="profile">
-              <div class="link">
-                <font-awesome-icon icon="fa-solid fa-circle" style="scale: 300%; margin-right: 15px"/>
-                Nickname
-              </div>
+              <router-link class="link" to="/profile">
+                <font-awesome-icon icon="fa-solid fa-user"/>
+                Profile
+              </router-link>
               <div class="dropdown">
                 <button @click="toggle()">
                   <font-awesome-icon icon="fa-solid fa-square-caret-down"/>
                 </button>
                 <div class="dropdown-content" v-if="active">
-                  <router-link class="drop_menu" to="/profile">
-                    <font-awesome-icon icon="fa-solid fa-user"/>
-                    Profile
-                  </router-link>
                   <router-link class="drop_menu" to="/settings">
                     <font-awesome-icon icon="fa-solid fa-gear"/>
                     Settings
                   </router-link>
                   <router-link class="drop_menu" to="/test">
                     <font-awesome-icon icon="fa-solid fa-puzzle-piece"/>
+
+
                     Game
                   </router-link>
-                  <router-link class="drop_menu" to="/">
+                  <router-link class="drop_menu" to="/" @click="logout">
                     <font-awesome-icon icon="fa-solid fa-circle-xmark"/>
                     Logout
                   </router-link>
@@ -110,16 +99,27 @@
               </div>
             </div>
           </li>
-
+          <li v-else>
+            <router-link class="link" to="/login">
+              <font-awesome-icon icon="fa-solid fa-arrow-right-to-bracket"/>
+              Login
+            </router-link>
+          </li>
         </ul>
       </transition>
     </nav>
-  </header>
 
+  </header>
 </template>
 
 <script>
+
+
+
+import router from "@/components/router";
+
 export default {
+
   name: "Navig-ation",
   data() {
     return {
@@ -127,15 +127,19 @@ export default {
       mobile: null,
       mobileNav: null,
       windowWidth: null,
-      active:false,
-      isAutorize:false
+      active: false,
+      isAutorize: false
     }
   },
   created() {
     window.addEventListener('resize', this.checkScreen)
     this.checkScreen()
+
   },
   mounted() {
+    const jwt = localStorage.getItem("jwt");
+    this.isAutorize = jwt !== null;
+
     window.addEventListener('scroll', this.updateScroll);
   },
   methods: {
@@ -160,11 +164,15 @@ export default {
       this.mobileNav = false;
       return;
     },
-    toggle () {
+    toggle() {
       this.active = !this.active
+    },
+    logout() {
+      localStorage.removeItem('jwt');
+      this.isAutorize=false;
+      router.push('/login');
     }
   }
-
 
 
 }
@@ -217,21 +225,27 @@ header {
 
       }
     }
-    .nickname{
+
+    .nickname {
       font-size: 14px;
     }
+
     .profile {
       position: relative;
       display: inline-flex;
 
+
     }
-    .dropdown button{
+
+    .dropdown button {
       scale: 130%;
       margin-left: 10px;
     }
-    .dropdown button:hover{
+
+    .dropdown button:hover {
       color: #00afea;
     }
+
     .dropdown {
       margin-left: 5px;
       position: relative;
@@ -263,10 +277,18 @@ header {
     }
 
 
-
     .branding {
       display: flex;
       align-items: center;
+      color: white;
+      transition: 0.5s ease all;
+      padding-bottom: 1px;
+      border-bottom: 1px solid transparent;
+      font-size: 35px;
+      &:hover{
+        color: #00afea;
+        border-color: #00afea;
+      }
     }
 
     .navigation {

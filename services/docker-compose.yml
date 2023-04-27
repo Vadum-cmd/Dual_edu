@@ -1,0 +1,76 @@
+version: "3.1"
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    environment:
+      FRONTEND_URL: http://localhost:8080/
+
+      DB_HOST: flask-backend-db
+      DB_PORT: 3306
+      DB_NAME: dual_edu
+      DB_USER: root
+      DB_PASS: 2wsxcde3  
+
+      EMAIL_ADDRESS: reandjoy@gmail.com
+      EMAIL_PASSWORD: snxnsgvgekokevve
+
+      SECRET_CODE_JWT : SECRET$)(!&^$CODE@&$)TO$*!@(GET(@$_USER
+      SECRET_CODE_RESET_PASSWORD : "SECRET!*CODE@*(TO@$RESET$@PASSWORD"
+      AUDIENCE: fastapi-users:auth
+    depends_on:
+      - db
+    networks:
+      - db_network
+    
+  db:
+    image: mysql
+    restart: always
+    container_name: flask-backend-db
+    environment:
+      MYSQL_DATABASE: dual_edu
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: '1qazxsw2'
+      MYSQL_ROOT_PASSWORD: '2wsxcde3'
+    ports:
+      - "3306:3306"
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - db-data:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://0.0.0.0:3306" ]
+      interval: 3s
+      timeout: 30s
+      retries: 30
+    networks:
+      - db_network
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8081:8080"
+    environment: 
+      ADMINER_DEFAULT_SERVER: flask-backend-db
+      PMA_HOST: flask-backend-db
+    networks:
+      - db_network
+
+  web:
+    build: ./frontend
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+      - backend
+
+volumes:
+  db-data:
+
+networks:
+  db_network:

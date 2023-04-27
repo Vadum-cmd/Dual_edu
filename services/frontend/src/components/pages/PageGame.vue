@@ -5,56 +5,86 @@
     <p v-else class="question">Translate the following word:</p>
     <div v-if="!gameOver" class="form-group">
       <p class="translation">{{ translation }}</p>
-      <input type="text" class="form-control" v-model="guess" @keyup.enter="checkAnswer" />
+      <input type="text" class="form-control" v-model="guess" @keyup.enter="checkAnswer"/>
       <p v-if="attemptsLeft > 0" class="attempts">{{ attemptsLeft }} attempts left.</p>
     </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   data() {
     return {
-      translations: [
-        { translation: "Кіт", keyword: "cat" },
-        { translation: "Пeс", keyword: "dog" },
-        { translation: "Тато", keyword: "father" },
-        { translation: "Мама", keyword: "mother" },
-        { translation: "Живородний", keyword: "viviparous" },
-      ],
-      currentQuestion: 0,
+      translation: null,
       guess: "",
       attemptsLeft: 3,
       score: 0,
       gameOver: false,
+      book_id: null,
+      url: process.env.VUE_APP_URL,
+      jwt: localStorage.getItem('jwt')
     };
   },
-  computed: {
-    translation() {
-      return this.translations[this.currentQuestion].translation;
-    },
-  },
   methods: {
+    getNextWord() {
+      axios.get(this.url + '/test', {
+        headers: {
+          'Cookie': this.jwt
+        },
+        withCredentials: true,
+      }).then(response => {
+        this.translation = response.data.word.word;
+        this.book_id = response.data.book_id;
+      }).catch(error => {
+        console.log(error);
+      });
+    },
     checkAnswer() {
-      const currentTranslation = this.translations[this.currentQuestion];
-      if (this.guess === currentTranslation.keyword) {
-        this.score++;
-        this.currentQuestion++;
-        this.guess = "";
-        this.attemptsLeft = 3;
-      } else {
-        this.attemptsLeft--;
-        if (this.attemptsLeft === 0) {
-          this.currentQuestion++;
-          this.guess = "";
-          this.attemptsLeft = 3;
-        }
-      }
-      if (this.currentQuestion === this.translations.length) {
+      if (this.attemptsLeft <= 1) {
         this.gameOver = true;
       }
-    },
+
+      return axios.post(`${this.url}/test?en_word=${this.translation}&answer=${this.guess}&book_id=${this.book_id}`, {},
+          {
+            headers: {
+              'Cookie': this.jwt,
+            },
+            withCredentials: true,
+          }
+      )
+          .then(response => {
+            if (response.status >= 200 && response.status < 300) {
+              return response.data;
+            } else {
+              throw new Error('Network response was not ok');
+            }
+          })
+          .then(data => {
+            this.guess='';
+            if (data.result) {
+              this.score++;
+              this.getNextWord();
+
+            } else {
+              this.attemptsLeft--;
+              if (this.attemptsLeft === 0) {
+                this.getNextWord();
+              }
+            }
+          })
+          .catch(error => {
+            console.error(error);
+          });
+
+    }
+
   },
+  mounted() {
+    this.getNextWord();
+
+  }
 };
 </script>
 <style>

@@ -5,14 +5,14 @@ from fastapi_users import schemas
 
 class UserRead(schemas.BaseUser[int]):
 
-    user_id: int
+    id: int
     email: str
     user_name: str
     native_language: str
     goal_level: str
     user_level: str
     frame_path: str
-    current_num_level: int
+    experience: int
     is_active: bool = True
     is_superuser: bool = False
     is_verified: bool = False

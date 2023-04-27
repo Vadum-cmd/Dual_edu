@@ -15,8 +15,8 @@ class UserCreate(UserBase):
 
 
 class User(UserBase):
-    user_id: int
-    current_num_level: int
+    id: int
+    experience: int
     frame_path: Optional[str] = None
     books: List["Book"] = []
 
@@ -74,5 +74,29 @@ class Book(BookBase):
     book_id: int
     words: List[UserWord] = []
 
-    # class Config:
-    #     orm_mode = True
+    class Config:
+        orm_mode = True
+
+
+# myuser
+# class User(BaseModel):
+#     experience: int
+#     goal_level: str
+#     user_level: str
+#     user_name: str
+#     email: str
+#     native_language: str
+#     frame_path: str
+#
+
+class SettingsUpdate(BaseModel):
+    user_name: str
+    user_level: str
+    goal_level: str
+    native_language: str
+
+
+class WordForVocabulary(BaseModel):
+    word: str
+    translation: str
+    word_level: str
