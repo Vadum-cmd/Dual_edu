@@ -4,6 +4,10 @@ from nltk.tokenize import RegexpTokenizer
 from nltk.stem.wordnet import WordNetLemmatizer
 from translators import translate_text
 import csv
+#from dependencies import get_db
+from fastapi import Depends
+#from sqlalchemy.orm import Session
+from crud.crud_functions import get_phrasal_verbs
 
 nltk.download('wordnet')
 
@@ -25,17 +29,23 @@ def extract_text_from_pdf(file_path: str):
             text += page.extract_text()
         return text
 
-def word_tokenization(text: str):
+
+def word_tokenization(text: str, db):
     tokenizer = RegexpTokenizer(r'\w+')
     words = tokenizer.tokenize(text)
+
+    all_phrasals = [i.en_word for i in get_phrasal_verbs(db)]
+
     words = [word.lower() for word in words if word.isalpha()]
     for i in range(len(words)):
         words[i] = WordNetLemmatizer().lemmatize(words[i], 'v')
-    return words
+    phrasal_verbs = search_phrasal(words, all_phrasals)
+    return words + list(phrasal_verbs)
 
-def search_phrasal(lst: list):
+
+def search_phrasal(lst: list, phrasal_verbs: list):
     phrasal = set()
-    phrasal_verbs = get_phrasal()
+    #phrasal_verbs = get_phrasal()
     for i in range(len(lst) - 3):
         together = lst[i] + " " + lst[i+1]
         separated = lst[i] + " " + lst[i+2]
