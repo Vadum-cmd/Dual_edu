@@ -74,7 +74,7 @@ def get_user_profile(db: Session, user_id: int) -> User:
 
 
 def get_user_id_by_book_id(db: Session, book_id):
-    return db.query(Book).filter(Book.book_id == book_id).first().user_id
+    return db.query(Book).filter(Book.book_id == book_id).first()
 
 
 def add_exp(db: Session, user_id: int, exp: int):
