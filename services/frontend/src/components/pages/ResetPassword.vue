@@ -4,9 +4,9 @@
     <form @submit.prevent="resetPassword">
       <div>
         <label for="password">New Password:</label>
-        <input type="password" id="password" v-model="password" required>
+        <input class="password" type="password" id="password" v-model="password" required>
       </div>
-      <button type="submit">Reset Password</button>
+      <setting-button type="submit">Reset Password</setting-button>
     </form>
   </div>
   <div v-else>
@@ -50,8 +50,17 @@ export default {
   },
   mounted() {
     this.token = window.location.href.split('token=')[1];
-    console.log(this.token);
 
   }
 }
 </script>
+<style>
+div{
+  color:white;
+
+}
+.password{
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+</style>
