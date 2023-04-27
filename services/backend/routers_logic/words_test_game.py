@@ -24,6 +24,7 @@ def check_user_answer(en_word: str, answer: str, book_id: int, db: Session):
         level = get_db_word_by_en_word(db=db, en_word=en_word).word_level
         change_user_word_status(db=db, book_id=book_id, en_word=en_word)
         user_id = get_user_id_by_book_id(db=db, book_id=book_id)
+        print(user_id)
         if level == "a2":
             exp = 25
         elif level == "b1":
